@@ -12,5 +12,5 @@
   // Must be a valid URL, for example: https://my-project.vercel.app
   // If your project is an app, put the download link here instead
   // (for example, a URL to download an APK).
-  "deploy-url": "https://auxio.vercel.app"
+  "deploy-url": "https://auxio-portal.vercel.app"
 }
