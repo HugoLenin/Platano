@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Language Bridge</string>
+    <string name="channel_call">Llamada de emergencia</string>
+    <string name="channel_call_desc">Mantiene activa la interpretación mientras dura la llamada.</string>
+    <string name="call_ongoing_title">Llamada de emergencia en curso</string>
+    <string name="call_ongoing_body">Interpretación activa. Toca para volver a la llamada.</string>
+</resources>

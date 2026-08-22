@@ -1,0 +1,17 @@
+[project]
+name = "elb-agent"
+version = "1.0.0"
+description = "Emergency Language Bridge - realtime interpretation agent"
+requires-python = ">=3.10,<3.15"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+asyncio_mode = "auto"
