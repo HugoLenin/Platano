@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="AuXio provides secure, real-time AI translation for emergency response teams.">
+  <meta name="description" content="AuXio provides secure, real-time AI interpretation for emergency calls, plus structured incident reports delivered to the caller's trusted contacts.">
   <title>AuXio | Secure communications</title>
+  <link rel="icon" href="./project-logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Hanken+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
@@ -70,8 +71,6 @@
     .nav-links a:hover { color: var(--text); }
     .nav-actions { gap: 20px; }
     .nav-download { padding: 12px 20px; color: #fff; background: var(--accent-strong); border-radius: 999px; font-size: 14px; font-weight: 600; }
-    .profile { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; color: #202124; background: #c6c6ca; }
-    .profile .material-symbols-outlined { font-size: 18px; }
 
     main { padding-top: 80px; }
     .page { position: relative; overflow: hidden; }
@@ -85,7 +84,7 @@
       background-size: 60px 60px;
       mask-image: linear-gradient(to bottom, black, transparent 80%);
     }
-    .hero, .features { position: relative; z-index: 1; width: min(100% - 64px, 1400px); margin: auto; }
+    .hero, .features, .section { position: relative; z-index: 1; width: min(100% - 64px, 1400px); margin: auto; }
     .hero { min-height: 76vh; display: grid; grid-template-columns: 0.95fr 1.35fr; align-items: center; gap: 72px; padding: 80px 0 100px; }
     .eyebrow { display: flex; align-items: center; gap: 12px; color: var(--accent); font-size: 13px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; }
     .eyebrow::before { content: ""; width: 48px; height: 2px; background: var(--accent); box-shadow: 0 0 10px rgba(255, 179, 177, 0.5); }
@@ -106,12 +105,18 @@
     .live-sync-label .material-symbols-outlined { color: var(--accent); }
     .progress { height: 4px; overflow: hidden; border-radius: 4px; background: var(--surface-bright); }
     .progress span { display: block; width: 75%; height: 100%; background: var(--accent); }
+
+    .section-head { max-width: 760px; margin-bottom: 48px; }
+    .section-head h2 { margin: 22px 0 14px; font-size: clamp(30px, 3.4vw, 46px); line-height: 1.1; letter-spacing: -0.03em; }
+    .section-head p { margin: 0; color: var(--muted); font-size: 17px; line-height: 1.6; }
     .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; padding-bottom: 110px; }
     .feature { min-height: 330px; padding: 32px; border: 1px solid transparent; border-radius: 16px; background: var(--surface-low); transition: background 220ms ease, border-color 220ms ease, transform 220ms ease; }
     .feature:hover { border-color: var(--line); background: var(--surface-high); transform: translateY(-4px); }
     .feature-icon { width: 48px; height: 48px; display: grid; place-items: center; margin-bottom: 36px; border-radius: 12px; color: var(--accent); background: var(--surface-bright); }
-    .feature h2 { margin: 0 0 10px; font-size: 24px; }
+    .feature h3 { margin: 0 0 10px; font-size: 24px; }
     .feature p { min-height: 72px; margin: 0; color: var(--muted); line-height: 1.55; }
+    .feature.pin { border-color: rgba(255, 179, 177, 0.35); background: linear-gradient(180deg, rgba(173, 2, 36, 0.12), var(--surface-low)); }
+    .tag { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 14px; padding: 5px 10px; border: 1px solid rgba(255, 179, 177, 0.35); border-radius: 999px; color: var(--accent); font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; }
     .micro { height: 64px; display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 28px; padding: 8px; border-radius: 8px; background: rgba(39, 54, 71, 0.75); opacity: 0.6; }
     .feature:hover .micro { opacity: 1; }
     .bars span { width: 8px; height: 20%; border-radius: 5px; background: var(--accent); animation: bounce 1.2s ease-in-out infinite; }
@@ -119,10 +124,43 @@
     .report-lines { display: flex; flex-direction: column; gap: 9px; align-items: flex-start; }
     .report-lines span { height: 4px; border-radius: 4px; background: rgba(198, 198, 202, 0.5); } .report-lines span:nth-child(1) { width: 75%; } .report-lines span:nth-child(2) { width: 50%; } .report-lines span:nth-child(3) { width: 100%; opacity: 0.5; }
     .radar { position: relative; } .radar::before { content: ""; position: absolute; width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--accent); animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite; } .radar::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
-    footer { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 40px max(32px, calc((100% - 1400px) / 2)); border-top: 1px solid var(--line); color: rgba(212, 228, 250, 0.55); background: #010f1f; font-size: 12px; }
+    .micro-terms { gap: 8px; flex-wrap: wrap; font-size: 12px; font-weight: 600; }
+    .micro-terms span { padding: 4px 9px; border-radius: 999px; color: var(--accent); background: rgba(173, 2, 36, 0.28); }
+    .micro-flow { gap: 8px; color: var(--muted); font-size: 12px; font-weight: 600; }
+    .micro-flow .material-symbols-outlined { font-size: 16px; color: var(--accent); }
+    .micro-mask { gap: 8px; }
+    .micro-mask span { width: 34px; height: 6px; border-radius: 6px; background: rgba(198, 198, 202, 0.4); } .micro-mask span:nth-child(2), .micro-mask span:nth-child(4) { background: repeating-linear-gradient(90deg, var(--accent) 0 4px, transparent 4px 8px); }
+
+    .steps-section { padding-bottom: 110px; }
+    .steps { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .step { display: flex; gap: 20px; padding: 28px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface-low); transition: background 220ms ease, transform 220ms ease; }
+    .step:hover { background: var(--surface-high); transform: translateY(-3px); }
+    .step-index { flex: 0 0 auto; width: 40px; height: 40px; display: grid; place-items: center; border-radius: 12px; color: var(--accent); background: var(--surface-bright); font: 700 15px var(--display); }
+    .step h3 { margin: 4px 0 8px; font-size: 20px; }
+    .step p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.6; }
+    .step .step-meta { display: block; margin-top: 12px; color: rgba(212, 228, 250, 0.5); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; }
+    .step-zero { grid-column: 1 / -1; border-color: rgba(255, 179, 177, 0.3); }
+    .stack { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px; }
+    .stack span { padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: 13px; font-weight: 500; }
+
+    .safeguards-section { padding-bottom: 110px; }
+    .safeguards { display: grid; grid-template-columns: 1.1fr 1fr; gap: 24px; align-items: start; }
+    .rules { display: flex; flex-direction: column; gap: 16px; margin: 0; padding: 0; list-style: none; }
+    .rules li { display: flex; gap: 14px; padding: 22px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-low); }
+    .rules .material-symbols-outlined { flex: 0 0 auto; color: var(--accent); }
+    .rules strong { display: block; margin-bottom: 6px; font-family: var(--display); font-size: 17px; }
+    .rules p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.55; }
+    .callout { padding: 28px; border: 1px solid rgba(255, 179, 177, 0.3); border-left: 3px solid var(--accent); border-radius: 14px; background: linear-gradient(180deg, rgba(173, 2, 36, 0.14), var(--surface-low)); }
+    .callout h3 { margin: 0 0 12px; font-size: 20px; }
+    .callout p { margin: 0 0 14px; color: var(--muted); font-size: 15px; line-height: 1.6; }
+    .callout ul { margin: 0; padding-left: 20px; color: var(--muted); font-size: 14px; line-height: 1.7; }
+
+    footer { padding: 40px max(32px, calc((100% - 1400px) / 2)); border-top: 1px solid var(--line); color: rgba(212, 228, 250, 0.55); background: #010f1f; font-size: 12px; }
+    .footer-note { max-width: 720px; margin-bottom: 28px; line-height: 1.7; }
+    .footer-bar { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
     .footer-links { display: flex; gap: 28px; } .footer-links a:hover { color: var(--text); }
     @keyframes bounce { 0%, 100% { height: 20%; } 50% { height: 80%; } } @keyframes ping { 0% { transform: scale(0.1); opacity: 1; } 100% { transform: scale(3); opacity: 0; } }
-    @media (max-width: 800px) { .nav, .hero, .features { width: min(100% - 32px, 560px); } .nav-links, .nav-download { display: none; } .hero { display: flex; flex-direction: column; align-items: stretch; gap: 24px; padding-top: 56px; } h1 { font-size: 44px; } .visual { margin-top: 28px; padding-left: 16px; } .live-sync { left: -2px; } .features { grid-template-columns: 1fr; padding-bottom: 64px; } footer { flex-direction: column; text-align: center; padding: 32px 16px; } }
+    @media (max-width: 800px) { .nav, .hero, .features, .section { width: min(100% - 32px, 560px); } .nav-links, .nav-download { display: none; } .hero { display: flex; flex-direction: column; align-items: stretch; gap: 24px; padding-top: 56px; } h1 { font-size: 44px; } .visual { margin-top: 28px; padding-left: 16px; } .live-sync { left: -2px; } .features { grid-template-columns: 1fr; padding-bottom: 64px; } .steps, .safeguards { grid-template-columns: 1fr; } .steps-section, .safeguards-section { padding-bottom: 64px; } footer { padding: 32px 16px; } .footer-bar { flex-direction: column; text-align: center; } }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
   </style>
 </head>
@@ -130,28 +168,181 @@
   <header>
     <div class="nav">
       <a class="brand" href="#top" aria-label="AuXio home"><span class="brand-mark"><span class="material-symbols-outlined">graphic_eq</span></span><span class="brand-name">AuXio</span></a>
-      <nav class="nav-links" aria-label="Main navigation"><a href="#features">Features</a><a href="#how-it-works">How it works</a><a href="#about">About</a></nav>
-      <div class="nav-actions"><a class="nav-download" href="#download">Download APK</a><span class="profile" aria-hidden="true"><span class="material-symbols-outlined">person</span></span></div>
+      <nav class="nav-links" aria-label="Main navigation"><a href="#features">Features</a><a href="#how-it-works">How it works</a><a href="#about">Safeguards</a></nav>
+      <div class="nav-actions"><a class="nav-download" href="#download">Download APK</a></div>
     </div>
   </header>
   <main id="top">
     <div class="page">
-      <section class="hero" id="about">
+      <section class="hero">
         <div class="hero-content">
           <div class="eyebrow">Secure communications</div>
           <h1>Breaking language barriers when every second counts.</h1>
-          <p class="hero-copy">Simultaneous AI translation designed specifically for emergency response, first responders, and critical global communications.</p>
+          <p class="hero-copy">AuXio interprets an emergency call in both directions in real time — and turns it into a structured report that reaches the people who care about the caller, not just the dispatch console.</p>
           <div class="download-area" id="download"><a class="button" href="#download"><span class="material-symbols-outlined">android</span>Download APK</a><div class="secure-note">Direct secure download</div></div>
         </div>
-        <div class="visual" id="how-it-works"><div class="live-sync"><div class="live-sync-label"><span class="material-symbols-outlined">record_voice_over</span>Live sync</div><div class="progress"><span></span></div></div><img class="visual-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJ6rKJiG68_mjICufE_vVjnu6eXgSGUF0wLhMHJw5QVkEHgDWylSSMypMHwI-pNWcRDgVrL403wY_2pXC4dX4ISid2m9IoU5eVEM_uAjI4QwN-jYA2fjbGWG1vNkRCLoN7KNh1v9Zlj3Wt_-9cU31fCCk29RyBSBt6p1ix1iWfc4r-4weryWHLSp1YexXJj4pxkEAjRMPwzOe2O5mAQ4SUe7amGoSMBxGLbnc9Rioqi2ak9k4Lozjw" alt="AuXio translation interface preview"></div>
+        <div class="visual"><div class="live-sync"><div class="live-sync-label"><span class="material-symbols-outlined">record_voice_over</span>Live sync</div><div class="progress"><span></span></div></div><img class="visual-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJ6rKJiG68_mjICufE_vVjnu6eXgSGUF0wLhMHJw5QVkEHgDWylSSMypMHwI-pNWcRDgVrL403wY_2pXC4dX4ISid2m9IoU5eVEM_uAjI4QwN-jYA2fjbGWG1vNkRCLoN7KNh1v9Zlj3Wt_-9cU31fCCk29RyBSBt6p1ix1iWfc4r-4weryWHLSp1YexXJj4pxkEAjRMPwzOe2O5mAQ4SUe7amGoSMBxGLbnc9Rioqi2ak9k4Lozjw" alt="AuXio translation interface preview"></div>
       </section>
-      <section class="features" id="features" aria-label="AuXio features">
-        <article class="feature"><div class="feature-icon"><span class="material-symbols-outlined">translate</span></div><h2>Real-time sync</h2><p>Zero-latency voice translation engineered for high-stakes environments. Instantly bridge communication gaps without delays.</p><div class="micro bars" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div></article>
-        <article class="feature"><div class="feature-icon"><span class="material-symbols-outlined">description</span></div><h2>AI incident reports</h2><p>Automatically synthesize calls into structured TXT/SMS reports. Standardized logging for dispatchers and legal records.</p><div class="micro report-lines" aria-hidden="true"><span></span><span></span><span></span></div></article>
-        <article class="feature"><div class="feature-icon"><span class="material-symbols-outlined">my_location</span></div><h2>Emergency routing</h2><p>Embedded operational maps with live telemetry. Track caller location and timestamp data seamlessly in one interface.</p><div class="micro radar" aria-hidden="true"></div></article>
+
+      <section class="section" id="features" aria-labelledby="features-title">
+        <div class="section-head">
+          <div class="eyebrow">Features</div>
+          <h2 id="features-title">A live interpreter on the call, and a report that outlives it.</h2>
+          <p>Live interpretation is what gets the caller understood. What happens after the call — a clear report in the hands of a trusted contact who can actually show up — is what AuXio is built for.</p>
+        </div>
+      </section>
+      <section class="features" aria-label="AuXio features">
+        <article class="feature">
+          <div class="feature-icon"><span class="material-symbols-outlined">translate</span></div>
+          <h3>Two-way live interpretation</h3>
+          <p>Each direction runs as its own interpreter session on a separate named audio track, so the caller and the dispatcher only ever hear the side meant for them. Turn-based, never talking over either voice.</p>
+          <div class="micro bars" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+        </article>
+        <article class="feature">
+          <div class="feature-icon"><span class="material-symbols-outlined">lock</span></div>
+          <h3>Locked critical glossary</h3>
+          <p>19 life-or-death terms across 6 languages have a fixed translation — including their negations. Every translation is checked against the glossary afterwards and repaired if a term went missing or its polarity flipped.</p>
+          <div class="micro micro-terms" aria-hidden="true"><span>not breathing</span><span>no pulse</span><span>trapped</span></div>
+        </article>
+        <article class="feature">
+          <div class="feature-icon"><span class="material-symbols-outlined">emergency_home</span></div>
+          <h3>Fallback instead of dead air</h3>
+          <p>Every direction is a state machine: listening, processing, playing. Translation gets a 3.5 s budget to reach the first audio byte; past it, the original speech is spoken instead of freezing the call. There is never silence.</p>
+          <div class="micro micro-flow" aria-hidden="true"><span>Listening</span><span class="material-symbols-outlined">chevron_right</span><span>Processing</span><span class="material-symbols-outlined">chevron_right</span><span>Playing</span></div>
+        </article>
+        <article class="feature pin">
+          <div class="feature-icon"><span class="material-symbols-outlined">diversity_3</span></div>
+          <span class="tag">The difference</span>
+          <h3>Trusted contact network</h3>
+          <p>Contacts are set up long before anything happens and stored server-side, so they survive a lost or broken phone. When a call comes in, the people who would want to know are already on the list.</p>
+          <div class="micro report-lines" aria-hidden="true"><span></span><span></span><span></span></div>
+        </article>
+        <article class="feature">
+          <div class="feature-icon"><span class="material-symbols-outlined">send</span></div>
+          <h3>Report delivery that reaches anyone</h3>
+          <p>Contacts with the app get a native push and a map. Everyone else gets WhatsApp, SMS or email with a short-lived signed link to a lightweight viewer — map included. Location travels as a real map pin, not a bare link.</p>
+          <div class="micro radar" aria-hidden="true"></div>
+        </article>
+        <article class="feature">
+          <div class="feature-icon"><span class="material-symbols-outlined">shield_person</span></div>
+          <h3>Two reports, not one redacted</h3>
+          <p>The family report is written from scratch for a family audience — what happened, where, that help is on the way. It carries no transcript, no confidence scores and no clinical detail; those exist only in the operator's copy.</p>
+          <div class="micro micro-mask" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+        </article>
+      </section>
+
+      <section class="section steps-section" id="how-it-works" aria-labelledby="how-title">
+        <div class="section-head">
+          <div class="eyebrow">How it works</div>
+          <h2 id="how-title">From the first word to the report, in one continuous flow.</h2>
+          <p>The caller, the dispatcher and the AI interpreter all join the same real-time room. Understanding the emergency and notifying the support network run alongside the call — never in front of it.</p>
+        </div>
+        <div class="steps">
+          <article class="step step-zero">
+            <div class="step-index" aria-hidden="true">00</div>
+            <div>
+              <h3>Before anything happens: set up your circle</h3>
+              <p>In the app's settings you add your trusted contacts and ask each one to send a quick opt-in message on WhatsApp. That is real, explicit consent — recorded before the emergency, not improvised during it — and it is what lets a message reach them the moment it matters.</p>
+              <span class="step-meta">One-time setup &middot; Stored server-side, not only on the phone</span>
+            </div>
+          </article>
+          <article class="step">
+            <div class="step-index" aria-hidden="true">01</div>
+            <div>
+              <h3>The call opens</h3>
+              <p>The Android app joins a real-time room together with the dispatcher's web console and the AI interpreter. Each participant subscribes only to the audio meant for them, so nobody hears the wrong side of the conversation.</p>
+              <span class="step-meta">WebRTC room &middot; Caller, operator, interpreter</span>
+            </div>
+          </article>
+          <article class="step">
+            <div class="step-index" aria-hidden="true">02</div>
+            <div>
+              <h3>Both directions are interpreted</h3>
+              <p>Speech is transcribed, translated by a model instructed to act as a strict interpreter — it never answers, advises or asks anything of its own — and spoken back with a low-latency voice. Negations, names, numbers and places are preserved exactly.</p>
+              <span class="step-meta">Speech-to-text &rarr; strict translation &rarr; voice</span>
+            </div>
+          </article>
+          <article class="step">
+            <div class="step-index" aria-hidden="true">03</div>
+            <div>
+              <h3>The emergency is understood in parallel</h3>
+              <p>A second model reads the running transcript and extracts emergency type, people affected, location and active hazards, with a confidence score on every field. It runs beside the interpreter and can never slow it down.</p>
+              <span class="step-meta">Per-field confidence &middot; Non-blocking</span>
+            </div>
+          </article>
+          <article class="step">
+            <div class="step-index" aria-hidden="true">04</div>
+            <div>
+              <h3>An early alert goes out mid-call</h3>
+              <p>Once location clears 0.75 confidence and emergency type clears 0.70 — both holding steady across two extraction passes, and never before 12 s into the call — a short alert is sent: what happened, where, and that emergency services are already on the line.</p>
+              <span class="step-meta">Lightweight alert &middot; Native map location</span>
+            </div>
+          </article>
+          <article class="step">
+            <div class="step-index" aria-hidden="true">05</div>
+            <div>
+              <h3>Two reports close the loop</h3>
+              <p>On hangup AuXio writes two plain-text reports: the operator's, with per-field confidence, dispatch data and the full bilingual transcript — and the family's, written separately, in the caller's own language, with none of that. Each goes out over its contact's channel.</p>
+              <span class="step-meta">Structured .txt &middot; Signed links that expire and can be revoked</span>
+            </div>
+          </article>
+        </div>
+        <div class="stack" aria-label="Built with">
+          <span>LiveKit Agents</span><span>Deepgram Nova-3</span><span>Claude Haiku</span><span>ElevenLabs Flash v2.5</span><span>Supabase</span><span>WhatsApp Cloud API via Kapso</span><span>Kotlin &amp; Jetpack Compose</span>
+        </div>
+      </section>
+
+      <section class="section safeguards-section" id="about" aria-labelledby="about-title">
+        <div class="section-head">
+          <div class="eyebrow">Safeguards &amp; scope</div>
+          <h2 id="about-title">AuXio informs. It never instructs.</h2>
+          <p>A tool that speaks during an emergency has to be honest about where its role ends. These limits are deliberate, and they are visible on every screen and in every message AuXio produces.</p>
+        </div>
+        <div class="safeguards">
+          <ul class="rules">
+            <li>
+              <span class="material-symbols-outlined">medical_information</span>
+              <div>
+                <strong>No medical guidance, ever</strong>
+                <p>Reports and alerts describe the situation. They never generate, suggest or relay a medical procedure for a family member to perform. Instructions come from the professionals on the call.</p>
+              </div>
+            </li>
+            <li>
+              <span class="material-symbols-outlined">record_voice_over</span>
+              <div>
+                <strong>The interpreter only interprets</strong>
+                <p>The translation agent is constrained to faithful interpretation. It does not offer opinions, does not answer on the caller's behalf, and does not ask questions of its own.</p>
+              </div>
+            </li>
+            <li>
+              <span class="material-symbols-outlined">visibility_lock</span>
+              <div>
+                <strong>Consent first, minimum data after</strong>
+                <p>Nobody is contacted without having opted in beforehand. Each recipient sees only the fields their role justifies, through links that are signed and short-lived rather than permanently public.</p>
+              </div>
+            </li>
+          </ul>
+          <aside class="callout">
+            <h3>Not a replacement for emergency services</h3>
+            <p>AuXio is an interpretation and notification layer. In an emergency, always contact your local emergency number — 123, 911, 112 or whatever applies where you are. AuXio helps you be understood and helps your people find out; it does not dispatch help.</p>
+            <p>Current scope of this build:</p>
+            <ul>
+              <li>Android only — sideloaded APK, not a store release</li>
+              <li>No SIP or live integration with real emergency lines</li>
+              <li>Turn-based interpretation, one speaker at a time</li>
+            </ul>
+          </aside>
+        </div>
       </section>
     </div>
   </main>
-  <footer><div class="brand"><span class="material-symbols-outlined">graphic_eq</span><span class="brand-name">AuXio</span></div><div class="footer-links"><a href="#privacy">Privacy</a><a href="#terms">Terms</a><a href="https://github.com" rel="noreferrer">GitHub</a></div><span>&copy; 2026 AuXio.</span></footer>
+  <footer>
+    <p class="footer-note">AuXio does not replace emergency services and does not provide medical, legal or safety instructions. If you are in danger, call your local emergency number. Reports are shared only with contacts who opted in beforehand, and generated links expire.</p>
+    <div class="footer-bar">
+      <div class="brand"><span class="material-symbols-outlined">graphic_eq</span><span class="brand-name">AuXio</span></div>
+      <div class="footer-links"><a href="#privacy">Privacy</a><a href="#terms">Terms</a><a href="https://github.com/platanus-hack/platanus-hack-26-co-team-4#equipo" rel="noreferrer">GitHub</a></div>
+      <span>&copy; 2026 AuXio.</span>
+    </div>
+  </footer>
 </body>
 </html>
