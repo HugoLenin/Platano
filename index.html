@@ -16,7 +16,8 @@
   <meta name="twitter:title" content="AuXio | Interpretación segura para emergencias">
   <meta name="twitter:description" content="Interpretación de llamadas de emergencia en tiempo real y reportes para contactos de confianza.">
   <title>AuXio | Secure communications</title>
-  <link rel="icon" href="./project-logo.png">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="alternate icon" href="./project-logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Hanken+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
@@ -80,6 +81,7 @@
       background: var(--accent-strong);
       box-shadow: 0 0 15px rgba(173, 2, 36, 0.35);
     }
+    .brand-globe { display: block; width: 21px; height: 21px; }
     .brand-name { font: 700 24px var(--display); letter-spacing: -0.04em; }
     .nav-links { gap: 36px; margin-left: 64px; color: var(--muted); font-size: 14px; font-weight: 600; }
     .nav-links a:hover { color: var(--text); }
@@ -186,7 +188,7 @@
 <body>
   <header>
     <div class="nav">
-      <a class="brand" href="#top" aria-label="AuXio home"><span class="brand-mark"><span class="material-symbols-outlined">graphic_eq</span></span><span class="brand-name">AuXio</span></a>
+      <a class="brand" href="#top" aria-label="AuXio home"><span class="brand-mark"><svg class="brand-globe" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><circle cx="50" cy="50" r="38" fill="none" stroke="currentColor" stroke-width="4.6"></circle><g fill="currentColor"><path d="M23.8 32.0 L30.0 24.6 L43.5 23.0 L48.0 28.5 L40.5 35.5 L42.0 40.0 L40.0 44.0 L42.5 47.5 L46.0 48.5 L58.0 57.5 L49.5 65.5 L44.0 79.0 L37.2 62.0 L37.2 49.5 L35.8 45.5 L33.5 44.3 L28.5 45.0 L22.8 38.0 Z"></path><path d="M49.5 20.5 L58.5 22.5 L53.0 29.5 Z"></path><path d="M62.5 26.5 L71.5 30.0 L73.5 38.0 L64.0 39.5 L60.5 33.0 Z"></path><path d="M60.8 46.0 L62.0 42.0 L78.0 42.5 L76.5 55.0 L74.0 66.0 L69.5 73.0 L70.0 63.0 L66.5 56.0 L64.0 51.5 Z"></path></g></svg></span><span class="brand-name">AuXio</span></a>
       <nav class="nav-links" aria-label="Main navigation"><a href="#features" data-i18n="features">Features</a><a href="#how-it-works" data-i18n="howItWorks">How it works</a><a href="#about" data-i18n="safeguards">Safeguards</a></nav>
       <div class="nav-actions"><label class="language-switch"><span class="material-symbols-outlined">language</span><span class="sr-only">Language</span><select id="language-select" aria-label="Page language"><option value="en">EN</option><option value="es">ES</option><option value="pt">PT</option><option value="fr">FR</option><option value="de">DE</option><option value="it">IT</option></select></label><a class="nav-download" href="#download" data-i18n="download">Download APK</a></div>
     </div>
@@ -358,7 +360,7 @@
   <footer>
     <p class="footer-note" data-i18n="footerNote">AuXio does not replace emergency services and does not provide medical, legal or safety instructions. If you are in danger, call your local emergency number. Reports are shared only with contacts who opted in beforehand, and generated links expire.</p>
     <div class="footer-bar">
-      <div class="brand"><span class="material-symbols-outlined">graphic_eq</span><span class="brand-name">AuXio</span></div>
+      <div class="brand"><span class="brand-mark"><svg class="brand-globe" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><circle cx="50" cy="50" r="38" fill="none" stroke="currentColor" stroke-width="4.6"></circle><g fill="currentColor"><path d="M23.8 32.0 L30.0 24.6 L43.5 23.0 L48.0 28.5 L40.5 35.5 L42.0 40.0 L40.0 44.0 L42.5 47.5 L46.0 48.5 L58.0 57.5 L49.5 65.5 L44.0 79.0 L37.2 62.0 L37.2 49.5 L35.8 45.5 L33.5 44.3 L28.5 45.0 L22.8 38.0 Z"></path><path d="M49.5 20.5 L58.5 22.5 L53.0 29.5 Z"></path><path d="M62.5 26.5 L71.5 30.0 L73.5 38.0 L64.0 39.5 L60.5 33.0 Z"></path><path d="M60.8 46.0 L62.0 42.0 L78.0 42.5 L76.5 55.0 L74.0 66.0 L69.5 73.0 L70.0 63.0 L66.5 56.0 L64.0 51.5 Z"></path></g></svg></span><span class="brand-name">AuXio</span></div>
       <div class="footer-links"><a href="#privacy">Privacy</a><a href="#terms">Terms</a><a href="https://github.com/platanus-hack/platanus-hack-26-co-team-4#equipo" rel="noreferrer">GitHub</a></div>
       <span>&copy; 2026 AuXio.</span>
     </div>
