@@ -91,12 +91,25 @@ Verificado ejecutándose: APK real (debug y release), web compilando limpia, 31
 tests del agente en verde, e interoperabilidad de firmas Python↔TypeScript
 probada — incluida una falsificación de alcance que es rechazada.
 
-Con credenciales reales (2026-08-22): **LiveKit, Deepgram, Anthropic y
-ElevenLabs verificados uno por uno contra su API**, el worker registrado en
-LiveKit Cloud y `/api/token` devolviendo JWT. Probado también el
-code-switching: una frase mezclando inglés y español transcrita con
-`nova-3 multi` a **0.996 de confianza**. Falta la llamada con audio de punta a
-punta y la latencia medida — estado vivo en [`RUNBOOK.md`](RUNBOOK.md) §8.
+**Llamada real de punta a punta, verificada el 2026-08-22.** El llamante habla
+inglés, el despachador oye español, y el audio que sale se vuelve a transcribir
+para comprobarlo:
+
+```
+said  (caller, en): My son is trapped in the back seat and he is not breathing.
+                    We are on Seventh Avenue with Forty Fifth street.
+heard (operator, es): Mi hijo está atrapado en el asiento trasero y no respira.
+                    Estamos en 7th Avenue con 45th Street.
+latencia fin-de-habla -> primer audio: 2.33s   ·   cruce de audio: no
+```
+
+Reproducible con `py -3.13 scripts/e2e_call.py`. El reporte se generó solo, con
+la ubicación y el tipo extraídos, `NOT BREATHING` y `TRAPPED` marcados como
+términos críticos y la notificación temprana disparada por fast-path.
+
+Lo que falta: el visor `/r/<token>` necesita Supabase, y WhatsApp necesita la
+plantilla aprobada por Meta. Estado sin maquillaje en
+[`RUNBOOK.md`](RUNBOOK.md) §8.
 
 ## Equipo
 

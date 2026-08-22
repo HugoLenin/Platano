@@ -105,8 +105,12 @@ tests del agente en verde e interoperabilidad de firmas Python↔TypeScript
 probada — incluyendo que una falsificación que intenta subir de alcance
 *familiar* a *operador* es rechazada.
 
-Con credenciales reales ya verificamos los cuatro proveedores contra su API
-—incluido el code-switching inglés↔español transcrito a 0.996 de confianza— y
-el agente registrado en LiveKit Cloud. Lo que falta es operacional, no de
-diseño: la llamada con audio de punta a punta y la latencia medida. Todo el
-estado, sin maquillaje, está en el repo (`RUNBOOK.md`, `docs/DECISIONS.md`).
+Y funciona de punta a punta: en una llamada real el llamante dijo en inglés
+*"my son is trapped in the back seat and he is not breathing"* y el despachador
+escuchó *"mi hijo está atrapado en el asiento trasero y no respira"*, **2,3
+segundos** después de que terminara de hablar. El reporte se generó solo, con la
+ubicación extraída y los términos críticos marcados.
+
+Lo que falta es operacional: el visor de reportes necesita la base de datos
+conectada y el aviso por WhatsApp necesita la plantilla aprobada por Meta. Todo
+el estado, sin maquillaje, está en el repo.

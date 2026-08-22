@@ -494,9 +494,6 @@ async def entrypoint(ctx: JobContext) -> None:
         )
         .to_jwt()
     )
-    await room_b.connect(settings.livekit_url, token_b)
-    logger.info("second interpreter connection joined as %s", TRACK_TO_CALLER)
-
     vad = ctx.proc.userdata.get("vad") or silero.VAD.load()
 
     # GOTCHA (verified 2026-08, livekit-plugins-anthropic 1.7.0 + anthropic 1.0.0):
@@ -527,7 +524,15 @@ async def entrypoint(ctx: JobContext) -> None:
             llm=anthropic.LLM(
                 model=settings.translate_model,
                 client=claude,
-                temperature=0.0,
+                # NO temperature: the plugin forwards it straight into
+                # messages.create(**extra), and the anthropic 1.x SDK removed
+                # the parameter - every call died with
+                #   TypeError: unexpected keyword argument 'temperature'
+                # LiveKit retries that with backoff, so it did not surface as
+                # an error: it burned the 3.5s budget and silently fell back to
+                # source passthrough on EVERY turn. Determinism now comes from
+                # the system prompt alone. Same family as the httpx2 gotcha in
+                # docs/DECISIONS.md D9.
                 # A translation is never longer than a few sentences; capping
                 # this bounds the worst-case latency of a runaway generation.
                 max_tokens=600,
@@ -588,6 +593,16 @@ async def entrypoint(ctx: JobContext) -> None:
             close_on_disconnect=False,
         ),
     )
+    # Connect the second room ONLY now. Everything above (Silero VAD, the two
+    # turn-detector ONNX models, the plugin construction) is synchronous and
+    # blocks the event loop. Connecting before it means the Rust FFI fires its
+    # ConnectCallback and then waits for a ReadyForRoomEventRequest that the
+    # blocked loop cannot send in time:
+    #   FFI Panic: timed out waiting for ReadyForRoomEventRequest
+    # which kills the whole worker process mid-call. Observed live.
+    await room_b.connect(settings.livekit_url, token_b)
+    logger.info("second interpreter connection joined as %s", TRACK_TO_CALLER)
+
     # operator -> caller, spoken on the "interpreter-to-caller" track
     await session_b.start(
         agent=agent_b,

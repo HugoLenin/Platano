@@ -256,11 +256,41 @@ credenciales de verdad:
 |---|---|---|
 | 1 | `web` levanta y `/api/token` devuelve un JWT | ✅ HTTP 200, `identity=operator`, sala `elb-demo` |
 | 2a | El worker se registra en LiveKit Cloud | ✅ `registered worker`, `elb-interpreter`, región US East B |
-| 2b | El agente entra a la sala y aparece como participante (log: `second interpreter connection joined as interpreter-to-caller`) | ⬜ requiere que un cliente entre a la sala |
-| 3 | Audio en **una** dirección: hablar por el teléfono, oír en la consola | ⬜ bloqueado por el TTS |
-| 4 | Las **dos** direcciones, sin que ningún lado oiga su propia interpretación (si pasa, alguien perdió el `autoSubscribe=false`) | ⬜ |
-| 5 | Colgar → se genera el reporte y `/r/<token>` abre | ⬜ |
+| 2b | El agente entra a la sala y publica sus dos tracks | ✅ `both interpretation directions are live` |
+| 3 | Audio en una dirección: el llamante habla inglés, el despachador oye español | ✅ ver abajo |
+| 4 | Sin cruce de audio: el operador no se suscribe al track del llamante | ✅ verificado por el harness |
+| 5 | Colgar → reporte generado | ✅ dos `.txt` (operador y familia) en `reports/` |
+| 5b | El link `/r/<token>` abre el reporte | ⬜ necesita Supabase: el visor lee de ahí |
 | 6 | WhatsApp: opt-in del contacto y luego un aviso real | ⬜ falta plantilla aprobada |
+
+### Cómo reproducirlo sin teléfono ni navegador
+
+Con la web y el agente corriendo:
+
+```bash
+cd agent && PYTHONPATH=src py -3.13 ../scripts/e2e_call.py
+```
+
+El harness sintetiza la voz del llamante con ElevenLabs, entra a la sala como
+`caller` **y** como `operator`, graba lo que oye el despachador y se lo manda a
+Deepgram. Sale con código 0 solo si hubo traducción y **no** hubo cruce de
+audio. Corrida real del 2026-08-22:
+
+```
+said  (caller, en): Help! There has been a car accident. My son is trapped in
+                    the back seat and he is not breathing. We are on Seventh
+                    Avenue with Forty Fifth street.
+heard (operator, es): Ha habido un accidente de coche. Mi hijo está atrapado en
+                    el asiento trasero y no respira. Estamos en 7th Avenue con
+                    45th Street.
+latency end-of-speech -> first interpreted audio: 2.33s
+crosstalk: no
+```
+
+**Latencia medida:** 2,3 s y 4,2 s en dos corridas de punta a punta; la parte de
+traducción sola es de **938 ms de mediana** (sale en la sección 6 del reporte).
+El objetivo de 1–2 s del brief **no se cumple**: lo que se mide es 2–4 s, y la
+mayor parte no es el modelo sino el endpointing del turno más el TTS.
 
 Proveedores verificados uno por uno contra su API real:
 
@@ -307,6 +337,9 @@ export PYTHONIOENCODING=utf-8      # PowerShell: $env:PYTHONIOENCODING="utf-8"
 | `TypeError: Invalid http_client argument; Expected an instance of httpx2.AsyncClient` | `livekit-plugins-anthropic` le pasa un cliente `httpx` al SDK `anthropic` 1.x | Ya está resuelto inyectando el cliente en `main.py`. **No quites ese workaround** ([D9](docs/DECISIONS.md#d9--el-cliente-de-anthropic-se-inyecta-a-mano-workaround-obligatorio)) |
 | `livekit-agents requires Python >= 3.10` | `python` es 3.9 | usa `py -3.13` |
 | `ValueError: ws_url is required, or set LIVEKIT_URL` | el proceso no ve `agent/.env` | `main.py` ya llama a `load_dotenv()` antes de importar `.config`. Si sigue pasando, estás corriendo desde otra carpeta: el `.env` se busca desde el cwd |
+| El agente se registra pero **nunca entra a la sala** | `agent_name` desactiva el dispatch automático de LiveKit | el token debe llevar `RoomConfiguration` + `RoomAgentDispatch` (ya está en `/api/token`). Si cambias el `agent_name` en `main.py`, cambia también `AGENT_NAME` ahí |
+| **Todos** los turnos caen en `translation exceeded 3.5s` | se le pasa `temperature` al plugin, y el SDK `anthropic` 1.x lo rechaza; LiveKit reintenta con backoff hasta agotar el presupuesto | no pasar `temperature` a `anthropic.LLM(...)` |
+| `FFI Panic: timed out waiting for ReadyForRoomEventRequest` y el worker muere | se conectó una `rtc.Room` y acto seguido se cargó un modelo síncrono, bloqueando el event loop | conectar `room_b` **después** de cargar VAD y turn detector (así está en `main.py`) |
 | ElevenLabs 401 `missing the permission text_to_speech` | la API key se creó con acceso restringido | elevenlabs.io → Profile → API Keys → editar la key → habilitar **Text to Speech** (y Voices → Read), o crear una con acceso completo |
 | Link de reporte da 401 / firma inválida | `ELB_REPORT_SIGNING_SECRET` distinto entre agente y web | igualarlos y reiniciar **ambos** |
 | El agente no dispara notificaciones (401 en `/api/notify`) | `ELB_INTERNAL_TOKEN` distinto | igualarlo en los dos `.env` |

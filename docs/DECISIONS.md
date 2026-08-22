@@ -387,6 +387,41 @@ Todas verificadas contra AGP 9.3.1 / Kotlin 2.4.10 / Gradle 9.5.0:
 
 ---
 
+## D15 · Tres fallas que solo aparecen corriendo el sistema completo
+
+Ninguna de estas da error en compilación, en los tests ni al importar. Las tres
+se encontraron en la primera llamada real (2026-08-22) y las tres son
+silenciosas: el sistema parece vivo y no interpreta nada.
+
+**a) Un agente con nombre no recibe dispatch automático.** `WorkerOptions(
+agent_name="elb-interpreter")` apaga el dispatch automático de LiveKit. El
+worker aparece `registered`, los humanos entran a la sala, y el intérprete
+simplemente no llega — sin un solo error en ningún log. El token que emite
+`/api/token` lleva ahora `RoomConfiguration` + `RoomAgentDispatch`. Si cambias
+`agent_name`, cambia también `AGENT_NAME` en esa ruta.
+
+**b) `temperature` mata todas las traducciones.** El plugin reenvía
+`temperature` dentro de `**extra` a `messages.create()`, y el SDK `anthropic`
+1.x eliminó ese parámetro (`TypeError: unexpected keyword argument`). LiveKit
+reintenta la creación del stream con backoff, así que **no** aparece como
+error: consume los 3,5 s de presupuesto y cae al passthrough del original, en
+cada turno. Es la misma familia que [D9](#d9--el-cliente-de-anthropic-se-inyecta-a-mano-workaround-obligatorio):
+el plugin no fijó la versión del SDK. El determinismo ahora sale del prompt.
+
+**c) Conectar una `rtc.Room` justo antes de cargar un modelo mata el proceso.**
+El FFI de Rust dispara su `ConnectCallback` y espera un
+`ReadyForRoomEventRequest` que el event loop, bloqueado cargando Silero y los
+dos turn detectors ONNX, no alcanza a mandar:
+
+```
+FFI Panic: timed out waiting for ReadyForRoomEventRequest (room_handle=5)
+```
+
+y se lleva el worker entero a mitad de llamada. `room_b.connect()` va **después**
+de toda la carga síncrona. Es intermitente, que es lo peor que puede ser.
+
+---
+
 ## Versiones confirmadas (2026-08-22)
 
 `livekit-agents 1.7.0` · `livekit-client 2.22.0` · `livekit-android 2.28.0` ·

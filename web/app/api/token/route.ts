@@ -5,15 +5,24 @@
  * each translation direction to a specific participant identity, and the
  * clients subscribe by track name. Anything else and the wiring silently
  * breaks.
+ *
+ * The token also carries the agent dispatch. This is NOT optional: the worker
+ * registers with `agent_name="elb-interpreter"`, and naming an agent turns
+ * LiveKit's automatic dispatch OFF. Without the RoomConfiguration below the
+ * room happily accepts both humans and the interpreter simply never joins -
+ * no error anywhere, just silence. Verified against a live room.
  */
 
 import { NextResponse } from "next/server";
-import { AccessToken } from "livekit-server-sdk";
+import { AccessToken, RoomAgentDispatch, RoomConfiguration } from "livekit-server-sdk";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const IDENTITIES = new Set(["caller", "operator"]);
+
+/** Must match WorkerOptions(agent_name=...) in agent/src/elb/main.py. */
+const AGENT_NAME = "elb-interpreter";
 
 export async function POST(req: Request) {
   const apiKey = process.env.LIVEKIT_API_KEY;
@@ -56,6 +65,13 @@ export async function POST(req: Request) {
     canSubscribe: true,
     canPublishData: true,
     canUpdateOwnMetadata: true,
+  });
+
+  // Dispatch the named worker into this room. Idempotent per room: if the
+  // interpreter is already there (the other participant's token asked first),
+  // LiveKit does not start a second job.
+  at.roomConfig = new RoomConfiguration({
+    agents: [new RoomAgentDispatch({ agentName: AGENT_NAME })],
   });
 
   return NextResponse.json({
