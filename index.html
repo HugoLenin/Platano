@@ -221,17 +221,17 @@
           <div class="feature-icon"><span class="material-symbols-outlined">lock</span></div>
           <h3 data-i18n="featureTwoTitle">Locked critical glossary</h3>
           <p data-i18n="featureTwoCopy">19 life-or-death terms across 6 languages have a fixed translation — including their negations. Every translation is checked against the glossary afterwards and repaired if a term went missing or its polarity flipped.</p>
-          <div class="micro micro-terms" aria-hidden="true"><span>not breathing</span><span>no pulse</span><span>trapped</span></div>
+          <div class="micro micro-terms" aria-hidden="true"><span data-i18n="notBreathing">not breathing</span><span data-i18n="noPulse">no pulse</span><span data-i18n="trapped">trapped</span></div>
         </article>
         <article class="feature">
           <div class="feature-icon"><span class="material-symbols-outlined">emergency_home</span></div>
           <h3 data-i18n="featureThreeTitle">Fallback instead of dead air</h3>
           <p data-i18n="featureThreeCopy">Every direction is a state machine: listening, processing, playing. Translation gets a 3.5 s budget to reach the first audio byte; past it, the original speech is spoken instead of freezing the call. There is never silence.</p>
-          <div class="micro micro-flow" aria-hidden="true"><span>Listening</span><span class="material-symbols-outlined">chevron_right</span><span>Processing</span><span class="material-symbols-outlined">chevron_right</span><span>Playing</span></div>
+          <div class="micro micro-flow" aria-hidden="true"><span data-i18n="listening">Listening</span><span class="material-symbols-outlined">chevron_right</span><span data-i18n="processing">Processing</span><span class="material-symbols-outlined">chevron_right</span><span data-i18n="playing">Playing</span></div>
         </article>
         <article class="feature pin">
           <div class="feature-icon"><span class="material-symbols-outlined">diversity_3</span></div>
-          <span class="tag">The difference</span>
+          <span class="tag" data-i18n="theDifference">The difference</span>
           <h3 data-i18n="featureFourTitle">Trusted contact network</h3>
           <p data-i18n="featureFourCopy">Contacts are set up long before anything happens and stored server-side, so they survive a lost or broken phone. When a call comes in, the people who would want to know are already on the list.</p>
           <div class="micro report-lines" aria-hidden="true"><span></span><span></span><span></span></div>
@@ -260,49 +260,49 @@
           <article class="step step-zero">
             <div class="step-index" aria-hidden="true">00</div>
             <div>
-              <h3>Before anything happens: set up your circle</h3>
-              <p>In the app's settings you add your trusted contacts and ask each one to send a quick opt-in message on WhatsApp. That is real, explicit consent — recorded before the emergency, not improvised during it — and it is what lets a message reach them the moment it matters.</p>
-              <span class="step-meta">One-time setup &middot; Stored server-side, not only on the phone</span>
+              <h3 data-i18n="stepZeroTitle">Before anything happens: set up your circle</h3>
+              <p data-i18n="stepZeroCopy">In the app's settings you add your trusted contacts and ask each one to send a quick opt-in message on WhatsApp. That is real, explicit consent — recorded before the emergency, not improvised during it — and it is what lets a message reach them the moment it matters.</p>
+              <span class="step-meta" data-i18n="stepZeroMeta">One-time setup &middot; Stored server-side, not only on the phone</span>
             </div>
           </article>
           <article class="step">
             <div class="step-index" aria-hidden="true">01</div>
             <div>
-              <h3>The call opens</h3>
-              <p>The Android app joins a real-time room together with the dispatcher's web console and the AI interpreter. Each participant subscribes only to the audio meant for them, so nobody hears the wrong side of the conversation.</p>
-              <span class="step-meta">WebRTC room &middot; Caller, operator, interpreter</span>
+              <h3 data-i18n="stepOneTitle">The call opens</h3>
+              <p data-i18n="stepOneCopy">The Android app joins a real-time room together with the dispatcher's web console and the AI interpreter. Each participant subscribes only to the audio meant for them, so nobody hears the wrong side of the conversation.</p>
+              <span class="step-meta" data-i18n="stepOneMeta">WebRTC room &middot; Caller, operator, interpreter</span>
             </div>
           </article>
           <article class="step">
             <div class="step-index" aria-hidden="true">02</div>
             <div>
-              <h3>Both directions are interpreted</h3>
-              <p>Speech is transcribed, translated by a model instructed to act as a strict interpreter — it never answers, advises or asks anything of its own — and spoken back with a low-latency voice. Negations, names, numbers and places are preserved exactly.</p>
-              <span class="step-meta">Speech-to-text &rarr; strict translation &rarr; voice</span>
+              <h3 data-i18n="stepTwoTitle">Both directions are interpreted</h3>
+              <p data-i18n="stepTwoCopy">Speech is transcribed, translated by a model instructed to act as a strict interpreter — it never answers, advises or asks anything of its own — and spoken back with a low-latency voice. Negations, names, numbers and places are preserved exactly.</p>
+              <span class="step-meta" data-i18n="stepTwoMeta">Speech-to-text &rarr; strict translation &rarr; voice</span>
             </div>
           </article>
           <article class="step">
             <div class="step-index" aria-hidden="true">03</div>
             <div>
-              <h3>The emergency is understood in parallel</h3>
-              <p>A second model reads the running transcript and extracts emergency type, people affected, location and active hazards, with a confidence score on every field. It runs beside the interpreter and can never slow it down.</p>
-              <span class="step-meta">Per-field confidence &middot; Non-blocking</span>
+              <h3 data-i18n="stepThreeTitle">The emergency is understood in parallel</h3>
+              <p data-i18n="stepThreeCopy">A second model reads the running transcript and extracts emergency type, people affected, location and active hazards, with a confidence score on every field. It runs beside the interpreter and can never slow it down.</p>
+              <span class="step-meta" data-i18n="stepThreeMeta">Per-field confidence &middot; Non-blocking</span>
             </div>
           </article>
           <article class="step">
             <div class="step-index" aria-hidden="true">04</div>
             <div>
-              <h3>An early alert goes out mid-call</h3>
-              <p>Once location clears 0.75 confidence and emergency type clears 0.70 — both holding steady across two extraction passes, and never before 12 s into the call — a short alert is sent: what happened, where, and that emergency services are already on the line.</p>
-              <span class="step-meta">Lightweight alert &middot; Native map location</span>
+              <h3 data-i18n="stepFourTitle">An early alert goes out mid-call</h3>
+              <p data-i18n="stepFourCopy">Once location clears 0.75 confidence and emergency type clears 0.70 — both holding steady across two extraction passes, and never before 12 s into the call — a short alert is sent: what happened, where, and that emergency services are already on the line.</p>
+              <span class="step-meta" data-i18n="stepFourMeta">Lightweight alert &middot; Native map location</span>
             </div>
           </article>
           <article class="step">
             <div class="step-index" aria-hidden="true">05</div>
             <div>
-              <h3>Two reports close the loop</h3>
-              <p>On hangup AuXio writes two plain-text reports: the operator's, with per-field confidence, dispatch data and the full bilingual transcript — and the family's, written separately, in the caller's own language, with none of that. Each goes out over its contact's channel.</p>
-              <span class="step-meta">Structured .txt &middot; Signed links that expire and can be revoked</span>
+              <h3 data-i18n="stepFiveTitle">Two reports close the loop</h3>
+              <p data-i18n="stepFiveCopy">On hangup AuXio writes two plain-text reports: the operator's, with per-field confidence, dispatch data and the full bilingual transcript — and the family's, written separately, in the caller's own language, with none of that. Each goes out over its contact's channel.</p>
+              <span class="step-meta" data-i18n="stepFiveMeta">Structured .txt &middot; Signed links that expire and can be revoked</span>
             </div>
           </article>
         </div>
@@ -322,33 +322,33 @@
             <li>
               <span class="material-symbols-outlined">medical_information</span>
               <div>
-                <strong>No medical guidance, ever</strong>
-                <p>Reports and alerts describe the situation. They never generate, suggest or relay a medical procedure for a family member to perform. Instructions come from the professionals on the call.</p>
+                <strong data-i18n="noMedical">No medical guidance, ever</strong>
+                <p data-i18n="noMedicalCopy">Reports and alerts describe the situation. They never generate, suggest or relay a medical procedure for a family member to perform. Instructions come from the professionals on the call.</p>
               </div>
             </li>
             <li>
               <span class="material-symbols-outlined">record_voice_over</span>
               <div>
-                <strong>The interpreter only interprets</strong>
-                <p>The translation agent is constrained to faithful interpretation. It does not offer opinions, does not answer on the caller's behalf, and does not ask questions of its own.</p>
+                <strong data-i18n="onlyInterprets">The interpreter only interprets</strong>
+                <p data-i18n="onlyInterpretsCopy">The translation agent is constrained to faithful interpretation. It does not offer opinions, does not answer on the caller's behalf, and does not ask questions of its own.</p>
               </div>
             </li>
             <li>
               <span class="material-symbols-outlined">visibility_lock</span>
               <div>
-                <strong>Consent first, minimum data after</strong>
-                <p>Nobody is contacted without having opted in beforehand. Each recipient sees only the fields their role justifies, through links that are signed and short-lived rather than permanently public.</p>
+                <strong data-i18n="consentFirst">Consent first, minimum data after</strong>
+                <p data-i18n="consentFirstCopy">Nobody is contacted without having opted in beforehand. Each recipient sees only the fields their role justifies, through links that are signed and short-lived rather than permanently public.</p>
               </div>
             </li>
           </ul>
           <aside class="callout">
-            <h3>Not a replacement for emergency services</h3>
-            <p>AuXio is an interpretation and notification layer. In an emergency, always contact your local emergency number — 123, 911, 112 or whatever applies where you are. AuXio helps you be understood and helps your people find out; it does not dispatch help.</p>
-            <p>Current scope of this build:</p>
+            <h3 data-i18n="notReplacement">Not a replacement for emergency services</h3>
+            <p data-i18n="notReplacementCopy">AuXio is an interpretation and notification layer. In an emergency, always contact your local emergency number — 123, 911, 112 or whatever applies where you are. AuXio helps you be understood and helps your people find out; it does not dispatch help.</p>
+            <p data-i18n="currentScope">Current scope of this build:</p>
             <ul>
-              <li>Android only — sideloaded APK, not a store release</li>
-              <li>No SIP or live integration with real emergency lines</li>
-              <li>Turn-based interpretation, one speaker at a time</li>
+              <li data-i18n="scopeAndroid">Android only — sideloaded APK, not a store release</li>
+              <li data-i18n="scopeSip">No SIP or live integration with real emergency lines</li>
+              <li data-i18n="scopeTurnBased">Turn-based interpretation, one speaker at a time</li>
             </ul>
           </aside>
         </div>
@@ -356,7 +356,7 @@
     </div>
   </main>
   <footer>
-    <p class="footer-note">AuXio does not replace emergency services and does not provide medical, legal or safety instructions. If you are in danger, call your local emergency number. Reports are shared only with contacts who opted in beforehand, and generated links expire.</p>
+    <p class="footer-note" data-i18n="footerNote">AuXio does not replace emergency services and does not provide medical, legal or safety instructions. If you are in danger, call your local emergency number. Reports are shared only with contacts who opted in beforehand, and generated links expire.</p>
     <div class="footer-bar">
       <div class="brand"><span class="material-symbols-outlined">graphic_eq</span><span class="brand-name">AuXio</span></div>
       <div class="footer-links"><a href="#privacy">Privacy</a><a href="#terms">Terms</a><a href="https://github.com/platanus-hack/platanus-hack-26-co-team-4#equipo" rel="noreferrer">GitHub</a></div>
@@ -366,7 +366,7 @@
   <script>
     const translations = {
       en: {
-        features: "Features", howItWorks: "How it works", safeguards: "Safeguards", download: "Download APK",
+        features: "Features", howItWorks: "How it works", safeguards: "Safeguards", download: "Download APK", liveSync: "Live sync", notBreathing: "not breathing", noPulse: "no pulse", trapped: "trapped", listening: "Listening", processing: "Processing", playing: "Playing", theDifference: "The difference",
         secure: "Secure communications", heroTitle: "Breaking language barriers when every second counts.",
         heroCopy: "AuXio interprets an emergency call in both directions in real time — and turns it into a structured report that reaches the people who care about the caller, not just the dispatch console.",
         secureDownload: "Direct secure download", featuresTitle: "A live interpreter on the call, and a report that outlives it.",
@@ -378,11 +378,13 @@
         featureFiveTitle: "Report delivery that reaches anyone", featureFiveCopy: "Contacts with the app get a native push and a map. Everyone else gets WhatsApp, SMS or email with a short-lived signed link to a lightweight viewer — map included. Location travels as a real map pin, not a bare link.",
         featureSixTitle: "Two reports, not one redacted", featureSixCopy: "The family report is written from scratch for a family audience — what happened, where, that help is on the way. It carries no transcript, no confidence scores and no clinical detail; those exist only in the operator's copy.",
         howTitle: "From the first word to the report, in one continuous flow.", howCopy: "The caller, the dispatcher and the AI interpreter all join the same real-time room. Understanding the emergency and notifying the support network run alongside the call — never in front of it.",
-        safeguardsScope: "Safeguards & scope", safeguardsTitle: "AuXio informs. It never instructs.", safeguardsCopy: "A tool that speaks during an emergency has to be honest about where its role ends. These limits are deliberate, and they are visible on every screen and in every message AuXio produces."
+        safeguardsScope: "Safeguards & scope", safeguardsTitle: "AuXio informs. It never instructs.", safeguardsCopy: "A tool that speaks during an emergency has to be honest about where its role ends. These limits are deliberate, and they are visible on every screen and in every message AuXio produces.",
+        stepZeroTitle: "Before anything happens: set up your circle", stepZeroCopy: "In the app's settings you add your trusted contacts and ask each one to send a quick opt-in message on WhatsApp. That is real, explicit consent recorded before the emergency, not improvised during it.", stepZeroMeta: "One-time setup · Stored server-side, not only on the phone", stepOneTitle: "The call opens", stepOneCopy: "The Android app joins a real-time room with the dispatcher's web console and the AI interpreter. Each participant hears only the audio meant for them.", stepOneMeta: "WebRTC room · Caller, operator, interpreter", stepTwoTitle: "Both directions are interpreted", stepTwoCopy: "Speech is transcribed, translated by a strict interpreter and spoken back with a low-latency voice. Negations, names, numbers and places are preserved exactly.", stepTwoMeta: "Speech-to-text → strict translation → voice", stepThreeTitle: "The emergency is understood in parallel", stepThreeCopy: "A second model reads the transcript and extracts the emergency type, affected people, location and hazards, with confidence for every field.", stepThreeMeta: "Per-field confidence · Non-blocking", stepFourTitle: "An early alert goes out mid-call", stepFourCopy: "Once the location and emergency type are stable and confident, a short alert is sent with what happened, where and that emergency services are already on the line.", stepFourMeta: "Lightweight alert · Native map location", stepFiveTitle: "Two reports close the loop", stepFiveCopy: "On hangup AuXio writes separate operator and family reports. Each one is delivered through its contact's channel.", stepFiveMeta: "Structured .txt · Signed links that expire and can be revoked",
+        noMedical: "No medical guidance, ever", noMedicalCopy: "Reports and alerts describe the situation. They never generate or relay a medical procedure. Instructions come from the professionals on the call.", onlyInterprets: "The interpreter only interprets", onlyInterpretsCopy: "The translation agent is constrained to faithful interpretation. It does not offer opinions, answer for the caller or ask its own questions.", consentFirst: "Consent first, minimum data after", consentFirstCopy: "Nobody is contacted without opting in beforehand. Each recipient sees only the fields their role justifies through signed, short-lived links.", notReplacement: "Not a replacement for emergency services", notReplacementCopy: "AuXio is an interpretation and notification layer. In an emergency, always contact your local emergency number. AuXio does not dispatch help.", currentScope: "Current scope of this build:", scopeAndroid: "Android only — sideloaded APK, not a store release", scopeSip: "No SIP or live integration with real emergency lines", scopeTurnBased: "Turn-based interpretation, one speaker at a time", footerNote: "AuXio does not replace emergency services and does not provide medical, legal or safety instructions. If you are in danger, call your local emergency number. Reports are shared only with contacts who opted in beforehand, and generated links expire."
       },
       es: {
         features: "Funciones", howItWorks: "Cómo funciona", safeguards: "Salvaguardas", download: "Descargar APK",
-        secure: "Comunicaciones seguras", heroTitle: "Rompiendo barreras de idioma cuando cada segundo cuenta.",
+        secure: "Comunicaciones seguras", liveSync: "Sincronización en vivo", heroTitle: "Rompiendo barreras de idioma cuando cada segundo cuenta.",
         heroCopy: "AuXio interpreta una llamada de emergencia en ambas direcciones y en tiempo real, y la convierte en un reporte estructurado que llega a quienes se preocupan por el llamante, no solo a la consola del despachador.",
         secureDownload: "Descarga segura directa", featuresTitle: "Un intérprete en vivo durante la llamada y un reporte que perdura.",
         featuresCopy: "La interpretación en vivo permite entender al llamante. Lo que ocurre después, un reporte claro en manos de un contacto de confianza que puede ayudar, es para lo que AuXio fue creado.",
@@ -393,7 +395,9 @@
         featureFiveTitle: "Reportes que llegan a cualquiera", featureFiveCopy: "Los contactos con la app reciben una notificación y un mapa. Los demás reciben WhatsApp, SMS o correo con un enlace firmado y temporal a un visor ligero, con el mapa incluido. La ubicación viaja como un marcador real, no como un enlace aislado.",
         featureSixTitle: "Dos reportes, no uno censurado", featureSixCopy: "El reporte familiar se escribe desde cero para la familia: qué ocurrió, dónde y que la ayuda está en camino. No contiene transcripción, niveles de confianza ni detalles clínicos; eso solo existe en la copia del operador.",
         howTitle: "De la primera palabra al reporte, en un flujo continuo.", howCopy: "El llamante, el despachador y el intérprete de IA entran a la misma sala en tiempo real. Comprender la emergencia y avisar a la red de apoyo ocurren durante la llamada, nunca antes que ella.",
-        safeguardsScope: "Salvaguardas y alcance", safeguardsTitle: "AuXio informa. Nunca da instrucciones.", safeguardsCopy: "Una herramienta que habla durante una emergencia debe ser honesta sobre dónde termina su función. Estos límites son deliberados y aparecen en cada pantalla y mensaje que produce AuXio."
+        safeguardsScope: "Salvaguardas y alcance", safeguardsTitle: "AuXio informa. Nunca da instrucciones.", safeguardsCopy: "Una herramienta que habla durante una emergencia debe ser honesta sobre dónde termina su función. Estos límites son deliberados y aparecen en cada pantalla y mensaje que produce AuXio.",
+        stepZeroTitle: "Antes de que ocurra algo: configura tu círculo", stepZeroCopy: "En los ajustes de la app agregas tus contactos de confianza y les pides enviar un mensaje de consentimiento por WhatsApp. Es un consentimiento real y explícito, registrado antes de la emergencia.", stepZeroMeta: "Configuración única · Guardado en el servidor, no solo en el teléfono", stepOneTitle: "La llamada comienza", stepOneCopy: "La app Android entra a una sala en tiempo real junto con la consola web del despachador y el intérprete de IA. Cada participante escucha solo el audio que le corresponde.", stepOneMeta: "Sala WebRTC · Llamante, operador, intérprete", stepTwoTitle: "Se interpretan ambas direcciones", stepTwoCopy: "El audio se transcribe, se traduce con un intérprete estricto y se reproduce con una voz de baja latencia. Negaciones, nombres, números y lugares se conservan exactamente.", stepTwoMeta: "Voz a texto → traducción estricta → voz", stepThreeTitle: "La emergencia se entiende en paralelo", stepThreeCopy: "Un segundo modelo lee la transcripción y extrae el tipo de emergencia, las personas afectadas, la ubicación y los peligros, con confianza para cada campo.", stepThreeMeta: "Confianza por campo · Sin bloquear la llamada", stepFourTitle: "Se envía una alerta temprana durante la llamada", stepFourCopy: "Cuando la ubicación y el tipo de emergencia son estables y confiables, se envía una alerta breve con qué ocurrió, dónde y que los servicios de emergencia ya están en la línea.", stepFourMeta: "Alerta ligera · Ubicación en mapa nativo", stepFiveTitle: "Dos reportes completan el proceso", stepFiveCopy: "Al terminar la llamada, AuXio escribe reportes separados para el operador y la familia. Cada uno se entrega por el canal de su contacto.", stepFiveMeta: ".txt estructurado · Enlaces firmados, temporales y revocables",
+        noMedical: "Nunca damos orientación médica", noMedicalCopy: "Los reportes y alertas describen la situación. Nunca generan ni transmiten procedimientos médicos. Las instrucciones vienen de los profesionales de la llamada.", onlyInterprets: "El intérprete solo interpreta", onlyInterpretsCopy: "El agente de traducción está limitado a interpretar fielmente. No opina, no responde por el llamante ni formula preguntas propias.", consentFirst: "Consentimiento primero, datos mínimos después", consentFirstCopy: "Nadie recibe mensajes sin aceptar previamente. Cada destinatario ve solo los campos que corresponden a su rol, mediante enlaces firmados y temporales.", notReplacement: "No reemplaza a los servicios de emergencia", notReplacementCopy: "AuXio es una capa de interpretación y notificaciones. En una emergencia, contacta siempre al número local. AuXio no envía ayuda.", currentScope: "Alcance actual de esta versión:", scopeAndroid: "Solo Android: APK instalado manualmente, no publicado en una tienda", scopeSip: "Sin SIP ni integración en vivo con líneas de emergencia reales", scopeTurnBased: "Interpretación por turnos, un hablante a la vez", footerNote: "AuXio no reemplaza a los servicios de emergencia ni ofrece instrucciones médicas, legales o de seguridad. Si estás en peligro, llama al número local de emergencias. Los reportes solo se comparten con contactos que aceptaron previamente y sus enlaces caducan."
       },
       pt: {
         features: "Recursos", howItWorks: "Como funciona", safeguards: "Salvaguardas", download: "Baixar APK", secure: "Comunicações seguras", heroTitle: "Quebrando barreiras linguísticas quando cada segundo conta.", heroCopy: "A AuXio interpreta uma chamada de emergência em ambas as direções em tempo real e a transforma em um relatório estruturado.", secureDownload: "Download seguro direto", featuresTitle: "Um intérprete ao vivo na chamada e um relatório que permanece.", featuresCopy: "A interpretação ao vivo ajuda a entender quem liga. Depois da chamada, um relatório claro chega a um contato de confiança.", howTitle: "Da primeira palavra ao relatório, em um fluxo contínuo.", howCopy: "Quem liga, o despachante e o intérprete de IA entram na mesma sala em tempo real.", safeguardsScope: "Salvaguardas e escopo", safeguardsTitle: "A AuXio informa. Nunca instrui.", safeguardsCopy: "Uma ferramenta que fala durante uma emergência deve ser clara sobre os limites da sua função."
@@ -413,7 +417,7 @@
       const dictionary = translations[language] || translations.en;
       document.documentElement.lang = language;
       document.querySelectorAll("[data-i18n]").forEach((element) => {
-        const translation = dictionary[element.dataset.i18n];
+        const translation = dictionary[element.dataset.i18n] || translations.es[element.dataset.i18n];
         if (translation) element.textContent = translation;
       });
       languageSelect.value = language;
