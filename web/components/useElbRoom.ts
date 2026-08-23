@@ -91,8 +91,11 @@ export function useElbRoom(role: "operator" | "caller" = "operator") {
   const [agentPresent, setAgentPresent] = useState(false);
   const [audioBlocked, setAudioBlocked] = useState(false);
   const [micError, setMicError] = useState("");
+  const [callerPresent, setCallerPresent] = useState(false);
+  const [callEnded, setCallEnded] = useState(false);
 
   const wantTrack = role === "operator" ? TRACK_TO_OPERATOR : "interpreter-to-caller";
+  const PEER_IDENTITY = role === "operator" ? "caller" : "operator";
 
   const handleEvent = useCallback((ev: ElbEvent) => {
     switch (ev.type) {
@@ -230,6 +233,19 @@ export function useElbRoom(role: "operator" | "caller" = "operator") {
             if (p.identity.startsWith("interpreter") || p.identity.startsWith("agent")) {
               setAgentPresent(true);
             }
+            if (p.identity === PEER_IDENTITY) {
+              setCallerPresent(true);
+              setCallEnded(false);
+            }
+          })
+          .on(RoomEvent.ParticipantDisconnected, (p) => {
+            if (p.identity !== PEER_IDENTITY) return;
+            setCallerPresent(false);
+            setCallEnded(true);
+            room.localParticipant
+              .setMicrophoneEnabled(false)
+              .then(() => setMicOn(false))
+              .catch(() => undefined);
           })
           .on(RoomEvent.DataReceived, (payload: Uint8Array, _p, _k, topic?: string) => {
             if (topic && topic !== DATA_TOPIC) return;
@@ -258,6 +274,7 @@ export function useElbRoom(role: "operator" | "caller" = "operator") {
           if (p.identity.startsWith("interpreter") || p.identity.startsWith("agent")) {
             setAgentPresent(true);
           }
+          if (p.identity === PEER_IDENTITY) setCallerPresent(true);
         });
 
         try {
@@ -293,7 +310,7 @@ export function useElbRoom(role: "operator" | "caller" = "operator") {
         setState(ConnectionState.Disconnected);
       }
     },
-    [handleEvent, role, wantTrack],
+    [handleEvent, role, wantTrack, PEER_IDENTITY],
   );
 
   const toggleMic = useCallback(async () => {
@@ -351,6 +368,8 @@ export function useElbRoom(role: "operator" | "caller" = "operator") {
     audioRef,
     audioBlocked,
     micError,
+    callerPresent,
+    callEnded,
     resumeAudio,
     state,
     error,
