@@ -1,0 +1,1147 @@
+{
+  "_comment": "SINGLE SOURCE OF TRUTH. Consumed by: (1) agent/src/elb/glossary.py for locked translation, (2) web operator console for live highlighting, (3) android app for caller-side highlighting. Do not fork this list.",
+  "version": "1.1.0",
+  "languages": [
+    "es",
+    "en",
+    "pt",
+    "fr",
+    "de",
+    "it"
+  ],
+  "severity_levels": {
+    "critical": "Immediate threat to life. Never soften, never drop, never infer.",
+    "high": "Materially changes the dispatch decision.",
+    "info": "Context the dispatcher must retain."
+  },
+  "terms": [
+    {
+      "id": "not_breathing",
+      "severity": "critical",
+      "polarity": "negative",
+      "pair": "breathing",
+      "fixed": {
+        "es": "NO RESPIRA",
+        "en": "NOT BREATHING",
+        "pt": "NÃO RESPIRA",
+        "fr": "NE RESPIRE PAS",
+        "de": "ATMET NICHT",
+        "it": "NON RESPIRA"
+      },
+      "match": {
+        "es": [
+          "no respira",
+          "no esta respirando",
+          "dejo de respirar",
+          "no puede respirar",
+          "sin respiracion",
+          "no respiraba"
+        ],
+        "en": [
+          "not breathing",
+          "isn't breathing",
+          "is not breathing",
+          "stopped breathing",
+          "no breathing",
+          "can't breathe",
+          "cannot breathe"
+        ],
+        "pt": [
+          "nao respira",
+          "nao esta respirando",
+          "parou de respirar",
+          "sem respiracao",
+          "nao consegue respirar"
+        ],
+        "fr": [
+          "ne respire pas",
+          "ne respire plus",
+          "a arrete de respirer",
+          "aucune respiration",
+          "n'arrive pas a respirer"
+        ],
+        "de": [
+          "atmet nicht",
+          "atmet nicht mehr",
+          "hat aufgehort zu atmen",
+          "keine atmung",
+          "kann nicht atmen"
+        ],
+        "it": [
+          "non respira",
+          "non sta respirando",
+          "ha smesso di respirare",
+          "nessun respiro",
+          "non riesce a respirare"
+        ]
+      }
+    },
+    {
+      "id": "breathing",
+      "severity": "high",
+      "polarity": "positive",
+      "pair": "not_breathing",
+      "fixed": {
+        "es": "SÍ RESPIRA",
+        "en": "IS BREATHING",
+        "pt": "ESTÁ RESPIRANDO",
+        "fr": "RESPIRE",
+        "de": "ATMET",
+        "it": "RESPIRA"
+      },
+      "match": {
+        "es": [
+          "si respira",
+          "esta respirando",
+          "respira bien",
+          "respira normal"
+        ],
+        "en": [
+          "is breathing",
+          "still breathing",
+          "he's breathing",
+          "she's breathing",
+          "breathing normally"
+        ],
+        "pt": [
+          "esta respirando",
+          "ainda respira",
+          "respira normalmente"
+        ],
+        "fr": [
+          "respire encore",
+          "il respire",
+          "elle respire",
+          "respire normalement"
+        ],
+        "de": [
+          "atmet noch",
+          "atmet normal",
+          "er atmet",
+          "sie atmet"
+        ],
+        "it": [
+          "sta respirando",
+          "respira ancora",
+          "respira normalmente"
+        ]
+      }
+    },
+    {
+      "id": "unconscious",
+      "severity": "critical",
+      "polarity": "negative",
+      "pair": "conscious",
+      "fixed": {
+        "es": "INCONSCIENTE",
+        "en": "UNCONSCIOUS",
+        "pt": "INCONSCIENTE",
+        "fr": "INCONSCIENT",
+        "de": "BEWUSSTLOS",
+        "it": "INCOSCIENTE"
+      },
+      "match": {
+        "es": [
+          "inconsciente",
+          "no responde",
+          "no reacciona",
+          "se desmayo",
+          "perdio el conocimiento",
+          "esta desmayado",
+          "esta desmayada"
+        ],
+        "en": [
+          "unconscious",
+          "unresponsive",
+          "not responding",
+          "passed out",
+          "blacked out",
+          "won't wake up",
+          "not waking up",
+          "knocked out"
+        ],
+        "pt": [
+          "inconsciente",
+          "nao responde",
+          "desmaiou",
+          "perdeu a consciencia",
+          "nao acorda"
+        ],
+        "fr": [
+          "inconscient",
+          "inconsciente",
+          "ne repond pas",
+          "s'est evanoui",
+          "a perdu connaissance",
+          "ne se reveille pas"
+        ],
+        "de": [
+          "bewusstlos",
+          "reagiert nicht",
+          "ohnmachtig",
+          "wacht nicht auf",
+          "ist umgekippt"
+        ],
+        "it": [
+          "incosciente",
+          "non risponde",
+          "e svenuto",
+          "ha perso conoscenza",
+          "non si sveglia"
+        ]
+      }
+    },
+    {
+      "id": "conscious",
+      "severity": "high",
+      "polarity": "positive",
+      "pair": "unconscious",
+      "fixed": {
+        "es": "CONSCIENTE",
+        "en": "CONSCIOUS",
+        "pt": "CONSCIENTE",
+        "fr": "CONSCIENT",
+        "de": "BEI BEWUSSTSEIN",
+        "it": "COSCIENTE"
+      },
+      "match": {
+        "es": [
+          "consciente",
+          "esta consciente",
+          "si responde",
+          "esta despierto",
+          "responde bien"
+        ],
+        "en": [
+          "conscious",
+          "is conscious",
+          "responsive",
+          "is responding",
+          "awake",
+          "talking to me"
+        ],
+        "pt": [
+          "consciente",
+          "esta consciente",
+          "responde",
+          "esta acordado"
+        ],
+        "fr": [
+          "conscient",
+          "consciente",
+          "repond",
+          "est eveille"
+        ],
+        "de": [
+          "bei bewusstsein",
+          "ansprechbar",
+          "reagiert",
+          "ist wach"
+        ],
+        "it": [
+          "cosciente",
+          "e cosciente",
+          "risponde",
+          "e sveglio"
+        ]
+      }
+    },
+    {
+      "id": "bleeding",
+      "severity": "critical",
+      "polarity": "positive",
+      "pair": "not_bleeding",
+      "fixed": {
+        "es": "SANGRANDO",
+        "en": "BLEEDING",
+        "pt": "SANGRANDO",
+        "fr": "SAIGNE",
+        "de": "BLUTET",
+        "it": "SANGUINA"
+      },
+      "match": {
+        "es": [
+          "sangrando",
+          "sangra",
+          "hemorragia",
+          "mucha sangre",
+          "esta sangrando",
+          "perdida de sangre"
+        ],
+        "en": [
+          "bleeding",
+          "is bleeding",
+          "hemorrhaging",
+          "lot of blood",
+          "lots of blood",
+          "losing blood",
+          "blood everywhere"
+        ],
+        "pt": [
+          "sangrando",
+          "esta sangrando",
+          "hemorragia",
+          "muito sangue",
+          "perdendo sangue"
+        ],
+        "fr": [
+          "saigne",
+          "saignement",
+          "hemorragie",
+          "beaucoup de sang",
+          "perd du sang"
+        ],
+        "de": [
+          "blutet",
+          "blutung",
+          "starke blutung",
+          "viel blut",
+          "verliert blut"
+        ],
+        "it": [
+          "sanguina",
+          "sanguinamento",
+          "emorragia",
+          "molto sangue",
+          "perde sangue"
+        ]
+      }
+    },
+    {
+      "id": "not_bleeding",
+      "severity": "high",
+      "polarity": "negative",
+      "pair": "bleeding",
+      "fixed": {
+        "es": "NO SANGRA",
+        "en": "NOT BLEEDING",
+        "pt": "NÃO SANGRA",
+        "fr": "NE SAIGNE PAS",
+        "de": "BLUTET NICHT",
+        "it": "NON SANGUINA"
+      },
+      "match": {
+        "es": [
+          "no sangra",
+          "no esta sangrando",
+          "sin sangre",
+          "no hay sangre",
+          "no hay hemorragia"
+        ],
+        "en": [
+          "not bleeding",
+          "isn't bleeding",
+          "is not bleeding",
+          "no bleeding",
+          "no blood",
+          "stopped bleeding"
+        ],
+        "pt": [
+          "nao sangra",
+          "nao esta sangrando",
+          "sem sangue",
+          "parou de sangrar"
+        ],
+        "fr": [
+          "ne saigne pas",
+          "ne saigne plus",
+          "pas de sang",
+          "aucun saignement"
+        ],
+        "de": [
+          "blutet nicht",
+          "keine blutung",
+          "kein blut"
+        ],
+        "it": [
+          "non sanguina",
+          "nessun sanguinamento",
+          "niente sangue"
+        ]
+      }
+    },
+    {
+      "id": "gun",
+      "severity": "critical",
+      "polarity": "positive",
+      "pair": "no_gun",
+      "fixed": {
+        "es": "ARMA DE FUEGO",
+        "en": "GUN",
+        "pt": "ARMA DE FOGO",
+        "fr": "ARME À FEU",
+        "de": "SCHUSSWAFFE",
+        "it": "ARMA DA FUOCO"
+      },
+      "match": {
+        "es": [
+          "arma",
+          "pistola",
+          "revolver",
+          "escopeta",
+          "fusil",
+          "arma de fuego",
+          "le disparo",
+          "disparos",
+          "balacera",
+          "tiene un arma"
+        ],
+        "en": [
+          "gun",
+          "a gun",
+          "pistol",
+          "revolver",
+          "firearm",
+          "rifle",
+          "shotgun",
+          "shooter",
+          "shooting",
+          "shot him",
+          "shot her",
+          "gunshot",
+          "armed"
+        ],
+        "pt": [
+          "arma",
+          "pistola",
+          "revolver",
+          "espingarda",
+          "arma de fogo",
+          "atirou",
+          "tiros",
+          "baleado"
+        ],
+        "fr": [
+          "arme",
+          "pistolet",
+          "revolver",
+          "fusil",
+          "arme a feu",
+          "a tire",
+          "coups de feu",
+          "arme a feu"
+        ],
+        "de": [
+          "waffe",
+          "pistole",
+          "revolver",
+          "gewehr",
+          "schusswaffe",
+          "geschossen",
+          "schusse",
+          "bewaffnet"
+        ],
+        "it": [
+          "arma",
+          "pistola",
+          "revolver",
+          "fucile",
+          "arma da fuoco",
+          "ha sparato",
+          "spari",
+          "armato"
+        ]
+      }
+    },
+    {
+      "id": "no_gun",
+      "severity": "high",
+      "polarity": "negative",
+      "pair": "gun",
+      "fixed": {
+        "es": "SIN ARMA DE FUEGO",
+        "en": "NO GUN",
+        "pt": "SEM ARMA DE FOGO",
+        "fr": "PAS D'ARME À FEU",
+        "de": "KEINE SCHUSSWAFFE",
+        "it": "NESSUNA ARMA DA FUOCO"
+      },
+      "match": {
+        "es": [
+          "no tiene arma",
+          "sin arma",
+          "no hay arma",
+          "no esta armado",
+          "no hay armas"
+        ],
+        "en": [
+          "no gun",
+          "not armed",
+          "unarmed",
+          "doesn't have a gun",
+          "does not have a gun",
+          "no weapon",
+          "no firearm"
+        ],
+        "pt": [
+          "sem arma",
+          "nao tem arma",
+          "desarmado",
+          "nao esta armado"
+        ],
+        "fr": [
+          "pas d'arme",
+          "sans arme",
+          "non arme",
+          "n'a pas d'arme",
+          "desarme"
+        ],
+        "de": [
+          "keine waffe",
+          "unbewaffnet",
+          "hat keine waffe",
+          "nicht bewaffnet"
+        ],
+        "it": [
+          "nessuna arma",
+          "senza arma",
+          "disarmato",
+          "non ha armi"
+        ]
+      }
+    },
+    {
+      "id": "fire",
+      "severity": "critical",
+      "polarity": "positive",
+      "pair": "no_fire",
+      "fixed": {
+        "es": "FUEGO / INCENDIO",
+        "en": "FIRE",
+        "pt": "FOGO / INCÊNDIO",
+        "fr": "INCENDIE",
+        "de": "FEUER / BRAND",
+        "it": "INCENDIO"
+      },
+      "match": {
+        "es": [
+          "fuego",
+          "incendio",
+          "se esta quemando",
+          "hay humo",
+          "llamas",
+          "se quema",
+          "explosion"
+        ],
+        "en": [
+          "fire",
+          "on fire",
+          "burning",
+          "smoke",
+          "flames",
+          "blaze",
+          "explosion",
+          "exploded"
+        ],
+        "pt": [
+          "fogo",
+          "incendio",
+          "queimando",
+          "fumaca",
+          "chamas",
+          "explosao"
+        ],
+        "fr": [
+          "feu",
+          "incendie",
+          "brule",
+          "fumee",
+          "flammes",
+          "explosion"
+        ],
+        "de": [
+          "feuer",
+          "brand",
+          "brennt",
+          "rauch",
+          "flammen",
+          "explosion"
+        ],
+        "it": [
+          "fuoco",
+          "incendio",
+          "brucia",
+          "fumo",
+          "fiamme",
+          "esplosione"
+        ]
+      }
+    },
+    {
+      "id": "no_fire",
+      "severity": "info",
+      "polarity": "negative",
+      "pair": "fire",
+      "fixed": {
+        "es": "SIN FUEGO",
+        "en": "NO FIRE",
+        "pt": "SEM FOGO",
+        "fr": "PAS D'INCENDIE",
+        "de": "KEIN FEUER",
+        "it": "NESSUN INCENDIO"
+      },
+      "match": {
+        "es": [
+          "no hay fuego",
+          "sin fuego",
+          "no hay incendio",
+          "no se esta quemando",
+          "no hay humo"
+        ],
+        "en": [
+          "no fire",
+          "not on fire",
+          "no smoke",
+          "no flames",
+          "fire is out"
+        ],
+        "pt": [
+          "sem fogo",
+          "nao ha fogo",
+          "sem fumaca",
+          "nao esta queimando"
+        ],
+        "fr": [
+          "pas de feu",
+          "pas d'incendie",
+          "pas de fumee",
+          "aucune flamme"
+        ],
+        "de": [
+          "kein feuer",
+          "kein brand",
+          "kein rauch",
+          "brennt nicht"
+        ],
+        "it": [
+          "nessun fuoco",
+          "non c'e incendio",
+          "niente fumo",
+          "non brucia"
+        ]
+      }
+    },
+    {
+      "id": "trapped",
+      "severity": "critical",
+      "polarity": "positive",
+      "pair": "not_trapped",
+      "fixed": {
+        "es": "ATRAPADO",
+        "en": "TRAPPED",
+        "pt": "PRESO",
+        "fr": "COINCÉ",
+        "de": "EINGESCHLOSSEN",
+        "it": "INTRAPPOLATO"
+      },
+      "match": {
+        "es": [
+          "atrapado",
+          "atrapada",
+          "encerrado",
+          "encerrada",
+          "no puede salir",
+          "esta prensado",
+          "aplastado",
+          "no podemos salir"
+        ],
+        "en": [
+          "trapped",
+          "stuck",
+          "pinned",
+          "can't get out",
+          "cannot get out",
+          "locked in",
+          "buried under",
+          "crushed under"
+        ],
+        "pt": [
+          "preso",
+          "presa",
+          "trancado",
+          "nao consegue sair",
+          "esmagado"
+        ],
+        "fr": [
+          "coince",
+          "bloque",
+          "enferme",
+          "ne peut pas sortir",
+          "ecrase sous"
+        ],
+        "de": [
+          "eingeschlossen",
+          "eingeklemmt",
+          "festgeklemmt",
+          "kommt nicht raus",
+          "verschuttet"
+        ],
+        "it": [
+          "intrappolato",
+          "bloccato",
+          "incastrato",
+          "non riesce a uscire",
+          "schiacciato sotto"
+        ]
+      }
+    },
+    {
+      "id": "not_trapped",
+      "severity": "info",
+      "polarity": "negative",
+      "pair": "trapped",
+      "fixed": {
+        "es": "NO ATRAPADO",
+        "en": "NOT TRAPPED",
+        "pt": "NÃO ESTÁ PRESO",
+        "fr": "PAS COINCÉ",
+        "de": "NICHT EINGESCHLOSSEN",
+        "it": "NON INTRAPPOLATO"
+      },
+      "match": {
+        "es": [
+          "no esta atrapado",
+          "puede salir",
+          "logro salir",
+          "esta afuera"
+        ],
+        "en": [
+          "not trapped",
+          "not stuck",
+          "can get out",
+          "got out",
+          "is outside",
+          "made it out"
+        ],
+        "pt": [
+          "nao esta preso",
+          "conseguiu sair",
+          "esta fora"
+        ],
+        "fr": [
+          "pas coince",
+          "n'est pas bloque",
+          "a pu sortir",
+          "est dehors"
+        ],
+        "de": [
+          "nicht eingeschlossen",
+          "kann raus",
+          "ist draussen",
+          "ist rausgekommen"
+        ],
+        "it": [
+          "non e intrappolato",
+          "puo uscire",
+          "e uscito",
+          "e fuori"
+        ]
+      }
+    },
+    {
+      "id": "child",
+      "severity": "high",
+      "polarity": "positive",
+      "pair": null,
+      "fixed": {
+        "es": "MENOR DE EDAD",
+        "en": "CHILD",
+        "pt": "CRIANÇA",
+        "fr": "ENFANT",
+        "de": "KIND",
+        "it": "BAMBINO"
+      },
+      "match": {
+        "es": [
+          "nino",
+          "nina",
+          "bebe",
+          "menor",
+          "hijo",
+          "hija",
+          "recien nacido",
+          "anos de edad",
+          "meses de edad"
+        ],
+        "en": [
+          "child",
+          "kid",
+          "baby",
+          "infant",
+          "toddler",
+          "newborn",
+          "my son",
+          "my daughter",
+          "little girl",
+          "little boy",
+          "years old",
+          "months old",
+          "minor"
+        ],
+        "pt": [
+          "crianca",
+          "bebe",
+          "menor",
+          "filho",
+          "filha",
+          "recem-nascido",
+          "anos de idade"
+        ],
+        "fr": [
+          "enfant",
+          "bebe",
+          "nourrisson",
+          "mon fils",
+          "ma fille",
+          "petit garcon",
+          "petite fille"
+        ],
+        "de": [
+          "kind",
+          "baby",
+          "saugling",
+          "kleinkind",
+          "mein sohn",
+          "meine tochter",
+          "jahre alt"
+        ],
+        "it": [
+          "bambino",
+          "bambina",
+          "neonato",
+          "mio figlio",
+          "mia figlia"
+        ]
+      }
+    },
+    {
+      "id": "pregnant",
+      "severity": "critical",
+      "polarity": "positive",
+      "pair": "not_pregnant",
+      "fixed": {
+        "es": "EMBARAZADA",
+        "en": "PREGNANT",
+        "pt": "GRÁVIDA",
+        "fr": "ENCEINTE",
+        "de": "SCHWANGER",
+        "it": "INCINTA"
+      },
+      "match": {
+        "es": [
+          "embarazada",
+          "embarazo",
+          "en gestacion",
+          "va a dar a luz",
+          "esta de parto",
+          "rompio fuente",
+          "contracciones",
+          "semanas de embarazo"
+        ],
+        "en": [
+          "pregnant",
+          "pregnancy",
+          "in labor",
+          "in labour",
+          "giving birth",
+          "water broke",
+          "contractions",
+          "weeks pregnant",
+          "expecting"
+        ],
+        "pt": [
+          "gravida",
+          "gravidez",
+          "em trabalho de parto",
+          "vai dar a luz",
+          "bolsa estourou",
+          "contracoes"
+        ],
+        "fr": [
+          "enceinte",
+          "grossesse",
+          "en train d'accoucher",
+          "va accoucher",
+          "perdu les eaux",
+          "contractions"
+        ],
+        "de": [
+          "schwanger",
+          "schwangerschaft",
+          "in den wehen",
+          "bekommt ein kind",
+          "fruchtblase geplatzt",
+          "wehen"
+        ],
+        "it": [
+          "incinta",
+          "gravidanza",
+          "in travaglio",
+          "sta partorendo",
+          "si sono rotte le acque",
+          "contrazioni"
+        ]
+      }
+    },
+    {
+      "id": "not_pregnant",
+      "severity": "info",
+      "polarity": "negative",
+      "pair": "pregnant",
+      "fixed": {
+        "es": "NO EMBARAZADA",
+        "en": "NOT PREGNANT",
+        "pt": "NÃO GRÁVIDA",
+        "fr": "PAS ENCEINTE",
+        "de": "NICHT SCHWANGER",
+        "it": "NON INCINTA"
+      },
+      "match": {
+        "es": [
+          "no esta embarazada",
+          "no embarazada"
+        ],
+        "en": [
+          "not pregnant",
+          "isn't pregnant",
+          "is not pregnant",
+          "no pregnancy"
+        ],
+        "pt": [
+          "nao esta gravida",
+          "nao gravida"
+        ],
+        "fr": [
+          "pas enceinte",
+          "n'est pas enceinte"
+        ],
+        "de": [
+          "nicht schwanger",
+          "ist nicht schwanger"
+        ],
+        "it": [
+          "non incinta",
+          "non e incinta"
+        ]
+      }
+    },
+    {
+      "id": "allergy",
+      "severity": "critical",
+      "polarity": "positive",
+      "pair": "no_allergy",
+      "fixed": {
+        "es": "ALERGIA",
+        "en": "ALLERGY",
+        "pt": "ALERGIA",
+        "fr": "ALLERGIE",
+        "de": "ALLERGIE",
+        "it": "ALLERGIA"
+      },
+      "match": {
+        "es": [
+          "alergia",
+          "alergico",
+          "alergica",
+          "reaccion alergica",
+          "anafilaxia",
+          "shock anafilactico"
+        ],
+        "en": [
+          "allergy",
+          "allergic",
+          "allergic reaction",
+          "anaphylaxis",
+          "anaphylactic",
+          "epipen",
+          "epi pen"
+        ],
+        "pt": [
+          "alergia",
+          "alergico",
+          "reacao alergica",
+          "anafilaxia"
+        ],
+        "fr": [
+          "allergie",
+          "allergique",
+          "reaction allergique",
+          "anaphylaxie",
+          "choc anaphylactique"
+        ],
+        "de": [
+          "allergie",
+          "allergisch",
+          "allergische reaktion",
+          "anaphylaxie",
+          "anaphylaktischer schock"
+        ],
+        "it": [
+          "allergia",
+          "allergico",
+          "reazione allergica",
+          "anafilassi",
+          "shock anafilattico"
+        ]
+      }
+    },
+    {
+      "id": "no_allergy",
+      "severity": "info",
+      "polarity": "negative",
+      "pair": "allergy",
+      "fixed": {
+        "es": "SIN ALERGIAS",
+        "en": "NO ALLERGY",
+        "pt": "SEM ALERGIAS",
+        "fr": "PAS D'ALLERGIE",
+        "de": "KEINE ALLERGIE",
+        "it": "NESSUNA ALLERGIA"
+      },
+      "match": {
+        "es": [
+          "sin alergias",
+          "no tiene alergias",
+          "no es alergico",
+          "ninguna alergia"
+        ],
+        "en": [
+          "no allergy",
+          "no allergies",
+          "not allergic",
+          "doesn't have allergies",
+          "no known allergies"
+        ],
+        "pt": [
+          "sem alergias",
+          "nao tem alergia",
+          "nao e alergico"
+        ],
+        "fr": [
+          "pas d'allergie",
+          "aucune allergie",
+          "n'est pas allergique"
+        ],
+        "de": [
+          "keine allergie",
+          "keine allergien",
+          "nicht allergisch"
+        ],
+        "it": [
+          "nessuna allergia",
+          "non ha allergie",
+          "non e allergico"
+        ]
+      }
+    },
+    {
+      "id": "no_pulse",
+      "severity": "critical",
+      "polarity": "negative",
+      "pair": "has_pulse",
+      "fixed": {
+        "es": "SIN PULSO",
+        "en": "NO PULSE",
+        "pt": "SEM PULSO",
+        "fr": "PAS DE POULS",
+        "de": "KEIN PULS",
+        "it": "NESSUN POLSO"
+      },
+      "match": {
+        "es": [
+          "sin pulso",
+          "no tiene pulso",
+          "no le siento el pulso",
+          "no hay pulso",
+          "no late",
+          "paro cardiaco",
+          "el corazon no late"
+        ],
+        "en": [
+          "no pulse",
+          "can't find a pulse",
+          "cannot find a pulse",
+          "no heartbeat",
+          "heart stopped",
+          "cardiac arrest"
+        ],
+        "pt": [
+          "sem pulso",
+          "nao tem pulso",
+          "nao sinto o pulso",
+          "parada cardiaca",
+          "coracao parou"
+        ],
+        "fr": [
+          "pas de pouls",
+          "aucun pouls",
+          "je ne sens pas le pouls",
+          "arret cardiaque"
+        ],
+        "de": [
+          "kein puls",
+          "keinen puls",
+          "finde keinen puls",
+          "herzstillstand",
+          "herz steht still"
+        ],
+        "it": [
+          "nessun polso",
+          "non ha polso",
+          "non sento il polso",
+          "arresto cardiaco"
+        ]
+      }
+    },
+    {
+      "id": "has_pulse",
+      "severity": "high",
+      "polarity": "positive",
+      "pair": "no_pulse",
+      "fixed": {
+        "es": "CON PULSO",
+        "en": "HAS PULSE",
+        "pt": "COM PULSO",
+        "fr": "A UN POULS",
+        "de": "HAT PULS",
+        "it": "HA POLSO"
+      },
+      "match": {
+        "es": [
+          "tiene pulso",
+          "si hay pulso",
+          "le siento el pulso",
+          "el corazon late"
+        ],
+        "en": [
+          "has a pulse",
+          "there is a pulse",
+          "i feel a pulse",
+          "heart is beating",
+          "found a pulse"
+        ],
+        "pt": [
+          "tem pulso",
+          "sinto o pulso",
+          "o coracao esta batendo"
+        ],
+        "fr": [
+          "a un pouls",
+          "je sens le pouls",
+          "le coeur bat"
+        ],
+        "de": [
+          "hat puls",
+          "puls vorhanden",
+          "ich fuhle den puls",
+          "herz schlagt"
+        ],
+        "it": [
+          "ha polso",
+          "sento il polso",
+          "il cuore batte"
+        ]
+      }
+    }
+  ]
+}

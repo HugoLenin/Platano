@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+/*
+ * Dispatcher-console palette. Chosen for a room that is often dim and for
+ * people who must read one number correctly at 3am, not for screenshots:
+ * high contrast, one accent (red) reserved exclusively for life-critical
+ * information so it never becomes decoration.
+ */
+@theme {
+  --color-ink-950: #0a0c10;
+  --color-ink-900: #10141b;
+  --color-ink-850: #161b24;
+  --color-ink-800: #1d2430;
+  --color-ink-700: #2a3444;
+  --color-ink-600: #3d4a5f;
+  --color-ink-400: #7d8ba3;
+  --color-ink-200: #c3ccdb;
+  --color-ink-50: #eef2f8;
+
+  --color-crit-500: #ef4444;
+  --color-crit-600: #dc2626;
+  --color-crit-900: #450a0a;
+  --color-warn-400: #fbbf24;
+  --color-warn-900: #451a03;
+  --color-info-400: #38bdf8;
+  --color-ok-400: #34d399;
+  --color-ok-900: #022c22;
+}
+
+html,
+body {
+  background: var(--color-ink-950);
+  color: var(--color-ink-50);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Critical terms in the live transcript. Underline as well as colour so the
+   signal survives colour-blindness and a badly calibrated projector. */
+mark.term-critical {
+  background: var(--color-crit-900);
+  color: #fecaca;
+  font-weight: 700;
+  padding: 0 3px;
+  border-radius: 3px;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+}
+mark.term-high {
+  background: var(--color-warn-900);
+  color: #fde68a;
+  font-weight: 600;
+  padding: 0 3px;
+  border-radius: 3px;
+}
+mark.term-info {
+  background: #0c4a6e;
+  color: #bae6fd;
+  padding: 0 3px;
+  border-radius: 3px;
+}
+
+@keyframes elb-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+.pulse {
+  animation: elb-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes elb-slide {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+.slide-in {
+  animation: elb-slide 0.18s ease-out;
+}
+
+.scroll-thin::-webkit-scrollbar { width: 8px; height: 8px; }
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: var(--color-ink-700);
+  border-radius: 4px;
+}
+.scroll-thin::-webkit-scrollbar-track { background: transparent; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse, .slide-in { animation: none; }
+}
