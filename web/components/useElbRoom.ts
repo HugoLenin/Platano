@@ -100,17 +100,21 @@ export function useElbRoom(role: "operator" | "caller" = "operator") {
   const handleEvent = useCallback((ev: ElbEvent) => {
     switch (ev.type) {
       case "transcript":
-        setEntries((prev) => [
-          ...prev,
-          {
-            key: `${ev.speaker}-${ev.seq}-${ev.ts}`,
-            seq: ev.seq,
-            speaker: ev.speaker,
-            lang: ev.lang,
-            text: ev.text,
-            ts: ev.ts,
-          },
-        ]);
+        setEntries((prev) => {
+          const key = `${ev.speaker}-${ev.seq}-${ev.ts}`;
+          if (prev.some((e) => e.key === key)) return prev;
+          return [
+            ...prev,
+            {
+              key,
+              seq: ev.seq,
+              speaker: ev.speaker,
+              lang: ev.lang,
+              text: ev.text,
+              ts: ev.ts,
+            },
+          ];
+        });
         break;
 
       case "translation":
@@ -119,10 +123,12 @@ export function useElbRoom(role: "operator" | "caller" = "operator") {
             .reverse()
             .findIndex((e) => e.speaker === ev.speaker && e.text === ev.source && !e.rendered);
           if (idx === -1) {
+            const key = `${ev.speaker}-${ev.seq}-${ev.ts}-t`;
+            if (prev.some((e) => e.key === key)) return prev;
             return [
               ...prev,
               {
-                key: `${ev.speaker}-${ev.seq}-${ev.ts}-t`,
+                key,
                 seq: ev.seq,
                 speaker: ev.speaker,
                 lang: ev.lang,
