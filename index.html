@@ -186,7 +186,9 @@
     @media (max-width: 800px) { .nav, .hero, .features, .section { width: min(100% - 32px, 560px); } .nav-links, .nav-download { display: none; } .hero { display: flex; flex-direction: column; align-items: stretch; gap: 24px; padding-top: 56px; } h1 { font-size: 44px; } .visual { margin-top: 28px; padding-left: 16px; } .live-sync { left: -2px; } .features { grid-template-columns: 1fr; padding-bottom: 64px; } .steps, .safeguards { grid-template-columns: 1fr; } .steps-section, .safeguards-section { padding-bottom: 64px; } footer { padding: 32px 16px; } .footer-bar { flex-direction: column; text-align: center; } }
     /* Cursor glow + trail. `screen` keeps it additive: it lights the dark
        surfaces and leaves light text alone instead of tinting it red. */
-    #cursor-trail { position: fixed; inset: 0; z-index: 60; pointer-events: none; mix-blend-mode: screen; filter: blur(9px); }
+    /* width/height are mandatory, not redundant: a canvas is a replaced
+       element, so `inset: 0` alone leaves it at its intrinsic 300x150. */
+    #cursor-trail { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 60; pointer-events: none; mix-blend-mode: screen; filter: blur(9px); }
     @media (hover: none) { #cursor-trail { display: none; } }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } #cursor-trail { display: none; } }
   </style>
@@ -720,15 +722,19 @@
       const ctx = canvas.getContext("2d");
       let width = 0;
       let height = 0;
-      /* Measure the element, not `window.innerWidth`: innerWidth includes the
-         scrollbar while an inset:0 fixed box excludes it, and that mismatch
-         stretches the bitmap so the glow drifts further off toward the right. */
+      /* documentElement.clientWidth/Height is the viewport minus scrollbars,
+         which is exactly the range clientX/clientY report - so one drawing unit
+         equals one pointer unit and the glow lands under the cursor.
+         The style size is set here too, not just in CSS: a canvas is a replaced
+         element, so without an explicit size it stays 300x150 and the effect
+         ends up squeezed into the top-left corner. */
       const resize = () => {
-        const rect = canvas.getBoundingClientRect();
-        width = rect.width;
-        height = rect.height;
-        canvas.width = Math.round(width);
-        canvas.height = Math.round(height);
+        width = document.documentElement.clientWidth;
+        height = document.documentElement.clientHeight;
+        canvas.style.width = width + "px";
+        canvas.style.height = height + "px";
+        canvas.width = width;
+        canvas.height = height;
       };
       resize();
       window.addEventListener("resize", resize);
