@@ -132,6 +132,8 @@
     .waveform svg { position: relative; z-index: 1; width: 100%; height: auto; overflow: visible; }
     .wave-path { fill: none; stroke: url(#audio-gradient); stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 7px rgba(255, 179, 177, 0.45)); stroke-dasharray: 22 12; animation: wave-drift 3.2s linear infinite; }
     .wave-path.secondary { opacity: 0.38; stroke-width: 3; animation-duration: 4.6s; animation-direction: reverse; }
+    .wave-path.background { opacity: 0.16; stroke-width: 2; filter: drop-shadow(0 0 5px rgba(139, 197, 238, 0.28)); stroke-dasharray: 14 16; animation-duration: 5.4s; }
+    .wave-path.background-alt { opacity: 0.12; stroke-width: 2; filter: drop-shadow(0 0 5px rgba(255, 179, 177, 0.25)); stroke-dasharray: 10 20; animation-duration: 6.8s; animation-direction: reverse; }
     .live-sync { position: absolute; z-index: 2; top: -6px; left: -22px; flex-direction: column; align-items: stretch; gap: 10px; min-width: 150px; padding: 16px; border: 1px solid var(--line); border-radius: 14px; background: rgba(10, 26, 43, 0.85); backdrop-filter: blur(12px); box-shadow: 0 16px 30px rgba(0, 0, 0, 0.25); }
     .live-sync-label { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; }
     .live-sync-label .material-symbols-outlined { color: var(--accent); }
@@ -723,10 +725,16 @@
       }
       path.setAttribute("d", pathData);
       path.setAttribute("class", `wave-path ${className}`);
-      path.setAttribute("stroke-width", className === "secondary" ? "3" : "5");
+      path.setAttribute("stroke-width", className === "secondary" ? "3" : className.startsWith("background") ? "2" : "5");
       return path;
     };
-    svg.append(createWavePath(58, 4.5, 0, "primary"), createWavePath(34, 5, Math.PI / 2, "secondary"));
+    svg.append(
+      createWavePath(86, 4.5, 0, "primary"),
+      createWavePath(52, 5, Math.PI / 2, "secondary"),
+      createWavePath(72, 3.1, Math.PI / 3, "background"),
+      createWavePath(44, 6.7, Math.PI, "background-alt"),
+      createWavePath(26, 9.2, Math.PI / 5, "background")
+    );
     waveform.append(svg);
     document.querySelector(".visual").append(waveform);
 
