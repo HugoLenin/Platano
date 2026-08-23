@@ -9,7 +9,14 @@ const src = join(here, "..", "..", "shared", "critical_terms.json");
 const dst = join(here, "..", "lib", "critical_terms.json");
 
 if (!existsSync(src)) {
-  console.error(`[sync-glossary] missing ${src}`);
+  // A deploy whose build root is `web/` may not have the repo root checked
+  // out. The copy already in lib/ is committed, so a missing source is only
+  // fatal when there is nothing to fall back to.
+  if (existsSync(dst)) {
+    console.warn(`[sync-glossary] ${src} not available, keeping the committed copy`);
+    process.exit(0);
+  }
+  console.error(`[sync-glossary] missing ${src} and no committed copy at ${dst}`);
   process.exit(1);
 }
 mkdirSync(dirname(dst), { recursive: true });

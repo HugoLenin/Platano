@@ -34,6 +34,7 @@ load_dotenv()
 import asyncio
 import json
 import logging
+import os
 import time
 import uuid
 from datetime import datetime, timezone
@@ -682,13 +683,19 @@ async def entrypoint(ctx: JobContext) -> None:
 
 
 def main() -> None:
-    cli.run_app(
-        WorkerOptions(
-            entrypoint_fnc=entrypoint,
-            prewarm_fnc=prewarm,
-            agent_name="elb-interpreter",
-        )
+    opts = WorkerOptions(
+        entrypoint_fnc=entrypoint,
+        prewarm_fnc=prewarm,
+        agent_name="elb-interpreter",
     )
+    # Render and most PaaS hosts assign the port and expect the process to bind
+    # it; the health-check endpoint livekit-agents already serves is what keeps
+    # the service from being reaped. Left alone when PORT is unset so local
+    # `dev` keeps its own default.
+    port = os.environ.get("PORT", "")
+    if port.isdigit():
+        opts.port = int(port)
+    cli.run_app(opts)
 
 
 if __name__ == "__main__":

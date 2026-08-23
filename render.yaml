@@ -1,0 +1,52 @@
+services:
+  - type: web
+    name: elb-interpreter
+    runtime: python
+    plan: free
+    rootDir: agent
+    healthCheckPath: /
+    buildCommand: pip install -r requirements.txt && PYTHONPATH=src python -m elb.main download-files
+    startCommand: PYTHONPATH=src python -m elb.main start
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.13"
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: ELB_OPERATOR_LANG
+        value: es
+      - key: ELB_TRANSLATE_MODEL
+        value: claude-haiku-4-5
+      - key: ELB_EXTRACT_MODEL
+        value: claude-haiku-4-5
+      - key: ELB_REPORT_MODEL
+        value: claude-sonnet-5
+      - key: ELB_STT_MODEL
+        value: nova-3
+      - key: ELB_TTS_MODEL
+        value: eleven_flash_v2_5
+      - key: LIVEKIT_URL
+        sync: false
+      - key: LIVEKIT_API_KEY
+        sync: false
+      - key: LIVEKIT_API_SECRET
+        sync: false
+      - key: DEEPGRAM_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: ELEVENLABS_API_KEY
+        sync: false
+      - key: ELB_TTS_VOICE_OPERATOR
+        sync: false
+      - key: ELB_TTS_VOICE_CALLER
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: ELB_REPORT_SIGNING_SECRET
+        sync: false
+      - key: ELB_INTERNAL_TOKEN
+        sync: false
+      - key: ELB_WEB_BASE_URL
+        sync: false
