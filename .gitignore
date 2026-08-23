@@ -7,7 +7,7 @@
 *.local
 
 # Android build-time config: local.properties holds the absolute SDK path of
-# whoever built last, elb.properties holds the backend IP / WhatsApp number.
+# whoever built last, elb.properties holds the backend IP and default room.
 android/local.properties
 android/elb.properties
 *.keystore

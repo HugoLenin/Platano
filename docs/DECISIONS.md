@@ -62,7 +62,7 @@ Jinja2, sin PDF, sin HTML como formato primario.
 
 **Por qué.** Un registro de emergencia tiene ~7 secciones fijas. Lo que
 necesita es salida **byte-estable** que se lea igual en Notepad, en una
-terminal, en el preview de WhatsApp e impresa en papel. Jinja2 agrega una
+terminal, en un cliente de correo e impresa en papel. Jinja2 agrega una
 dependencia y pelea de whitespace para comprar una flexibilidad que aquí es un
 defecto: que el layout sea rígido es la feature.
 
@@ -292,36 +292,60 @@ bloque de permisos) · `call/CallService.kt` · `MainActivity.kt:67`.
 
 ---
 
-## D11 · WhatsApp: la plantilla es el camino por defecto, no el fallback
+## D11 · Un solo canal de salida: correo por SMTP
 
-**Decisión.** Tres reglas de la plataforma mandan sobre el diseño:
+**Decisión.** El aviso al familiar sale por **correo electrónico y nada más**.
+Antes había una escalera de tres peldaños (push nativo → WhatsApp → correo);
+los dos primeros se eliminaron.
+
+**Por qué se cayó WhatsApp.** No por la implementación, que estaba completa,
+sino por lo que exigía *antes* de poder mandar un solo mensaje:
 
 1. **Ventana de 24 h.** Fuera de ella solo se puede mandar una plantilla
    aprobada por Meta. Un contacto de confianza **nunca** nos escribió, así que
-   la plantilla es el camino **normal**.
-2. **El opt-in es la mitigación y el consentimiento a la vez.** El contacto
-   manda un WhatsApp cualquiera a nuestro número: eso abre la ventana **y** deja
-   consentimiento auditable (`whatsapp_opt_in_at`, escrito por el webhook
-   entrante). No es un truco de demo, es como debería funcionar en producción.
-3. **Tarjeta de ubicación nativa** (`location`) en vez de un link a Google Maps
-   — pero solo dentro de la ventana, porque fuera de ella un segundo mensaje
-   no-plantilla sería rechazado. Por eso el cuerpo de la plantilla lleva el
-   link de mapa embebido.
+   la plantilla no era el fallback: era el camino normal.
+2. Esa plantilla necesitaba una WhatsApp Business Account, un
+   `phone_number_id` y aprobación de Meta en `es` **y** `en`. Tres cosas
+   upstream de que la demo funcionara, ninguna bajo nuestro control.
+3. El camino sin plantilla (el contacto escribe primero y abre la ventana)
+   funcionaba, pero exigía que el webhook entrante fuera alcanzable desde
+   internet para registrar `whatsapp_opt_in_at`.
 
-**Cola por destinatario.** Todos los envíos a un mismo número se serializan y
-se reintentan con backoff exponencial tratando **409, 429 y 5xx** igual.
+**Por qué se cayó el push nativo.** `sendPush` nunca se ejecutó ni una vez. La
+app Android no registra token FCM, así que `push_token` siempre venía vacío y
+la función salía en su primera línea. Código muerto que hacía leer el flujo
+como si tuviera tres caminos cuando tenía uno.
 
-Nota de investigación: **el 409 no está documentado por Kapso.** Su doc pública
-documenta rate limiting con **429 + `Retry-After` + `X-RateLimit-Remaining`**.
-La cola se implementó igual porque cuesta nada y cubre ambos casos, y porque
-una tormenta de reintentos contra una persona en una emergencia es el peor modo
-de falla posible.
+**Lo que se pierde, dicho sin adornos.** WhatsApp mandaba una **tarjeta de
+ubicación nativa** que renderiza un mapa dentro de la conversación. El correo no
+tiene equivalente: las coordenadas salen como link a `maps.google.com`. Es un
+downgrade real de la experiencia, no una equivalencia.
 
-Firmas confirmadas del SDK:
-`client.messages.sendText / sendTemplate / sendLocation({ phoneNumberId, to, ... })`.
+**Por qué SMTP y no un proveedor transaccional.** Gmail SMTP autentica con una
+App Password de 16 caracteres y nada más: sin dominio que verificar, sin
+reputación de remitente que calentar, sin API key que provisionar. La
+alternativa evaluada fue Resend, y se descartó porque **sin dominio verificado
+solo permite enviar a la dirección con la que te registraste** — inútil cuando
+el punto entero es avisarle a otra persona. `SMTP_HOST` y `SMTP_PORT` quedan
+configurables, así que cambiar a un proveedor de verdad es config, no código.
 
-**Código.** `web/lib/whatsapp.ts` · `web/app/api/whatsapp/webhook/route.ts` ·
-plantilla exacta en [`docs/WHATSAPP_TEMPLATE.md`](./WHATSAPP_TEMPLATE.md).
+**Detalles que no son adorno:**
+
+- **Cada mensaje va también en texto plano.** HTML solo, desde una cuenta
+  desconocida, es la receta para caer en Promociones o Spam. La alternativa
+  `text` es la mejora de entregabilidad más barata que existe, y es lo que un
+  reloj o un lector de pantalla van a leer de verdad.
+- **Puerto 465 con TLS implícito**, no 587 con STARTTLS: 587 es el puerto que
+  más se filtra, y un STARTTLS bloqueado falla con un timeout que parece un
+  cuelgue.
+- **Cola por destinatario.** Gmail responde a una ráfaga bloqueando la cuenta
+  entera, y una tormenta de reintentos contra alguien en una emergencia es el
+  peor modo de falla posible.
+- **Los 5xx no se reintentan.** Una contraseña mala sigue mala, y reintentarla
+  contra Google cuenta para el límite que termina bloqueando la cuenta.
+
+**Código.** `web/lib/email.ts` · `web/app/api/notify/route.ts` ·
+diagnóstico en `web/scripts/check-email.mjs`.
 
 ---
 
@@ -434,7 +458,7 @@ de toda la carga síncrona. Es intermitente, que es lo peor que puede ser.
 ## Lo que este documento **no** dice
 
 Nada de esto se probó end-to-end con credenciales reales: no hubo llamada con
-audio real, ni latencia medida, ni WhatsApp enviado, ni escritura real a
+audio real, ni latencia medida, ni correo enviado, ni escritura real a
 Supabase. Las decisiones de arriba son de diseño y están verificadas a nivel de
 compilación, tests e interoperabilidad de firmas — no de operación. Ver
 `HANDOFF.md` §4.5 y `RUNBOOK.md` § "Smoke test" para el orden recomendado.

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Disclaimer } from "@/components/Disclaimer";
 
 export default function Home() {
   return (
@@ -45,7 +44,6 @@ export default function Home() {
         </div>
       </div>
 
-      <Disclaimer />
     </main>
   );
 }

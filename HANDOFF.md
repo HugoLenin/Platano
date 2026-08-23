@@ -4,6 +4,16 @@ Estado al momento del traspaso. Léelo completo antes de tocar código: la
 investigación ya está hecha y varias cosas **no** son lo que la memoria del
 modelo diría.
 
+> [!IMPORTANT]
+> **Cambio posterior a este traspaso (2026-08-22).** El canal de salida se
+> redujo a **correo por SMTP (Gmail)**. Se eliminaron WhatsApp/Kapso y el push
+> nativo FCM: `web/lib/whatsapp.ts`, `web/app/api/whatsapp/webhook/` y
+> `docs/WHATSAPP_TEMPLATE.md` ya no existen, y `trusted_contacts` perdió
+> `push_token`, `whatsapp_opt_in_at` y `whatsapp_opt_in_ref`. El razonamiento
+> está en [D11](docs/DECISIONS.md#d11--un-solo-canal-de-salida-correo-por-smtp).
+> Todo lo que este documento diga sobre WhatsApp o FCM es **historia**, no
+> estado actual.
+
 ---
 
 ## 1. Qué YA está hecho y VERIFICADO ejecutándose
@@ -14,7 +24,7 @@ modelo diría.
 | Agente Python (`agent/`) | ✅ Completo | `import elb.main` OK contra **livekit-agents 1.7.0** real instalado. Plugins Deepgram/Anthropic/ElevenLabs se construyen con nuestros IDs de modelo. |
 | Tests del agente | ✅ 31/31 pasan | `cd agent && PYTHONPATH=src py -3.13 -m pytest tests/ -q` → `31 passed`. Corren **sin credenciales**. |
 | Esquema Supabase | ✅ Escrito | `supabase/schema.sql`. No aplicado a ninguna instancia todavía. |
-| Web (`web/`) | ✅ Compila | `npx tsc --noEmit` limpio + `npm run build` OK. 9 rutas generadas. |
+| Web (`web/`) | ✅ Compila | `npx tsc --noEmit` limpio + `npm run build` OK. 8 rutas generadas. |
 | Android (`android/`) | ✅ APK REAL | `./gradlew assembleDebug` → **BUILD SUCCESSFUL**, APK de 67 MB. `./gradlew assembleRelease` → **BUILD SUCCESSFUL**. |
 | Contenido del APK | ✅ Inspeccionado | `assets/critical_terms.json` v1.1.0 con 19 términos dentro del APK. 4 ABIs. Permisos correctos, **sin** `ACCESS_BACKGROUND_LOCATION`. |
 | Interop de firmas Py↔TS | ✅ Probado | Token firmado en Python, verificado en Node: firma OK, y una falsificación que sube `scope` de `family` a `operator` es **rechazada**. |
@@ -151,7 +161,6 @@ cd android
 # opcional, para apuntar el APK al backend correcto:
 #   crear android/elb.properties con:
 #   ELB_API_BASE=http://<IP-DE-TU-LAPTOP>:3000
-#   ELB_WHATSAPP_NUMBER=+57...
 ./gradlew assembleDebug      # -> app/build/outputs/apk/debug/app-debug.apk
 ./gradlew assembleRelease    # -> app/build/outputs/apk/release/app-release.apk
 adb install -r app/build/outputs/apk/debug/app-debug.apk
@@ -193,7 +202,7 @@ reports/
 **No había ninguna API key en esta máquina.** Nada de esto se ejecutó de verdad:
 - Una llamada real con audio (LiveKit + Deepgram + Claude + ElevenLabs).
 - La latencia real (objetivo 1–2 s, realista 1,5–3 s). Los números de latencia del reporte salen de datos de prueba.
-- El envío real por WhatsApp vía Kapso.
+- El envío real de correo (el SMTP rechaza la cuenta configurada).
 - Escritura real a Supabase.
 - Push nativo: `web/app/api/notify/route.ts` implementa FCM pero requiere `FCM_SERVER_KEY`, y la app Android **no registra token FCM todavía** (no hay `firebase-messaging` en las dependencias). Hoy el camino app-instalada cae a WhatsApp. Si quieren la ruta push, hay que agregar Firebase al Android.
 
@@ -242,11 +251,11 @@ agent/src/elb/
 web/
   app/operator/    consola del despachador
   app/r/[token]/   visor del reporte (server component: el scope se resuelve ANTES de renderizar)
-  app/api/         token · notify · contacts · whatsapp/webhook · report/[token]
-  lib/             signing.ts (espejo de Python) · glossary.ts · whatsapp.ts (Kapso) · events.ts
+  app/api/         token · notify · contacts · report/[token]
+  lib/             signing.ts (espejo de Python) · glossary.ts · email.ts (SMTP) · events.ts
 android/app/src/main/java/co/elb/app/
   call/CallController.kt   LiveKit, autoSubscribe=false + filtro por nombre de track
   call/CallService.kt      foreground service microphone|location (evita el permiso background)
-  ui/                      Home · Call · Settings (contactos + opt-in WhatsApp) · tema
+  ui/                      Home · Call · Settings (contactos) · tema
 supabase/schema.sql
 ```

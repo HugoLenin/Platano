@@ -50,7 +50,6 @@ class ElbViewModel(app: Application) : AndroidViewModel(app) {
     val state: StateFlow<AppState> = _state.asStateFlow()
 
     val userId: String get() = prefs.userId.ifBlank { BuildConfig.DEMO_USER_ID }
-    val whatsappOptInNumber: String get() = BuildConfig.WHATSAPP_OPTIN_NUMBER
     val glossary get() = call.glossary
 
     init {
@@ -110,8 +109,8 @@ class ElbViewModel(app: Application) : AndroidViewModel(app) {
                 _state.update {
                     it.copy(
                         savingContact = false,
-                        banner = "Contacto guardado. Pídele que envíe un WhatsApp al número " +
-                            "para activar los avisos.",
+                        banner = "Contacto guardado. Recibirá el aviso por correo " +
+                            "si activas una emergencia.",
                     )
                 }
                 refreshContacts()

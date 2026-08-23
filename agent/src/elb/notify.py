@@ -1,9 +1,9 @@
 """Support-network notification.
 
-The agent decides WHEN and WHAT; the Next.js app decides HOW to deliver
-(WhatsApp via Kapso, native push, SMS, email). That split exists because the
-Kapso client is a TypeScript SDK - putting delivery behind one HTTP call keeps
-a single implementation instead of a reimplementation in Python.
+The agent decides WHEN and WHAT; the Next.js app decides HOW to deliver. Today
+that means one channel - email over SMTP - but the split is still worth keeping:
+the transport lives next to the templates that render it, and swapping or adding
+a channel never touches this file.
 
 Signed links are minted HERE, not in the web app, so the signing secret and the
 scoping decision live next to the code that knows what is in the report.
@@ -34,8 +34,6 @@ class NotifyTarget:
     email: str = ""
     locale: str = "es"
     relationship: str = ""
-    push_token: str = ""
-    whatsapp_opt_in_at: str | None = None
 
 
 @dataclass
@@ -118,8 +116,6 @@ class Notifier:
                     "email": t.email,
                     "locale": t.locale,
                     "relationship": t.relationship,
-                    "push_token": t.push_token,
-                    "whatsapp_opt_in_at": t.whatsapp_opt_in_at,
                     "link": links.get(t.contact_id, {}).get("url", ""),
                     "link_expires_at": links.get(t.contact_id, {}).get("expires_at"),
                 }

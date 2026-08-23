@@ -9,8 +9,12 @@ import co.elb.app.data.Glossary
 import co.elb.app.data.OutboundEndCall
 import co.elb.app.data.OutboundHello
 import co.elb.app.data.OutboundLocation
+import com.twilio.audioswitch.AudioDevice
 import io.livekit.android.ConnectOptions
 import io.livekit.android.LiveKit
+import io.livekit.android.AudioOptions
+import io.livekit.android.LiveKitOverrides
+import io.livekit.android.audio.AudioSwitchHandler
 import io.livekit.android.events.RoomEvent
 import io.livekit.android.events.collect
 import io.livekit.android.room.Room
@@ -85,7 +89,21 @@ class CallController(
 
         try {
             val creds = api.token(room = roomName, lang = lang, userId = userId, displayName = displayName)
-            val r = LiveKit.create(appContext)
+            val r = LiveKit.create(
+                appContext,
+                overrides = LiveKitOverrides(
+                    audioOptions = AudioOptions(
+                        audioHandler = AudioSwitchHandler(appContext).apply {
+                            preferredDeviceList = listOf(
+                                AudioDevice.BluetoothHeadset::class.java,
+                                AudioDevice.WiredHeadset::class.java,
+                                AudioDevice.Speakerphone::class.java,
+                                AudioDevice.Earpiece::class.java,
+                            )
+                        },
+                    ),
+                ),
+            )
             room = r
 
             eventJob = scope.launch { r.events.collect { handleEvent(it) } }

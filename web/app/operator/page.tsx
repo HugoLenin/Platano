@@ -10,7 +10,6 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Disclaimer } from "@/components/Disclaimer";
 import { useElbRoom, type TranscriptEntry } from "@/components/useElbRoom";
 import { fixedFor, highlight, GLOSSARY_VERSION } from "@/lib/glossary";
 import type { Assessed, TurnState } from "@/lib/events";
@@ -174,7 +173,6 @@ export default function OperatorPage() {
           Entrar a la llamada
         </button>
 
-        <Disclaimer />
       </main>
     );
   }
@@ -182,7 +180,24 @@ export default function OperatorPage() {
   // ------------------------------------------------------------------ in call
   return (
     <main className="flex h-screen flex-col">
-      <div ref={elb.audioRef} className="hidden" aria-hidden />
+      <div
+        ref={elb.audioRef}
+        aria-hidden
+        style={{ position: "absolute", width: 0, height: 0, overflow: "hidden" }}
+      />
+      {elb.micError ? (
+        <div className="bg-warn-400 px-4 py-2 text-sm font-semibold text-ink-950">
+          {elb.micError}
+        </div>
+      ) : null}
+      {elb.audioBlocked ? (
+        <button
+          onClick={elb.resumeAudio}
+          className="bg-warn-400 px-4 py-2 text-sm font-semibold text-ink-950"
+        >
+          El navegador bloqueó el audio. Pulsa aquí para escuchar la interpretación.
+        </button>
+      ) : null}
 
       {/* header */}
       <header className="flex shrink-0 items-center gap-4 border-b border-ink-800 bg-ink-900 px-4 py-2.5">
@@ -261,7 +276,6 @@ export default function OperatorPage() {
             </span>
             <span>glosario v{GLOSSARY_VERSION}</span>
             <span className="ml-auto">
-              <Disclaimer compact />
             </span>
           </footer>
         </section>
@@ -348,12 +362,32 @@ export default function OperatorPage() {
               </p>
             ) : (
               <ul className="mt-1.5 space-y-1 text-xs">
-                {elb.notifications.map((n, i) => (
-                  <li key={i} className={n.ok ? "text-ok-400" : "text-crit-500"}>
-                    {n.kind === "early" ? "Aviso temprano" : "Reporte final"} ·{" "}
-                    {n.delivered} contacto(s) {n.ok ? "notificado(s)" : `— ${n.reason ?? "falló"}`}
-                  </li>
-                ))}
+                {elb.notifications.map((n, i) => {
+                  // Three states, not two. "links minted, no channel to send
+                  // them on" is neither green nor red: nothing failed, so
+                  // painting it red is what trains a dispatcher to ignore red.
+                  const label = n.kind === "early" ? "Aviso temprano" : "Reporte final";
+                  if (!n.ok) {
+                    return (
+                      <li key={i} className="text-crit-500">
+                        {label} · falló — {n.reason ?? "error de envío"}
+                      </li>
+                    );
+                  }
+                  if (n.delivered > 0) {
+                    return (
+                      <li key={i} className="text-ok-400">
+                        {label} · {n.delivered} contacto(s) notificado(s)
+                      </li>
+                    );
+                  }
+                  return (
+                    <li key={i} className="text-warn-400">
+                      {label} · {n.prepared ?? 0} enlace(s) generado(s), sin envío
+                      {n.reason ? ` — ${n.reason}` : ""}
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </div>

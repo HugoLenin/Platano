@@ -76,7 +76,7 @@ corresponden **nunca se escriben** en él: un bug de renderizado no puede
 filtrarlos. El enlace es un token firmado (HMAC-SHA256) que carga su propio
 alcance, expira solo y se puede revocar sin romper los demás.
 
-Y el aviso por WhatsApp se manda solo a quien **dio consentimiento explícito**:
+Y el aviso por correo se manda solo a quien **dio consentimiento explícito**:
 el contacto tiene que escribirle una vez a nuestro número. Ese único mensaje es
 a la vez el permiso auditable y lo que habilita el envío.
 
@@ -94,8 +94,8 @@ a la vez el permiso auditable y lo que habilita el envío.
 LiveKit (audio en tiempo real) · Deepgram Nova-3 con detección multilingüe
 (STT) · **Claude Haiku 4.5** para traducir y extraer, **Claude Opus 5** para el
 reporte final · ElevenLabs Flash v2.5 (TTS, una voz distinta por dirección) ·
-Next.js 16 · Android nativo con Jetpack Compose · Supabase · WhatsApp Cloud API
-vía Kapso.
+Next.js 16 · Android nativo con Jetpack Compose · Supabase · correo por SMTP
+(Gmail).
 
 ## Estado
 
@@ -112,5 +112,5 @@ segundos** después de que terminara de hablar. El reporte se generó solo, con 
 ubicación extraída y los términos críticos marcados.
 
 Lo que falta es operacional: el visor de reportes necesita la base de datos
-conectada y el aviso por WhatsApp necesita la plantilla aprobada por Meta. Todo
+conectada y el aviso por correo necesita una cuenta de Google válida. Todo
 el estado, sin maquillaje, está en el repo.

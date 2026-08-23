@@ -3,7 +3,7 @@
 DECISION: hand-rolled fixed-width builder on the stdlib (`textwrap`), no
 template engine. See docs/DECISIONS.md. A .txt emergency record has a small
 fixed set of sections; what it actually needs is byte-stable output that reads
-correctly in Notepad, a terminal, a WhatsApp preview and a printout. Jinja2
+correctly in Notepad, a terminal, an email client and a printout. Jinja2
 would add a dependency and whitespace-control friction to buy flexibility we
 do not want here - the layout being rigid is a feature.
 

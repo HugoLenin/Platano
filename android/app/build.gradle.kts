@@ -36,7 +36,6 @@ android {
         buildConfigField("String", "API_BASE", "\"${cfg("ELB_API_BASE", "http://10.0.2.2:3000")}\"")
         buildConfigField("String", "DEFAULT_ROOM", "\"${cfg("ELB_DEFAULT_ROOM", "elb-demo")}\"")
         buildConfigField("String", "DEMO_USER_ID", "\"${cfg("ELB_DEMO_USER_ID", "11111111-1111-1111-1111-111111111111")}\"")
-        buildConfigField("String", "WHATSAPP_OPTIN_NUMBER", "\"${cfg("ELB_WHATSAPP_NUMBER", "")}\"")
     }
 
     signingConfigs {
