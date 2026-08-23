@@ -98,11 +98,11 @@ export default function OperatorPage() {
   const startedRef = useRef<number>(0);
 
   useEffect(() => {
-    if (!elb.connected) return;
+    if (!elb.connected || elb.callEnded) return;
     if (!startedRef.current) startedRef.current = Date.now();
     const t = setInterval(() => setElapsed(Math.floor((Date.now() - startedRef.current) / 1000)), 1000);
     return () => clearInterval(t);
-  }, [elb.connected]);
+  }, [elb.connected, elb.callEnded]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -187,6 +187,12 @@ export default function OperatorPage() {
         aria-hidden
         style={{ position: "absolute", width: 0, height: 0, overflow: "hidden" }}
       />
+      {elb.callEnded ? (
+        <div className="bg-warn-400 px-4 py-2 text-sm font-semibold text-ink-950">
+          El llamante colgó. El micrófono se apagó y el agente está generando el reporte
+          final; puedes salir con «Finalizar y generar reporte».
+        </div>
+      ) : null}
       {elb.micError ? (
         <div className="bg-warn-400 px-4 py-2 text-sm font-semibold text-ink-950">
           {elb.micError}
