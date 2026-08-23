@@ -3,12 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="AuXio provides secure, real-time AI translation for emergency response teams.">
+  <meta name="description" content="AuXio: interpretación de llamadas de emergencia con IA en tiempo real, reportes estructurados y avisos para contactos de confianza.">
+  <meta name="keywords" content="AuXio, traducción de emergencias, intérprete de IA, llamadas al 123, emergency response">
+  <meta name="theme-color" content="#051424">
+  <link rel="canonical" href="https://auxio-portal.vercel.app/">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://auxio-portal.vercel.app/">
+  <meta property="og:title" content="AuXio | Interpretación segura para emergencias">
+  <meta property="og:description" content="Interpretación de llamadas de emergencia en tiempo real y reportes para contactos de confianza.">
+  <meta property="og:image" content="https://auxio-portal.vercel.app/project-logo.png">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="AuXio | Interpretación segura para emergencias">
+  <meta name="twitter:description" content="Interpretación de llamadas de emergencia en tiempo real y reportes para contactos de confianza.">
   <title>AuXio | Secure communications</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="./favicon.ico" sizes="32x32">
+  <link rel="icon" href="./icon-512.png" type="image/png" sizes="512x512">
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Hanken+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet">
+  <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"Organization","name":"AuXio","url":"https://auxio-portal.vercel.app/","logo":"https://auxio-portal.vercel.app/project-logo.png","description":"Interpretación de llamadas de emergencia con IA en tiempo real y reportes estructurados."}
+  </script>
   <style>
     :root {
       --background: #051424;
@@ -65,13 +83,17 @@
       background: var(--accent-strong);
       box-shadow: 0 0 15px rgba(173, 2, 36, 0.35);
     }
+    .brand-globe { display: block; width: 21px; height: 21px; }
     .brand-name { font: 700 24px var(--display); letter-spacing: -0.04em; }
     .nav-links { gap: 36px; margin-left: 64px; color: var(--muted); font-size: 14px; font-weight: 600; }
     .nav-links a:hover { color: var(--text); }
     .nav-actions { gap: 20px; }
+    .language-switch { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+    .language-switch .material-symbols-outlined { font-size: 18px; color: var(--accent); }
+    .language-switch select { padding: 8px 28px 8px 10px; border: 1px solid var(--line); border-radius: 8px; color: var(--text); background: var(--surface-low); font: 600 12px var(--body); cursor: pointer; }
+    .language-switch select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
     .nav-download { padding: 12px 20px; color: #fff; background: var(--accent-strong); border-radius: 999px; font-size: 14px; font-weight: 600; }
-    .profile { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; color: #202124; background: #c6c6ca; }
-    .profile .material-symbols-outlined { font-size: 18px; }
 
     main { padding-top: 80px; }
     .page { position: relative; overflow: hidden; }
@@ -85,7 +107,7 @@
       background-size: 60px 60px;
       mask-image: linear-gradient(to bottom, black, transparent 80%);
     }
-    .hero, .features { position: relative; z-index: 1; width: min(100% - 64px, 1400px); margin: auto; }
+    .hero, .features, .section { position: relative; z-index: 1; width: min(100% - 64px, 1400px); margin: auto; }
     .hero { min-height: 76vh; display: grid; grid-template-columns: 0.95fr 1.35fr; align-items: center; gap: 72px; padding: 80px 0 100px; }
     .eyebrow { display: flex; align-items: center; gap: 12px; color: var(--accent); font-size: 13px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; }
     .eyebrow::before { content: ""; width: 48px; height: 2px; background: var(--accent); box-shadow: 0 0 10px rgba(255, 179, 177, 0.5); }
@@ -98,20 +120,37 @@
     .secure-note { display: flex; align-items: center; gap: 8px; margin: 12px 8px; color: rgba(212, 228, 250, 0.55); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; }
     .secure-note::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px rgba(255, 179, 177, 0.8); }
     .visual { position: relative; padding: 20px 0; }
-    .visual::before { content: ""; position: absolute; inset: 10% 5%; border-radius: 50%; background: rgba(28, 43, 60, 0.7); filter: blur(45px); }
-    .visual-image { position: relative; z-index: 1; display: block; width: 100%; border-radius: 28px; box-shadow: 0 24px 56px rgba(0, 0, 0, 0.5); transform: rotate(-4deg); transition: transform 700ms ease; }
+    .visual::before { content: ""; position: absolute; inset: 10% 5%; border-radius: 50%; background: linear-gradient(90deg, rgba(173, 2, 36, 0.28), rgba(42, 117, 180, 0.24)); filter: blur(55px); }
+    .visual::after { content: ""; position: relative; z-index: 1; display: block; min-height: 390px; border: 1px solid rgba(143, 170, 198, 0.25); border-radius: 28px; background-color: rgba(13, 28, 45, 0.98); background-image: repeating-linear-gradient(90deg, transparent 0 14px, rgba(255, 179, 177, 0.8) 15px 19px, transparent 20px 34px, rgba(57, 125, 178, 0.72) 35px 40px, transparent 41px 56px), linear-gradient(90deg, rgba(194, 11, 49, 0.5), rgba(57, 125, 178, 0.46)); background-size: 520px 100%, 100% 100%; background-position: center; background-blend-mode: screen; box-shadow: 0 24px 56px rgba(0, 0, 0, 0.5); transform: rotate(-4deg); animation: waveform 2.8s ease-in-out infinite alternate; }
+    .visual-image { display: none; }
+    .visual::after { display: none; }
     .visual-image:hover { transform: rotate(0); }
+    .waveform { position: relative; z-index: 1; min-height: 390px; display: flex; align-items: center; justify-content: center; gap: clamp(4px, 0.8vw, 12px); padding: 72px clamp(24px, 6vw, 96px); overflow: hidden; border: 1px solid rgba(143, 170, 198, 0.25); border-radius: 28px; background: linear-gradient(135deg, rgba(13, 28, 45, 0.98), rgba(18, 33, 49, 0.82)); box-shadow: 0 24px 56px rgba(0, 0, 0, 0.5); transform: rotate(-4deg); transition: transform 700ms ease; }
+    .waveform:hover { transform: rotate(0); }
+    .waveform::before { content: ""; position: absolute; inset: 50% 8%; height: 1px; background: rgba(212, 228, 250, 0.18); box-shadow: 0 0 20px rgba(212, 228, 250, 0.2); }
+    .wave-bar { display: none; }
+    .waveform svg { position: relative; z-index: 1; width: 100%; height: auto; overflow: visible; }
+    .wave-path { fill: none; stroke: url(#audio-gradient); stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 7px rgba(255, 179, 177, 0.45)); stroke-dasharray: 22 12; animation: wave-drift 3.2s linear infinite; }
+    .wave-path.secondary { opacity: 0.38; stroke-width: 3; animation-duration: 4.6s; animation-direction: reverse; }
+    .wave-path.background { opacity: 0.16; stroke-width: 2; filter: drop-shadow(0 0 5px rgba(139, 197, 238, 0.28)); stroke-dasharray: 14 16; animation-duration: 5.4s; }
+    .wave-path.background-alt { opacity: 0.12; stroke-width: 2; filter: drop-shadow(0 0 5px rgba(255, 179, 177, 0.25)); stroke-dasharray: 10 20; animation-duration: 6.8s; animation-direction: reverse; }
     .live-sync { position: absolute; z-index: 2; top: -6px; left: -22px; flex-direction: column; align-items: stretch; gap: 10px; min-width: 150px; padding: 16px; border: 1px solid var(--line); border-radius: 14px; background: rgba(10, 26, 43, 0.85); backdrop-filter: blur(12px); box-shadow: 0 16px 30px rgba(0, 0, 0, 0.25); }
     .live-sync-label { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; }
     .live-sync-label .material-symbols-outlined { color: var(--accent); }
     .progress { height: 4px; overflow: hidden; border-radius: 4px; background: var(--surface-bright); }
     .progress span { display: block; width: 75%; height: 100%; background: var(--accent); }
+
+    .section-head { max-width: 760px; margin-bottom: 48px; }
+    .section-head h2 { margin: 22px 0 14px; font-size: clamp(30px, 3.4vw, 46px); line-height: 1.1; letter-spacing: -0.03em; }
+    .section-head p { margin: 0; color: var(--muted); font-size: 17px; line-height: 1.6; }
     .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; padding-bottom: 110px; }
     .feature { min-height: 330px; padding: 32px; border: 1px solid transparent; border-radius: 16px; background: var(--surface-low); transition: background 220ms ease, border-color 220ms ease, transform 220ms ease; }
     .feature:hover { border-color: var(--line); background: var(--surface-high); transform: translateY(-4px); }
     .feature-icon { width: 48px; height: 48px; display: grid; place-items: center; margin-bottom: 36px; border-radius: 12px; color: var(--accent); background: var(--surface-bright); }
-    .feature h2 { margin: 0 0 10px; font-size: 24px; }
+    .feature h3 { margin: 0 0 10px; font-size: 24px; }
     .feature p { min-height: 72px; margin: 0; color: var(--muted); line-height: 1.55; }
+    .feature.pin { border-color: rgba(255, 179, 177, 0.35); background: linear-gradient(180deg, rgba(173, 2, 36, 0.12), var(--surface-low)); }
+    .tag { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 14px; padding: 5px 10px; border: 1px solid rgba(255, 179, 177, 0.35); border-radius: 999px; color: var(--accent); font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; }
     .micro { height: 64px; display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 28px; padding: 8px; border-radius: 8px; background: rgba(39, 54, 71, 0.75); opacity: 0.6; }
     .feature:hover .micro { opacity: 1; }
     .bars span { width: 8px; height: 20%; border-radius: 5px; background: var(--accent); animation: bounce 1.2s ease-in-out infinite; }
@@ -119,39 +158,712 @@
     .report-lines { display: flex; flex-direction: column; gap: 9px; align-items: flex-start; }
     .report-lines span { height: 4px; border-radius: 4px; background: rgba(198, 198, 202, 0.5); } .report-lines span:nth-child(1) { width: 75%; } .report-lines span:nth-child(2) { width: 50%; } .report-lines span:nth-child(3) { width: 100%; opacity: 0.5; }
     .radar { position: relative; } .radar::before { content: ""; position: absolute; width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--accent); animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite; } .radar::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
-    footer { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 40px max(32px, calc((100% - 1400px) / 2)); border-top: 1px solid var(--line); color: rgba(212, 228, 250, 0.55); background: #010f1f; font-size: 12px; }
+    .micro-terms { gap: 8px; flex-wrap: wrap; font-size: 12px; font-weight: 600; }
+    .micro-terms span { padding: 4px 9px; border-radius: 999px; color: var(--accent); background: rgba(173, 2, 36, 0.28); }
+    .micro-flow { gap: 8px; color: var(--muted); font-size: 12px; font-weight: 600; }
+    .micro-flow .material-symbols-outlined { font-size: 16px; color: var(--accent); }
+    .micro-mask { gap: 8px; }
+    .micro-mask span { width: 34px; height: 6px; border-radius: 6px; background: rgba(198, 198, 202, 0.4); } .micro-mask span:nth-child(2), .micro-mask span:nth-child(4) { background: repeating-linear-gradient(90deg, var(--accent) 0 4px, transparent 4px 8px); }
+
+    .steps-section { padding-bottom: 110px; }
+    .steps { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .step { display: flex; gap: 20px; padding: 28px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface-low); transition: background 220ms ease, transform 220ms ease; }
+    .step:hover { background: var(--surface-high); transform: translateY(-3px); }
+    .step-index { flex: 0 0 auto; width: 40px; height: 40px; display: grid; place-items: center; border-radius: 12px; color: var(--accent); background: var(--surface-bright); font: 700 15px var(--display); }
+    .step h3 { margin: 4px 0 8px; font-size: 20px; }
+    .step p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.6; }
+    .step .step-meta { display: block; margin-top: 12px; color: rgba(212, 228, 250, 0.5); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; }
+    .step-zero { grid-column: 1 / -1; border-color: rgba(255, 179, 177, 0.3); }
+    .stack { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px; }
+    .stack span { padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: 13px; font-weight: 500; }
+
+    .safeguards-section { padding-bottom: 110px; }
+    .safeguards { display: grid; grid-template-columns: 1.1fr 1fr; gap: 24px; align-items: start; }
+    .rules { display: flex; flex-direction: column; gap: 16px; margin: 0; padding: 0; list-style: none; }
+    .rules li { display: flex; gap: 14px; padding: 22px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-low); }
+    .rules .material-symbols-outlined { flex: 0 0 auto; color: var(--accent); }
+    .rules strong { display: block; margin-bottom: 6px; font-family: var(--display); font-size: 17px; }
+    .rules p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.55; }
+    .callout { padding: 28px; border: 1px solid rgba(255, 179, 177, 0.3); border-left: 3px solid var(--accent); border-radius: 14px; background: linear-gradient(180deg, rgba(173, 2, 36, 0.14), var(--surface-low)); }
+    .callout h3 { margin: 0 0 12px; font-size: 20px; }
+    .callout p { margin: 0 0 14px; color: var(--muted); font-size: 15px; line-height: 1.6; }
+    .callout ul { margin: 0; padding-left: 20px; color: var(--muted); font-size: 14px; line-height: 1.7; }
+
+    footer { padding: 40px max(32px, calc((100% - 1400px) / 2)); border-top: 1px solid var(--line); color: rgba(212, 228, 250, 0.55); background: #010f1f; font-size: 12px; }
+    .footer-note { max-width: 720px; margin-bottom: 28px; line-height: 1.7; }
+    .footer-bar { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
     .footer-links { display: flex; gap: 28px; } .footer-links a:hover { color: var(--text); }
-    @keyframes bounce { 0%, 100% { height: 20%; } 50% { height: 80%; } } @keyframes ping { 0% { transform: scale(0.1); opacity: 1; } 100% { transform: scale(3); opacity: 0; } }
-    @media (max-width: 800px) { .nav, .hero, .features { width: min(100% - 32px, 560px); } .nav-links, .nav-download { display: none; } .hero { display: flex; flex-direction: column; align-items: stretch; gap: 24px; padding-top: 56px; } h1 { font-size: 44px; } .visual { margin-top: 28px; padding-left: 16px; } .live-sync { left: -2px; } .features { grid-template-columns: 1fr; padding-bottom: 64px; } footer { flex-direction: column; text-align: center; padding: 32px 16px; } }
-    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+    @keyframes bounce { 0%, 100% { height: 20%; } 50% { height: 80%; } } @keyframes wave { 0%, 100% { transform: scaleY(0.55); opacity: 0.7; } 50% { transform: scaleY(1); opacity: 1; } } @keyframes wave-drift { to { stroke-dashoffset: -68; } } @keyframes waveform { 0% { transform: rotate(-4deg) scaleY(0.88); filter: saturate(0.9); } 100% { transform: rotate(-1deg) scaleY(1); filter: saturate(1.25); } } @keyframes ping { 0% { transform: scale(0.1); opacity: 1; } 100% { transform: scale(3); opacity: 0; } }
+    @media (max-width: 800px) { .nav, .hero, .features, .section { width: min(100% - 32px, 560px); } .nav-links, .nav-download { display: none; } .hero { display: flex; flex-direction: column; align-items: stretch; gap: 24px; padding-top: 56px; } h1 { font-size: 44px; } .visual { margin-top: 28px; padding-left: 16px; } .visual::after { min-height: 280px; background-size: 360px 100%, 100% 100%; } .live-sync { left: -2px; } .features { grid-template-columns: 1fr; padding-bottom: 64px; } .steps, .safeguards { grid-template-columns: 1fr; } .steps-section, .safeguards-section { padding-bottom: 64px; } footer { padding: 32px 16px; } .footer-bar { flex-direction: column; text-align: center; } }
+    /* Cursor glow + trail. `screen` keeps it additive: it lights the dark
+       surfaces and leaves light text alone instead of tinting it red. */
+    /* width/height are mandatory, not redundant: a canvas is a replaced
+       element, so `inset: 0` alone leaves it at its intrinsic 300x150. */
+    #cursor-trail { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 60; pointer-events: none; mix-blend-mode: screen; filter: blur(9px); }
+    @media (hover: none) { #cursor-trail { display: none; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } #cursor-trail { display: none; } }
   </style>
 </head>
 <body>
+  <canvas id="cursor-trail" aria-hidden="true"></canvas>
   <header>
     <div class="nav">
-      <a class="brand" href="#top" aria-label="AuXio home"><span class="brand-mark"><span class="material-symbols-outlined">graphic_eq</span></span><span class="brand-name">AuXio</span></a>
-      <nav class="nav-links" aria-label="Main navigation"><a href="#features">Features</a><a href="#how-it-works">How it works</a><a href="#about">About</a></nav>
-      <div class="nav-actions"><a class="nav-download" href="#download">Download APK</a><span class="profile" aria-hidden="true"><span class="material-symbols-outlined">person</span></span></div>
+      <a class="brand" href="#top" aria-label="AuXio home"><span class="brand-mark"><svg class="brand-globe" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><circle cx="50" cy="50" r="38" fill="none" stroke="currentColor" stroke-width="4.6"></circle><g fill="currentColor"><path d="M23.8 32.0 L30.0 24.6 L43.5 23.0 L48.0 28.5 L40.5 35.5 L42.0 40.0 L40.0 44.0 L42.5 47.5 L46.0 48.5 L58.0 57.5 L49.5 65.5 L44.0 79.0 L37.2 62.0 L37.2 49.5 L35.8 45.5 L33.5 44.3 L28.5 45.0 L22.8 38.0 Z"></path><path d="M49.5 20.5 L58.5 22.5 L53.0 29.5 Z"></path><path d="M62.5 26.5 L71.5 30.0 L73.5 38.0 L64.0 39.5 L60.5 33.0 Z"></path><path d="M60.8 46.0 L62.0 42.0 L78.0 42.5 L76.5 55.0 L74.0 66.0 L69.5 73.0 L70.0 63.0 L66.5 56.0 L64.0 51.5 Z"></path></g></svg></span><span class="brand-name">AuXio</span></a>
+      <nav class="nav-links" aria-label="Main navigation"><a href="#features" data-i18n="features">Features</a><a href="#how-it-works" data-i18n="howItWorks">How it works</a><a href="#about" data-i18n="safeguards">Safeguards</a></nav>
+      <div class="nav-actions"><label class="language-switch"><span class="material-symbols-outlined">language</span><span class="sr-only">Language</span><select id="language-select" aria-label="Page language"><option value="en">EN</option><option value="es">ES</option><option value="pt">PT</option><option value="fr">FR</option><option value="de">DE</option><option value="it">IT</option></select></label><a class="nav-download" href="#download" data-i18n="download">Download APK</a></div>
     </div>
   </header>
   <main id="top">
     <div class="page">
-      <section class="hero" id="about">
+      <section class="hero">
         <div class="hero-content">
-          <div class="eyebrow">Secure communications</div>
-          <h1>Breaking language barriers when every second counts.</h1>
-          <p class="hero-copy">Simultaneous AI translation designed specifically for emergency response, first responders, and critical global communications.</p>
-          <div class="download-area" id="download"><a class="button" href="#download"><span class="material-symbols-outlined">android</span>Download APK</a><div class="secure-note">Direct secure download</div></div>
+          <div class="eyebrow" data-i18n="secure">Secure communications</div>
+          <h1 data-i18n="heroTitle">Breaking language barriers when every second counts.</h1>
+          <p class="hero-copy" data-i18n="heroCopy">AuXio interprets an emergency call in both directions in real time — and turns it into a structured report that reaches the people who care about the caller, not just the dispatch console.</p>
+          <div class="download-area" id="download"><a class="button" href="#download"><span class="material-symbols-outlined">android</span><span data-i18n="download">Download APK</span></a><div class="secure-note" data-i18n="secureDownload">Direct secure download</div></div>
         </div>
-        <div class="visual" id="how-it-works"><div class="live-sync"><div class="live-sync-label"><span class="material-symbols-outlined">record_voice_over</span>Live sync</div><div class="progress"><span></span></div></div><img class="visual-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJ6rKJiG68_mjICufE_vVjnu6eXgSGUF0wLhMHJw5QVkEHgDWylSSMypMHwI-pNWcRDgVrL403wY_2pXC4dX4ISid2m9IoU5eVEM_uAjI4QwN-jYA2fjbGWG1vNkRCLoN7KNh1v9Zlj3Wt_-9cU31fCCk29RyBSBt6p1ix1iWfc4r-4weryWHLSp1YexXJj4pxkEAjRMPwzOe2O5mAQ4SUe7amGoSMBxGLbnc9Rioqi2ak9k4Lozjw" alt="AuXio translation interface preview"></div>
+        <div class="visual"><div class="live-sync"><div class="live-sync-label"><span class="material-symbols-outlined">record_voice_over</span>Live sync</div><div class="progress"><span></span></div></div><img class="visual-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJ6rKJiG68_mjICufE_vVjnu6eXgSGUF0wLhMHJw5QVkEHgDWylSSMypMHwI-pNWcRDgVrL403wY_2pXC4dX4ISid2m9IoU5eVEM_uAjI4QwN-jYA2fjbGWG1vNkRCLoN7KNh1v9Zlj3Wt_-9cU31fCCk29RyBSBt6p1ix1iWfc4r-4weryWHLSp1YexXJj4pxkEAjRMPwzOe2O5mAQ4SUe7amGoSMBxGLbnc9Rioqi2ak9k4Lozjw" alt="AuXio translation interface preview"></div>
       </section>
-      <section class="features" id="features" aria-label="AuXio features">
-        <article class="feature"><div class="feature-icon"><span class="material-symbols-outlined">translate</span></div><h2>Real-time sync</h2><p>Zero-latency voice translation engineered for high-stakes environments. Instantly bridge communication gaps without delays.</p><div class="micro bars" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div></article>
-        <article class="feature"><div class="feature-icon"><span class="material-symbols-outlined">description</span></div><h2>AI incident reports</h2><p>Automatically synthesize calls into structured TXT/SMS reports. Standardized logging for dispatchers and legal records.</p><div class="micro report-lines" aria-hidden="true"><span></span><span></span><span></span></div></article>
-        <article class="feature"><div class="feature-icon"><span class="material-symbols-outlined">my_location</span></div><h2>Emergency routing</h2><p>Embedded operational maps with live telemetry. Track caller location and timestamp data seamlessly in one interface.</p><div class="micro radar" aria-hidden="true"></div></article>
+
+      <section class="section" id="features" aria-labelledby="features-title">
+        <div class="section-head">
+          <div class="eyebrow" data-i18n="features">Features</div>
+          <h2 id="features-title" data-i18n="featuresTitle">A live interpreter on the call, and a report that outlives it.</h2>
+          <p data-i18n="featuresCopy">Live interpretation is what gets the caller understood. What happens after the call — a clear report in the hands of a trusted contact who can actually show up — is what AuXio is built for.</p>
+        </div>
+      </section>
+      <section class="features" aria-label="AuXio features">
+        <article class="feature">
+          <div class="feature-icon"><span class="material-symbols-outlined">translate</span></div>
+          <h3 data-i18n="featureOneTitle">Two-way live interpretation</h3>
+          <p data-i18n="featureOneCopy">Each direction runs as its own interpreter session on a separate named audio track, so the caller and the dispatcher only ever hear the side meant for them. Turn-based, never talking over either voice.</p>
+          <div class="micro bars" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+        </article>
+        <article class="feature">
+          <div class="feature-icon"><span class="material-symbols-outlined">lock</span></div>
+          <h3 data-i18n="featureTwoTitle">Locked critical glossary</h3>
+          <p data-i18n="featureTwoCopy">19 life-or-death terms across 6 languages have a fixed translation — including their negations. Every translation is checked against the glossary afterwards and repaired if a term went missing or its polarity flipped.</p>
+          <div class="micro micro-terms" aria-hidden="true"><span data-i18n="notBreathing">not breathing</span><span data-i18n="noPulse">no pulse</span><span data-i18n="trapped">trapped</span></div>
+        </article>
+        <article class="feature">
+          <div class="feature-icon"><span class="material-symbols-outlined">emergency_home</span></div>
+          <h3 data-i18n="featureThreeTitle">Fallback instead of dead air</h3>
+          <p data-i18n="featureThreeCopy">Every direction is a state machine: listening, processing, playing. Translation gets a 3.5 s budget to reach the first audio byte; past it, the original speech is spoken instead of freezing the call. There is never silence.</p>
+          <div class="micro micro-flow" aria-hidden="true"><span data-i18n="listening">Listening</span><span class="material-symbols-outlined">chevron_right</span><span data-i18n="processing">Processing</span><span class="material-symbols-outlined">chevron_right</span><span data-i18n="playing">Playing</span></div>
+        </article>
+        <article class="feature pin">
+          <div class="feature-icon"><span class="material-symbols-outlined">diversity_3</span></div>
+          <span class="tag" data-i18n="theDifference">The difference</span>
+          <h3 data-i18n="featureFourTitle">Trusted contact network</h3>
+          <p data-i18n="featureFourCopy">Contacts are set up long before anything happens and stored server-side, so they survive a lost or broken phone. When a call comes in, the people who would want to know are already on the list.</p>
+          <div class="micro report-lines" aria-hidden="true"><span></span><span></span><span></span></div>
+        </article>
+        <article class="feature">
+          <div class="feature-icon"><span class="material-symbols-outlined">send</span></div>
+          <h3 data-i18n="featureFiveTitle">Report delivery that reaches anyone</h3>
+          <p data-i18n="featureFiveCopy">Contacts with the app get a native push and a map. Everyone else gets WhatsApp, SMS or email with a short-lived signed link to a lightweight viewer — map included. Location travels as a real map pin, not a bare link.</p>
+          <div class="micro radar" aria-hidden="true"></div>
+        </article>
+        <article class="feature">
+          <div class="feature-icon"><span class="material-symbols-outlined">shield_person</span></div>
+          <h3 data-i18n="featureSixTitle">Two reports, not one redacted</h3>
+          <p data-i18n="featureSixCopy">The family report is written from scratch for a family audience — what happened, where, that help is on the way. It carries no transcript, no confidence scores and no clinical detail; those exist only in the operator's copy.</p>
+          <div class="micro micro-mask" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+        </article>
+      </section>
+
+      <section class="section steps-section" id="how-it-works" aria-labelledby="how-title">
+        <div class="section-head">
+          <div class="eyebrow" data-i18n="howItWorks">How it works</div>
+          <h2 id="how-title" data-i18n="howTitle">From the first word to the report, in one continuous flow.</h2>
+          <p data-i18n="howCopy">The caller, the dispatcher and the AI interpreter all join the same real-time room. Understanding the emergency and notifying the support network run alongside the call — never in front of it.</p>
+        </div>
+        <div class="steps">
+          <article class="step step-zero">
+            <div class="step-index" aria-hidden="true">00</div>
+            <div>
+              <h3 data-i18n="stepZeroTitle">Before anything happens: set up your circle</h3>
+              <p data-i18n="stepZeroCopy">In the app's settings you add your trusted contacts and ask each one to send a quick opt-in message on WhatsApp. That is real, explicit consent — recorded before the emergency, not improvised during it — and it is what lets a message reach them the moment it matters.</p>
+              <span class="step-meta" data-i18n="stepZeroMeta">One-time setup &middot; Stored server-side, not only on the phone</span>
+            </div>
+          </article>
+          <article class="step">
+            <div class="step-index" aria-hidden="true">01</div>
+            <div>
+              <h3 data-i18n="stepOneTitle">The call opens</h3>
+              <p data-i18n="stepOneCopy">The Android app joins a real-time room together with the dispatcher's web console and the AI interpreter. Each participant subscribes only to the audio meant for them, so nobody hears the wrong side of the conversation.</p>
+              <span class="step-meta" data-i18n="stepOneMeta">WebRTC room &middot; Caller, operator, interpreter</span>
+            </div>
+          </article>
+          <article class="step">
+            <div class="step-index" aria-hidden="true">02</div>
+            <div>
+              <h3 data-i18n="stepTwoTitle">Both directions are interpreted</h3>
+              <p data-i18n="stepTwoCopy">Speech is transcribed, translated by a model instructed to act as a strict interpreter — it never answers, advises or asks anything of its own — and spoken back with a low-latency voice. Negations, names, numbers and places are preserved exactly.</p>
+              <span class="step-meta" data-i18n="stepTwoMeta">Speech-to-text &rarr; strict translation &rarr; voice</span>
+            </div>
+          </article>
+          <article class="step">
+            <div class="step-index" aria-hidden="true">03</div>
+            <div>
+              <h3 data-i18n="stepThreeTitle">The emergency is understood in parallel</h3>
+              <p data-i18n="stepThreeCopy">A second model reads the running transcript and extracts emergency type, people affected, location and active hazards, with a confidence score on every field. It runs beside the interpreter and can never slow it down.</p>
+              <span class="step-meta" data-i18n="stepThreeMeta">Per-field confidence &middot; Non-blocking</span>
+            </div>
+          </article>
+          <article class="step">
+            <div class="step-index" aria-hidden="true">04</div>
+            <div>
+              <h3 data-i18n="stepFourTitle">An early alert goes out mid-call</h3>
+              <p data-i18n="stepFourCopy">Once location clears 0.75 confidence and emergency type clears 0.70 — both holding steady across two extraction passes, and never before 12 s into the call — a short alert is sent: what happened, where, and that emergency services are already on the line.</p>
+              <span class="step-meta" data-i18n="stepFourMeta">Lightweight alert &middot; Native map location</span>
+            </div>
+          </article>
+          <article class="step">
+            <div class="step-index" aria-hidden="true">05</div>
+            <div>
+              <h3 data-i18n="stepFiveTitle">Two reports close the loop</h3>
+              <p data-i18n="stepFiveCopy">On hangup AuXio writes two plain-text reports: the operator's, with per-field confidence, dispatch data and the full bilingual transcript — and the family's, written separately, in the caller's own language, with none of that. Each goes out over its contact's channel.</p>
+              <span class="step-meta" data-i18n="stepFiveMeta">Structured .txt &middot; Signed links that expire and can be revoked</span>
+            </div>
+          </article>
+        </div>
+        <div class="stack" aria-label="Built with">
+          <span>LiveKit Agents</span><span>Deepgram Nova-3</span><span>Claude Haiku</span><span>ElevenLabs Flash v2.5</span><span>Supabase</span><span>WhatsApp Cloud API via Kapso</span><span>Kotlin &amp; Jetpack Compose</span>
+        </div>
+      </section>
+
+      <section class="section safeguards-section" id="about" aria-labelledby="about-title">
+        <div class="section-head">
+          <div class="eyebrow" data-i18n="safeguardsScope">Safeguards &amp; scope</div>
+          <h2 id="about-title" data-i18n="safeguardsTitle">AuXio informs. It never instructs.</h2>
+          <p data-i18n="safeguardsCopy">A tool that speaks during an emergency has to be honest about where its role ends. These limits are deliberate, and they are visible on every screen and in every message AuXio produces.</p>
+        </div>
+        <div class="safeguards">
+          <ul class="rules">
+            <li>
+              <span class="material-symbols-outlined">medical_information</span>
+              <div>
+                <strong data-i18n="noMedical">No medical guidance, ever</strong>
+                <p data-i18n="noMedicalCopy">Reports and alerts describe the situation. They never generate, suggest or relay a medical procedure for a family member to perform. Instructions come from the professionals on the call.</p>
+              </div>
+            </li>
+            <li>
+              <span class="material-symbols-outlined">record_voice_over</span>
+              <div>
+                <strong data-i18n="onlyInterprets">The interpreter only interprets</strong>
+                <p data-i18n="onlyInterpretsCopy">The translation agent is constrained to faithful interpretation. It does not offer opinions, does not answer on the caller's behalf, and does not ask questions of its own.</p>
+              </div>
+            </li>
+            <li>
+              <span class="material-symbols-outlined">visibility_lock</span>
+              <div>
+                <strong data-i18n="consentFirst">Consent first, minimum data after</strong>
+                <p data-i18n="consentFirstCopy">Nobody is contacted without having opted in beforehand. Each recipient sees only the fields their role justifies, through links that are signed and short-lived rather than permanently public.</p>
+              </div>
+            </li>
+          </ul>
+          <aside class="callout">
+            <h3 data-i18n="notReplacement">Not a replacement for emergency services</h3>
+            <p data-i18n="notReplacementCopy">AuXio is an interpretation and notification layer. In an emergency, always contact your local emergency number — 123, 911, 112 or whatever applies where you are. AuXio helps you be understood and helps your people find out; it does not dispatch help.</p>
+            <p data-i18n="currentScope">Current scope of this build:</p>
+            <ul>
+              <li data-i18n="scopeAndroid">Android only — sideloaded APK, not a store release</li>
+              <li data-i18n="scopeSip">No SIP or live integration with real emergency lines</li>
+              <li data-i18n="scopeTurnBased">Turn-based interpretation, one speaker at a time</li>
+            </ul>
+          </aside>
+        </div>
       </section>
     </div>
   </main>
-  <footer><div class="brand"><span class="material-symbols-outlined">graphic_eq</span><span class="brand-name">AuXio</span></div><div class="footer-links"><a href="#privacy">Privacy</a><a href="#terms">Terms</a><a href="https://github.com" rel="noreferrer">GitHub</a></div><span>&copy; 2026 AuXio.</span></footer>
+  <footer>
+    <p class="footer-note" data-i18n="footerNote">AuXio does not replace emergency services and does not provide medical, legal or safety instructions. If you are in danger, call your local emergency number. Reports are shared only with contacts who opted in beforehand, and generated links expire.</p>
+    <div class="footer-bar">
+      <div class="brand"><span class="brand-mark"><svg class="brand-globe" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><circle cx="50" cy="50" r="38" fill="none" stroke="currentColor" stroke-width="4.6"></circle><g fill="currentColor"><path d="M23.8 32.0 L30.0 24.6 L43.5 23.0 L48.0 28.5 L40.5 35.5 L42.0 40.0 L40.0 44.0 L42.5 47.5 L46.0 48.5 L58.0 57.5 L49.5 65.5 L44.0 79.0 L37.2 62.0 L37.2 49.5 L35.8 45.5 L33.5 44.3 L28.5 45.0 L22.8 38.0 Z"></path><path d="M49.5 20.5 L58.5 22.5 L53.0 29.5 Z"></path><path d="M62.5 26.5 L71.5 30.0 L73.5 38.0 L64.0 39.5 L60.5 33.0 Z"></path><path d="M60.8 46.0 L62.0 42.0 L78.0 42.5 L76.5 55.0 L74.0 66.0 L69.5 73.0 L70.0 63.0 L66.5 56.0 L64.0 51.5 Z"></path></g></svg></span><span class="brand-name">AuXio</span></div>
+      <div class="footer-links"><a href="#privacy">Privacy</a><a href="#terms">Terms</a><a href="https://github.com/platanus-hack/platanus-hack-26-co-team-4#equipo" rel="noreferrer">GitHub</a></div>
+      <span>&copy; 2026 AuXio.</span>
+    </div>
+  </footer>
+  <script>
+    const translations = {
+      en: {
+        features: "Features", howItWorks: "How it works", safeguards: "Safeguards", download: "Download APK", liveSync: "Live sync", notBreathing: "not breathing", noPulse: "no pulse", trapped: "trapped", listening: "Listening", processing: "Processing", playing: "Playing", theDifference: "The difference",
+        secure: "Secure communications", heroTitle: "Breaking language barriers when every second counts.",
+        heroCopy: "AuXio interprets an emergency call in both directions in real time — and turns it into a structured report that reaches the people who care about the caller, not just the dispatch console.",
+        secureDownload: "Direct secure download", featuresTitle: "A live interpreter on the call, and a report that outlives it.",
+        featuresCopy: "Live interpretation is what gets the caller understood. What happens after the call — a clear report in the hands of a trusted contact who can actually show up — is what AuXio is built for.",
+        featureOneTitle: "Two-way live interpretation", featureOneCopy: "Each direction runs as its own interpreter session on a separate named audio track, so the caller and the dispatcher only ever hear the side meant for them. Turn-based, never talking over either voice.",
+        featureTwoTitle: "Locked critical glossary", featureTwoCopy: "19 life-or-death terms across 6 languages have a fixed translation — including their negations. Every translation is checked against the glossary afterwards and repaired if a term went missing or its polarity flipped.",
+        featureThreeTitle: "Fallback instead of dead air", featureThreeCopy: "Every direction is a state machine: listening, processing, playing. Translation gets a 3.5 s budget to reach the first audio byte; past it, the original speech is spoken instead of freezing the call. There is never silence.",
+        featureFourTitle: "Trusted contact network", featureFourCopy: "Contacts are set up long before anything happens and stored server-side, so they survive a lost or broken phone. When a call comes in, the people who would want to know are already on the list.",
+        featureFiveTitle: "Report delivery that reaches anyone", featureFiveCopy: "Contacts with the app get a native push and a map. Everyone else gets WhatsApp, SMS or email with a short-lived signed link to a lightweight viewer — map included. Location travels as a real map pin, not a bare link.",
+        featureSixTitle: "Two reports, not one redacted", featureSixCopy: "The family report is written from scratch for a family audience — what happened, where, that help is on the way. It carries no transcript, no confidence scores and no clinical detail; those exist only in the operator's copy.",
+        howTitle: "From the first word to the report, in one continuous flow.", howCopy: "The caller, the dispatcher and the AI interpreter all join the same real-time room. Understanding the emergency and notifying the support network run alongside the call — never in front of it.",
+        safeguardsScope: "Safeguards & scope", safeguardsTitle: "AuXio informs. It never instructs.", safeguardsCopy: "A tool that speaks during an emergency has to be honest about where its role ends. These limits are deliberate, and they are visible on every screen and in every message AuXio produces.",
+        stepZeroTitle: "Before anything happens: set up your circle", stepZeroCopy: "In the app's settings you add your trusted contacts and ask each one to send a quick opt-in message on WhatsApp. That is real, explicit consent recorded before the emergency, not improvised during it.", stepZeroMeta: "One-time setup · Stored server-side, not only on the phone", stepOneTitle: "The call opens", stepOneCopy: "The Android app joins a real-time room with the dispatcher's web console and the AI interpreter. Each participant hears only the audio meant for them.", stepOneMeta: "WebRTC room · Caller, operator, interpreter", stepTwoTitle: "Both directions are interpreted", stepTwoCopy: "Speech is transcribed, translated by a strict interpreter and spoken back with a low-latency voice. Negations, names, numbers and places are preserved exactly.", stepTwoMeta: "Speech-to-text → strict translation → voice", stepThreeTitle: "The emergency is understood in parallel", stepThreeCopy: "A second model reads the transcript and extracts the emergency type, affected people, location and hazards, with confidence for every field.", stepThreeMeta: "Per-field confidence · Non-blocking", stepFourTitle: "An early alert goes out mid-call", stepFourCopy: "Once the location and emergency type are stable and confident, a short alert is sent with what happened, where and that emergency services are already on the line.", stepFourMeta: "Lightweight alert · Native map location", stepFiveTitle: "Two reports close the loop", stepFiveCopy: "On hangup AuXio writes separate operator and family reports. Each one is delivered through its contact's channel.", stepFiveMeta: "Structured .txt · Signed links that expire and can be revoked",
+        noMedical: "No medical guidance, ever", noMedicalCopy: "Reports and alerts describe the situation. They never generate or relay a medical procedure. Instructions come from the professionals on the call.", onlyInterprets: "The interpreter only interprets", onlyInterpretsCopy: "The translation agent is constrained to faithful interpretation. It does not offer opinions, answer for the caller or ask its own questions.", consentFirst: "Consent first, minimum data after", consentFirstCopy: "Nobody is contacted without opting in beforehand. Each recipient sees only the fields their role justifies through signed, short-lived links.", notReplacement: "Not a replacement for emergency services", notReplacementCopy: "AuXio is an interpretation and notification layer. In an emergency, always contact your local emergency number. AuXio does not dispatch help.", currentScope: "Current scope of this build:", scopeAndroid: "Android only — sideloaded APK, not a store release", scopeSip: "No SIP or live integration with real emergency lines", scopeTurnBased: "Turn-based interpretation, one speaker at a time", footerNote: "AuXio does not replace emergency services and does not provide medical, legal or safety instructions. If you are in danger, call your local emergency number. Reports are shared only with contacts who opted in beforehand, and generated links expire."
+      },
+      es: {
+        listening: "Escuchando",
+        processing: "Procesando",
+        playing: "Reproduciendo",
+        notBreathing: "no respira",
+        noPulse: "sin pulso",
+        trapped: "atrapado",
+        theDifference: "La diferencia",
+        liveSync: "Sincronización en vivo",
+        features: "Funciones", howItWorks: "Cómo funciona", safeguards: "Salvaguardas", download: "Descargar APK",
+        secure: "Comunicaciones seguras", liveSync: "Sincronización en vivo", heroTitle: "Rompiendo barreras de idioma cuando cada segundo cuenta.",
+        heroCopy: "AuXio interpreta una llamada de emergencia en ambas direcciones y en tiempo real, y la convierte en un reporte estructurado que llega a quienes se preocupan por el llamante, no solo a la consola del despachador.",
+        secureDownload: "Descarga segura directa", featuresTitle: "Un intérprete en vivo durante la llamada y un reporte que perdura.",
+        featuresCopy: "La interpretación en vivo permite entender al llamante. Lo que ocurre después, un reporte claro en manos de un contacto de confianza que puede ayudar, es para lo que AuXio fue creado.",
+        featureOneTitle: "Interpretación bidireccional en vivo", featureOneCopy: "Cada dirección funciona como una sesión independiente en un canal de audio separado, de modo que el llamante y el despachador solo escuchan el lado que les corresponde. Por turnos, sin que ninguna voz interrumpa a la otra.",
+        featureTwoTitle: "Glosario crítico protegido", featureTwoCopy: "19 términos de vida o muerte en 6 idiomas tienen una traducción fija, incluidas sus negaciones. Cada traducción se compara con el glosario y se corrige si falta un término o cambia su polaridad.",
+        featureThreeTitle: "Respuesta alternativa, nunca silencio", featureThreeCopy: "Cada dirección sigue una máquina de estados: escuchando, procesando y reproduciendo. La traducción tiene 3,5 segundos para comenzar; después, se reproduce el audio original en vez de congelar la llamada. Nunca hay silencio.",
+        featureFourTitle: "Red de contactos de confianza", featureFourCopy: "Los contactos se configuran antes de cualquier emergencia y se guardan en el servidor, para que sobrevivan a un teléfono perdido o dañado. Cuando llega una llamada, las personas que necesitan saberlo ya están en la lista.",
+        featureFiveTitle: "Reportes que llegan a cualquiera", featureFiveCopy: "Los contactos con la app reciben una notificación y un mapa. Los demás reciben WhatsApp, SMS o correo con un enlace firmado y temporal a un visor ligero, con el mapa incluido. La ubicación viaja como un marcador real, no como un enlace aislado.",
+        featureSixTitle: "Dos reportes, no uno censurado", featureSixCopy: "El reporte familiar se escribe desde cero para la familia: qué ocurrió, dónde y que la ayuda está en camino. No contiene transcripción, niveles de confianza ni detalles clínicos; eso solo existe en la copia del operador.",
+        howTitle: "De la primera palabra al reporte, en un flujo continuo.", howCopy: "El llamante, el despachador y el intérprete de IA entran a la misma sala en tiempo real. Comprender la emergencia y avisar a la red de apoyo ocurren durante la llamada, nunca antes que ella.",
+        safeguardsScope: "Salvaguardas y alcance", safeguardsTitle: "AuXio informa. Nunca da instrucciones.", safeguardsCopy: "Una herramienta que habla durante una emergencia debe ser honesta sobre dónde termina su función. Estos límites son deliberados y aparecen en cada pantalla y mensaje que produce AuXio.",
+        stepZeroTitle: "Antes de que ocurra algo: configura tu círculo", stepZeroCopy: "En los ajustes de la app agregas tus contactos de confianza y les pides enviar un mensaje de consentimiento por WhatsApp. Es un consentimiento real y explícito, registrado antes de la emergencia.", stepZeroMeta: "Configuración única · Guardado en el servidor, no solo en el teléfono", stepOneTitle: "La llamada comienza", stepOneCopy: "La app Android entra a una sala en tiempo real junto con la consola web del despachador y el intérprete de IA. Cada participante escucha solo el audio que le corresponde.", stepOneMeta: "Sala WebRTC · Llamante, operador, intérprete", stepTwoTitle: "Se interpretan ambas direcciones", stepTwoCopy: "El audio se transcribe, se traduce con un intérprete estricto y se reproduce con una voz de baja latencia. Negaciones, nombres, números y lugares se conservan exactamente.", stepTwoMeta: "Voz a texto → traducción estricta → voz", stepThreeTitle: "La emergencia se entiende en paralelo", stepThreeCopy: "Un segundo modelo lee la transcripción y extrae el tipo de emergencia, las personas afectadas, la ubicación y los peligros, con confianza para cada campo.", stepThreeMeta: "Confianza por campo · Sin bloquear la llamada", stepFourTitle: "Se envía una alerta temprana durante la llamada", stepFourCopy: "Cuando la ubicación y el tipo de emergencia son estables y confiables, se envía una alerta breve con qué ocurrió, dónde y que los servicios de emergencia ya están en la línea.", stepFourMeta: "Alerta ligera · Ubicación en mapa nativo", stepFiveTitle: "Dos reportes completan el proceso", stepFiveCopy: "Al terminar la llamada, AuXio escribe reportes separados para el operador y la familia. Cada uno se entrega por el canal de su contacto.", stepFiveMeta: ".txt estructurado · Enlaces firmados, temporales y revocables",
+        noMedical: "Nunca damos orientación médica", noMedicalCopy: "Los reportes y alertas describen la situación. Nunca generan ni transmiten procedimientos médicos. Las instrucciones vienen de los profesionales de la llamada.", onlyInterprets: "El intérprete solo interpreta", onlyInterpretsCopy: "El agente de traducción está limitado a interpretar fielmente. No opina, no responde por el llamante ni formula preguntas propias.", consentFirst: "Consentimiento primero, datos mínimos después", consentFirstCopy: "Nadie recibe mensajes sin aceptar previamente. Cada destinatario ve solo los campos que corresponden a su rol, mediante enlaces firmados y temporales.", notReplacement: "No reemplaza a los servicios de emergencia", notReplacementCopy: "AuXio es una capa de interpretación y notificaciones. En una emergencia, contacta siempre al número local. AuXio no envía ayuda.", currentScope: "Alcance actual de esta versión:", scopeAndroid: "Solo Android: APK instalado manualmente, no publicado en una tienda", scopeSip: "Sin SIP ni integración en vivo con líneas de emergencia reales", scopeTurnBased: "Interpretación por turnos, un hablante a la vez", footerNote: "AuXio no reemplaza a los servicios de emergencia ni ofrece instrucciones médicas, legales o de seguridad. Si estás en peligro, llama al número local de emergencias. Los reportes solo se comparten con contactos que aceptaron previamente y sus enlaces caducan."
+      },
+      pt: {
+        features: "Recursos",
+        howItWorks: "Como funciona",
+        safeguards: "Salvaguardas",
+        download: "Baixar APK",
+        liveSync: "Sincronização ao vivo",
+        notBreathing: "não respira",
+        noPulse: "sem pulso",
+        trapped: "preso",
+        listening: "Ouvindo",
+        processing: "Processando",
+        playing: "Reproduzindo",
+        theDifference: "O diferencial",
+        secure: "Comunicações seguras",
+        heroTitle: "Quebrando barreiras linguísticas quando cada segundo conta.",
+        heroCopy: "A AuXio interpreta uma chamada de emergência nas duas direções em tempo real — e a transforma em um relatório estruturado que chega a quem se preocupa com quem ligou, não apenas ao console do despachante.",
+        secureDownload: "Download seguro direto",
+        featuresTitle: "Um intérprete ao vivo na chamada e um relatório que permanece.",
+        featuresCopy: "A interpretação ao vivo é o que faz quem liga ser entendido. O que acontece depois — um relatório claro nas mãos de um contato de confiança que pode agir — é para isso que a AuXio existe.",
+        featureOneTitle: "Interpretação ao vivo nas duas direções",
+        featureOneCopy: "Cada direção funciona como uma sessão própria em uma faixa de áudio separada, então quem liga e o despachante ouvem apenas o lado destinado a eles. Por turnos, sem sobrepor nenhuma voz.",
+        featureTwoTitle: "Glossário crítico protegido",
+        featureTwoCopy: "19 termos de vida ou morte em 6 idiomas têm tradução fixa, incluindo suas negações. Cada tradução é verificada contra o glossário e corrigida se um termo desaparecer ou se a polaridade for invertida.",
+        featureThreeTitle: "Alternativa em vez de silêncio",
+        featureThreeCopy: "Cada direção é uma máquina de estados: ouvindo, processando, reproduzindo. A tradução tem 3,5 s para começar; passado esse limite, o áudio original é reproduzido em vez de travar a chamada. Nunca há silêncio.",
+        featureFourTitle: "Rede de contatos de confiança",
+        featureFourCopy: "Os contatos são configurados muito antes de qualquer emergência e guardados no servidor, para sobreviverem a um telefone perdido ou quebrado. Quando a chamada chega, quem precisa saber já está na lista.",
+        featureFiveTitle: "Entrega que alcança qualquer pessoa",
+        featureFiveCopy: "Contatos com o app recebem notificação nativa e mapa. Os demais recebem WhatsApp, SMS ou e-mail com um link assinado e temporário para um visualizador leve — com mapa. A localização vai como marcador real, não como link solto.",
+        featureSixTitle: "Dois relatórios, não um censurado",
+        featureSixCopy: "O relatório da família é escrito do zero para a família: o que aconteceu, onde e que a ajuda está a caminho. Sem transcrição, sem níveis de confiança e sem detalhe clínico; isso existe apenas na cópia do operador.",
+        howTitle: "Da primeira palavra ao relatório, em um fluxo contínuo.",
+        howCopy: "Quem liga, o despachante e o intérprete de IA entram na mesma sala em tempo real. Entender a emergência e avisar a rede de apoio acontecem junto com a chamada — nunca à frente dela.",
+        safeguardsScope: "Salvaguardas e escopo",
+        safeguardsTitle: "A AuXio informa. Nunca instrui.",
+        safeguardsCopy: "Uma ferramenta que fala durante uma emergência precisa ser honesta sobre onde termina o seu papel. Esses limites são deliberados e aparecem em cada tela e mensagem que a AuXio produz.",
+        stepZeroTitle: "Antes de qualquer coisa: monte o seu círculo",
+        stepZeroCopy: "Nas configurações do app você adiciona seus contatos de confiança e pede que cada um envie uma mensagem de consentimento pelo WhatsApp. É consentimento real e explícito, registrado antes da emergência.",
+        stepZeroMeta: "Configuração única · Guardado no servidor, não só no telefone",
+        stepOneTitle: "A chamada começa",
+        stepOneCopy: "O app Android entra em uma sala em tempo real com o console do despachante e o intérprete de IA. Cada participante ouve apenas o áudio destinado a ele.",
+        stepOneMeta: "Sala WebRTC · Quem liga, operador, intérprete",
+        stepTwoTitle: "As duas direções são interpretadas",
+        stepTwoCopy: "A fala é transcrita, traduzida por um intérprete estrito e reproduzida com voz de baixa latência. Negações, nomes, números e lugares são preservados exatamente.",
+        stepTwoMeta: "Voz para texto → tradução estrita → voz",
+        stepThreeTitle: "A emergência é entendida em paralelo",
+        stepThreeCopy: "Um segundo modelo lê a transcrição e extrai tipo de emergência, pessoas afetadas, localização e riscos, com confiança para cada campo. Roda ao lado do intérprete e nunca o atrasa.",
+        stepThreeMeta: "Confiança por campo · Sem bloquear",
+        stepFourTitle: "Um alerta antecipado sai durante a chamada",
+        stepFourCopy: "Quando a localização passa de 0,75 de confiança e o tipo de emergência de 0,70 — estáveis por duas leituras e nunca antes de 12 s de chamada — sai um alerta curto: o que aconteceu, onde e que os serviços de emergência já estão na linha.",
+        stepFourMeta: "Alerta leve · Localização nativa no mapa",
+        stepFiveTitle: "Dois relatórios fecham o ciclo",
+        stepFiveCopy: "Ao desligar, a AuXio escreve dois relatórios: o do operador, com confiança por campo e a transcrição bilíngue completa — e o da família, escrito separadamente, no idioma de quem ligou, sem nada disso.",
+        stepFiveMeta: ".txt estruturado · Links assinados que expiram e podem ser revogados",
+        noMedical: "Nunca orientação médica",
+        noMedicalCopy: "Relatórios e alertas descrevem a situação. Nunca geram nem repassam um procedimento médico. As instruções vêm dos profissionais na chamada.",
+        onlyInterprets: "O intérprete apenas interpreta",
+        onlyInterpretsCopy: "O agente de tradução está limitado a interpretar fielmente. Não opina, não responde pela pessoa que ligou e não faz perguntas próprias.",
+        consentFirst: "Consentimento primeiro, dados mínimos depois",
+        consentFirstCopy: "Ninguém é contatado sem ter aceitado antes. Cada destinatário vê apenas os campos que seu papel justifica, por links assinados e de vida curta.",
+        notReplacement: "Não substitui os serviços de emergência",
+        notReplacementCopy: "A AuXio é uma camada de interpretação e notificação. Em uma emergência, ligue sempre para o número local. A AuXio não despacha ajuda.",
+        currentScope: "Escopo atual desta versão:",
+        scopeAndroid: "Apenas Android — APK instalado manualmente, sem publicação em loja",
+        scopeSip: "Sem SIP nem integração real com linhas de emergência",
+        scopeTurnBased: "Interpretação por turnos, um falante por vez",
+        footerNote: "A AuXio não substitui os serviços de emergência e não fornece instruções médicas, jurídicas ou de segurança. Se você está em perigo, ligue para o número local de emergência. Os relatórios são compartilhados apenas com contatos que aceitaram antes, e os links expiram.",
+      },
+      fr: {
+        features: "Fonctionnalités",
+        howItWorks: "Fonctionnement",
+        safeguards: "Garanties",
+        download: "Télécharger l’APK",
+        liveSync: "Synchronisation en direct",
+        notBreathing: "ne respire pas",
+        noPulse: "pas de pouls",
+        trapped: "coincé",
+        listening: "Écoute",
+        processing: "Traitement",
+        playing: "Diffusion",
+        theDifference: "La différence",
+        secure: "Communications sécurisées",
+        heroTitle: "Briser les barrières linguistiques quand chaque seconde compte.",
+        heroCopy: "AuXio interprète un appel d’urgence dans les deux sens en temps réel — et le transforme en rapport structuré qui parvient à ceux qui tiennent à l’appelant, pas seulement à la console du répartiteur.",
+        secureDownload: "Téléchargement direct sécurisé",
+        featuresTitle: "Un interprète en direct pendant l’appel, et un rapport qui lui survit.",
+        featuresCopy: "L’interprétation en direct permet de comprendre l’appelant. Ce qui se passe ensuite — un rapport clair entre les mains d’un proche capable d’agir — est la raison d’être d’AuXio.",
+        featureOneTitle: "Interprétation en direct dans les deux sens",
+        featureOneCopy: "Chaque direction fonctionne comme sa propre session sur une piste audio distincte : l’appelant et le répartiteur n’entendent que ce qui leur est destiné. Par tours, sans jamais couvrir l’autre voix.",
+        featureTwoTitle: "Glossaire critique verrouillé",
+        featureTwoCopy: "19 termes vitaux dans 6 langues ont une traduction fixe, négations comprises. Chaque traduction est vérifiée face au glossaire et réparée si un terme disparaît ou si sa polarité s’inverse.",
+        featureThreeTitle: "Un repli plutôt que le silence",
+        featureThreeCopy: "Chaque direction est une machine à états : écoute, traitement, diffusion. La traduction a 3,5 s pour démarrer ; au-delà, l’audio d’origine est diffusé au lieu de bloquer l’appel. Il n’y a jamais de silence.",
+        featureFourTitle: "Réseau de contacts de confiance",
+        featureFourCopy: "Les contacts sont configurés bien avant l’urgence et conservés côté serveur : ils survivent à un téléphone perdu ou cassé. Quand l’appel arrive, les personnes concernées sont déjà sur la liste.",
+        featureFiveTitle: "Une remise qui atteint tout le monde",
+        featureFiveCopy: "Les contacts équipés de l’app reçoivent une notification native et une carte. Les autres reçoivent WhatsApp, SMS ou e-mail avec un lien signé et éphémère vers une visionneuse légère — carte incluse. La position part en repère réel, pas en simple lien.",
+        featureSixTitle: "Deux rapports, pas un rapport expurgé",
+        featureSixCopy: "Le rapport familial est rédigé de zéro pour la famille : ce qui s’est passé, où, et que les secours arrivent. Sans transcription, sans scores de confiance, sans détail clinique ; cela n’existe que dans la copie du répartiteur.",
+        howTitle: "Du premier mot au rapport, dans un flux continu.",
+        howCopy: "L’appelant, le répartiteur et l’interprète IA rejoignent la même salle en temps réel. Comprendre l’urgence et prévenir les proches se font pendant l’appel — jamais avant lui.",
+        safeguardsScope: "Garanties et périmètre",
+        safeguardsTitle: "AuXio informe. Il n’instruit jamais.",
+        safeguardsCopy: "Un outil qui parle pendant une urgence doit être honnête sur les limites de son rôle. Ces limites sont délibérées et visibles sur chaque écran et dans chaque message produit par AuXio.",
+        stepZeroTitle: "Avant tout : constituez votre cercle",
+        stepZeroCopy: "Dans les réglages de l’app, vous ajoutez vos contacts de confiance et demandez à chacun d’envoyer un message de consentement sur WhatsApp. C’est un consentement réel et explicite, enregistré avant l’urgence.",
+        stepZeroMeta: "Configuration unique · Conservé côté serveur, pas seulement sur le téléphone",
+        stepOneTitle: "L’appel s’ouvre",
+        stepOneCopy: "L’app Android rejoint une salle temps réel avec la console du répartiteur et l’interprète IA. Chaque participant n’entend que l’audio qui lui est destiné.",
+        stepOneMeta: "Salle WebRTC · Appelant, opérateur, interprète",
+        stepTwoTitle: "Les deux sens sont interprétés",
+        stepTwoCopy: "La parole est transcrite, traduite par un interprète strict, puis restituée avec une voix à faible latence. Négations, noms, nombres et lieux sont préservés à l’identique.",
+        stepTwoMeta: "Voix vers texte → traduction stricte → voix",
+        stepThreeTitle: "L’urgence est comprise en parallèle",
+        stepThreeCopy: "Un second modèle lit la transcription et en extrait le type d’urgence, les personnes touchées, le lieu et les dangers, avec un niveau de confiance par champ. Il tourne à côté de l’interprète et ne le ralentit jamais.",
+        stepThreeMeta: "Confiance par champ · Sans blocage",
+        stepFourTitle: "Une alerte précoce part pendant l’appel",
+        stepFourCopy: "Dès que le lieu dépasse 0,75 de confiance et le type d’urgence 0,70 — stables sur deux passes et jamais avant 12 s d’appel — une alerte courte est envoyée : ce qui s’est passé, où, et que les secours sont déjà en ligne.",
+        stepFourMeta: "Alerte légère · Position native sur carte",
+        stepFiveTitle: "Deux rapports referment la boucle",
+        stepFiveCopy: "À la fin de l’appel, AuXio rédige deux rapports : celui du répartiteur, avec la confiance par champ et la transcription bilingue complète — et celui de la famille, rédigé séparément, dans la langue de l’appelant, sans rien de tout cela.",
+        stepFiveMeta: ".txt structuré · Liens signés, expirables et révocables",
+        noMedical: "Jamais de consigne médicale",
+        noMedicalCopy: "Les rapports et alertes décrivent la situation. Ils ne génèrent ni ne relaient jamais un geste médical. Les instructions viennent des professionnels en ligne.",
+        onlyInterprets: "L’interprète ne fait qu’interpréter",
+        onlyInterpretsCopy: "L’agent de traduction est contraint à une interprétation fidèle. Il ne donne pas d’avis, ne répond pas à la place de l’appelant et ne pose pas ses propres questions.",
+        consentFirst: "Le consentement d’abord, le minimum de données ensuite",
+        consentFirstCopy: "Personne n’est contacté sans avoir consenti au préalable. Chaque destinataire ne voit que les champs que son rôle justifie, via des liens signés et de courte durée.",
+        notReplacement: "Ne remplace pas les services d’urgence",
+        notReplacementCopy: "AuXio est une couche d’interprétation et de notification. En cas d’urgence, appelez toujours votre numéro local. AuXio n’envoie pas de secours.",
+        currentScope: "Périmètre actuel de cette version :",
+        scopeAndroid: "Android uniquement — APK installé manuellement, hors store",
+        scopeSip: "Ni SIP ni intégration réelle avec les lignes d’urgence",
+        scopeTurnBased: "Interprétation par tours, un locuteur à la fois",
+        footerNote: "AuXio ne remplace pas les services d’urgence et ne fournit aucune instruction médicale, juridique ou de sécurité. Si vous êtes en danger, appelez votre numéro d’urgence local. Les rapports ne sont partagés qu’avec les contacts ayant consenti au préalable, et les liens expirent.",
+      },
+      de: {
+        features: "Funktionen",
+        howItWorks: "So funktioniert es",
+        safeguards: "Schutzmaßnahmen",
+        download: "APK herunterladen",
+        liveSync: "Live-Synchronisierung",
+        notBreathing: "atmet nicht",
+        noPulse: "kein Puls",
+        trapped: "eingeklemmt",
+        listening: "Zuhören",
+        processing: "Verarbeiten",
+        playing: "Ausgabe",
+        theDifference: "Der Unterschied",
+        secure: "Sichere Kommunikation",
+        heroTitle: "Sprachbarrieren überwinden, wenn jede Sekunde zählt.",
+        heroCopy: "AuXio übersetzt einen Notruf in Echtzeit in beide Richtungen — und macht daraus einen strukturierten Bericht, der bei den Menschen ankommt, denen der Anrufer wichtig ist, nicht nur in der Leitstelle.",
+        secureDownload: "Direkter sicherer Download",
+        featuresTitle: "Ein Live-Dolmetscher im Gespräch und ein Bericht, der es überdauert.",
+        featuresCopy: "Die Live-Verdolmetschung sorgt dafür, dass der Anrufer verstanden wird. Was danach passiert — ein klarer Bericht in den Händen einer Vertrauensperson, die handeln kann — ist der Grund, warum AuXio existiert.",
+        featureOneTitle: "Live-Verdolmetschung in beide Richtungen",
+        featureOneCopy: "Jede Richtung läuft als eigene Sitzung auf einer separaten Audiospur, sodass Anrufer und Disponent nur die für sie bestimmte Seite hören. Abwechselnd, ohne eine Stimme zu übertönen.",
+        featureTwoTitle: "Gesperrtes Notfallglossar",
+        featureTwoCopy: "19 lebenswichtige Begriffe in 6 Sprachen haben eine feste Übersetzung, Negationen inklusive. Jede Übersetzung wird gegen das Glossar geprüft und korrigiert, wenn ein Begriff fehlt oder sich die Polarität umkehrt.",
+        featureThreeTitle: "Rückfall statt Funkstille",
+        featureThreeCopy: "Jede Richtung ist ein Zustandsautomat: Zuhören, Verarbeiten, Ausgabe. Die Übersetzung hat 3,5 s bis zum ersten Ton; danach wird das Original ausgegeben, statt das Gespräch zu blockieren. Es gibt nie Stille.",
+        featureFourTitle: "Netz aus Vertrauenskontakten",
+        featureFourCopy: "Die Kontakte werden lange vor dem Notfall eingerichtet und serverseitig gespeichert, damit sie ein verlorenes oder kaputtes Telefon überleben. Kommt der Anruf, stehen die richtigen Menschen schon auf der Liste.",
+        featureFiveTitle: "Zustellung, die jeden erreicht",
+        featureFiveCopy: "Kontakte mit App erhalten eine native Benachrichtigung samt Karte. Alle anderen bekommen WhatsApp, SMS oder E-Mail mit einem signierten, kurzlebigen Link zu einer leichten Ansicht — mit Karte. Der Standort geht als echte Kartenmarkierung, nicht als nackter Link.",
+        featureSixTitle: "Zwei Berichte, keine geschwärzte Fassung",
+        featureSixCopy: "Der Familienbericht wird von Grund auf für die Familie geschrieben: was passiert ist, wo, und dass Hilfe unterwegs ist. Ohne Transkript, ohne Konfidenzwerte, ohne klinische Details; die stehen nur in der Fassung für die Leitstelle.",
+        howTitle: "Vom ersten Wort bis zum Bericht, in einem durchgehenden Ablauf.",
+        howCopy: "Anrufer, Disponent und KI-Dolmetscher betreten denselben Echtzeitraum. Den Notfall zu verstehen und das Umfeld zu benachrichtigen läuft neben dem Gespräch — niemals davor.",
+        safeguardsScope: "Schutzmaßnahmen und Umfang",
+        safeguardsTitle: "AuXio informiert. Es gibt niemals Anweisungen.",
+        safeguardsCopy: "Ein Werkzeug, das während eines Notfalls spricht, muss ehrlich sagen, wo seine Rolle endet. Diese Grenzen sind gewollt und auf jedem Bildschirm und in jeder Nachricht von AuXio sichtbar.",
+        stepZeroTitle: "Bevor etwas passiert: den Kreis einrichten",
+        stepZeroCopy: "In den Einstellungen der App fügst du deine Vertrauenskontakte hinzu und bittest jeden, eine Zustimmungsnachricht per WhatsApp zu senden. Das ist echte, ausdrückliche Zustimmung, erfasst vor dem Notfall.",
+        stepZeroMeta: "Einmalige Einrichtung · Serverseitig gespeichert, nicht nur auf dem Telefon",
+        stepOneTitle: "Der Anruf beginnt",
+        stepOneCopy: "Die Android-App betritt einen Echtzeitraum mit der Web-Konsole des Disponenten und dem KI-Dolmetscher. Jeder Teilnehmer hört nur das für ihn bestimmte Audio.",
+        stepOneMeta: "WebRTC-Raum · Anrufer, Operator, Dolmetscher",
+        stepTwoTitle: "Beide Richtungen werden gedolmetscht",
+        stepTwoCopy: "Sprache wird transkribiert, von einem strikten Dolmetscher übersetzt und mit einer latenzarmen Stimme ausgegeben. Negationen, Namen, Zahlen und Orte bleiben exakt erhalten.",
+        stepTwoMeta: "Sprache zu Text → strikte Übersetzung → Stimme",
+        stepThreeTitle: "Der Notfall wird parallel erfasst",
+        stepThreeCopy: "Ein zweites Modell liest das Transkript und extrahiert Notfallart, betroffene Personen, Ort und Gefahren — mit Konfidenz pro Feld. Es läuft neben dem Dolmetscher und bremst ihn nie.",
+        stepThreeMeta: "Konfidenz pro Feld · Nicht blockierend",
+        stepFourTitle: "Eine Frühwarnung geht mitten im Gespräch raus",
+        stepFourCopy: "Sobald der Ort 0,75 Konfidenz und die Notfallart 0,70 überschreiten — stabil über zwei Durchläufe und nie vor 12 s Gesprächsdauer — geht eine kurze Warnung raus: was passiert ist, wo, und dass die Rettungsdienste schon in der Leitung sind.",
+        stepFourMeta: "Leichte Warnung · Nativer Kartenstandort",
+        stepFiveTitle: "Zwei Berichte schließen den Kreis",
+        stepFiveCopy: "Beim Auflegen schreibt AuXio zwei Berichte: den der Leitstelle, mit Konfidenz pro Feld und vollständigem zweisprachigem Transkript — und den der Familie, separat geschrieben, in der Sprache des Anrufers, ohne all das.",
+        stepFiveMeta: "Strukturierte .txt · Signierte Links, die ablaufen und widerrufbar sind",
+        noMedical: "Niemals medizinische Anleitung",
+        noMedicalCopy: "Berichte und Warnungen beschreiben die Lage. Sie erzeugen oder übermitteln nie eine medizinische Maßnahme. Anweisungen kommen von den Fachkräften in der Leitung.",
+        onlyInterprets: "Der Dolmetscher dolmetscht nur",
+        onlyInterpretsCopy: "Der Übersetzungsagent ist auf treues Dolmetschen beschränkt. Er äußert keine Meinung, antwortet nicht für den Anrufer und stellt keine eigenen Fragen.",
+        consentFirst: "Zustimmung zuerst, dann Datenminimierung",
+        consentFirstCopy: "Niemand wird kontaktiert, ohne vorher zugestimmt zu haben. Jeder Empfänger sieht nur die Felder, die seine Rolle rechtfertigt — über signierte, kurzlebige Links.",
+        notReplacement: "Kein Ersatz für den Rettungsdienst",
+        notReplacementCopy: "AuXio ist eine Dolmetsch- und Benachrichtigungsschicht. Im Notfall rufe immer deine örtliche Notrufnummer an. AuXio schickt keine Hilfe los.",
+        currentScope: "Aktueller Umfang dieser Version:",
+        scopeAndroid: "Nur Android — manuell installiertes APK, keine Store-Veröffentlichung",
+        scopeSip: "Kein SIP, keine echte Anbindung an Notrufleitungen",
+        scopeTurnBased: "Dolmetschen abwechselnd, eine Person spricht zur Zeit",
+        footerNote: "AuXio ersetzt keine Rettungsdienste und gibt keine medizinischen, rechtlichen oder sicherheitsbezogenen Anweisungen. Wenn du in Gefahr bist, rufe deine örtliche Notrufnummer an. Berichte werden nur mit Kontakten geteilt, die vorher zugestimmt haben, und die Links laufen ab.",
+      },
+      it: {
+        features: "Funzioni",
+        howItWorks: "Come funziona",
+        safeguards: "Garanzie",
+        download: "Scarica APK",
+        liveSync: "Sincronizzazione dal vivo",
+        notBreathing: "non respira",
+        noPulse: "nessun polso",
+        trapped: "intrappolato",
+        listening: "In ascolto",
+        processing: "Elaborazione",
+        playing: "Riproduzione",
+        theDifference: "La differenza",
+        secure: "Comunicazioni sicure",
+        heroTitle: "Superare le barriere linguistiche quando ogni secondo conta.",
+        heroCopy: "AuXio interpreta una chiamata di emergenza in entrambe le direzioni in tempo reale — e la trasforma in un rapporto strutturato che arriva a chi ha a cuore chi chiama, non solo alla console dell’operatore.",
+        secureDownload: "Download diretto sicuro",
+        featuresTitle: "Un interprete dal vivo nella chiamata e un rapporto che le sopravvive.",
+        featuresCopy: "L’interpretazione dal vivo è ciò che permette di capire chi chiama. Quello che accade dopo — un rapporto chiaro nelle mani di una persona di fiducia che può intervenire — è il motivo per cui AuXio esiste.",
+        featureOneTitle: "Interpretazione dal vivo nelle due direzioni",
+        featureOneCopy: "Ogni direzione è una sessione a sé su una traccia audio separata, così chi chiama e l’operatore sentono solo il lato che li riguarda. A turni, senza mai coprire l’altra voce.",
+        featureTwoTitle: "Glossario critico bloccato",
+        featureTwoCopy: "19 termini vitali in 6 lingue hanno una traduzione fissa, negazioni comprese. Ogni traduzione viene verificata sul glossario e corretta se un termine sparisce o se ne inverte la polarità.",
+        featureThreeTitle: "Un ripiego invece del silenzio",
+        featureThreeCopy: "Ogni direzione è una macchina a stati: ascolto, elaborazione, riproduzione. La traduzione ha 3,5 s per partire; oltre, si riproduce l’audio originale invece di bloccare la chiamata. Non c’è mai silenzio.",
+        featureFourTitle: "Rete di contatti fidati",
+        featureFourCopy: "I contatti si configurano molto prima dell’emergenza e restano sul server, così sopravvivono a un telefono perso o rotto. Quando arriva la chiamata, le persone che devono saperlo sono già in elenco.",
+        featureFiveTitle: "Una consegna che raggiunge chiunque",
+        featureFiveCopy: "I contatti con l’app ricevono una notifica nativa e una mappa. Gli altri ricevono WhatsApp, SMS o e-mail con un link firmato e a breve scadenza verso un visualizzatore leggero — mappa inclusa. La posizione viaggia come segnaposto reale, non come link isolato.",
+        featureSixTitle: "Due rapporti, non uno censurato",
+        featureSixCopy: "Il rapporto per la famiglia è scritto da zero per la famiglia: cosa è successo, dove, e che i soccorsi stanno arrivando. Senza trascrizione, senza punteggi di confidenza e senza dettagli clinici; quelli esistono solo nella copia dell’operatore.",
+        howTitle: "Dalla prima parola al rapporto, in un flusso continuo.",
+        howCopy: "Chi chiama, l’operatore e l’interprete IA entrano nella stessa stanza in tempo reale. Capire l’emergenza e avvisare la rete di supporto avvengono accanto alla chiamata — mai prima di essa.",
+        safeguardsScope: "Garanzie e ambito",
+        safeguardsTitle: "AuXio informa. Non dà mai istruzioni.",
+        safeguardsCopy: "Uno strumento che parla durante un’emergenza deve essere onesto su dove finisce il suo ruolo. Questi limiti sono deliberati e visibili in ogni schermata e in ogni messaggio prodotto da AuXio.",
+        stepZeroTitle: "Prima che accada qualcosa: crea la tua cerchia",
+        stepZeroCopy: "Nelle impostazioni dell’app aggiungi i tuoi contatti fidati e chiedi a ciascuno di inviare un messaggio di consenso su WhatsApp. È consenso reale ed esplicito, registrato prima dell’emergenza.",
+        stepZeroMeta: "Configurazione unica · Salvato sul server, non solo sul telefono",
+        stepOneTitle: "La chiamata si apre",
+        stepOneCopy: "L’app Android entra in una stanza in tempo reale con la console dell’operatore e l’interprete IA. Ogni partecipante sente solo l’audio destinato a lui.",
+        stepOneMeta: "Stanza WebRTC · Chi chiama, operatore, interprete",
+        stepTwoTitle: "Entrambe le direzioni vengono interpretate",
+        stepTwoCopy: "Il parlato viene trascritto, tradotto da un interprete rigoroso e riprodotto con una voce a bassa latenza. Negazioni, nomi, numeri e luoghi si conservano esattamente.",
+        stepTwoMeta: "Voce in testo → traduzione rigorosa → voce",
+        stepThreeTitle: "L’emergenza si capisce in parallelo",
+        stepThreeCopy: "Un secondo modello legge la trascrizione ed estrae tipo di emergenza, persone coinvolte, posizione e pericoli, con una confidenza per ogni campo. Gira accanto all’interprete e non lo rallenta mai.",
+        stepThreeMeta: "Confidenza per campo · Non bloccante",
+        stepFourTitle: "Un avviso anticipato parte durante la chiamata",
+        stepFourCopy: "Appena la posizione supera 0,75 di confidenza e il tipo di emergenza 0,70 — stabili per due passaggi e mai prima di 12 s di chiamata — parte un avviso breve: cosa è successo, dove, e che i soccorsi sono già in linea.",
+        stepFourMeta: "Avviso leggero · Posizione nativa su mappa",
+        stepFiveTitle: "Due rapporti chiudono il cerchio",
+        stepFiveCopy: "Alla chiusura AuXio scrive due rapporti: quello dell’operatore, con confidenza per campo e la trascrizione bilingue completa — e quello della famiglia, scritto separatamente, nella lingua di chi ha chiamato, senza nulla di tutto ciò.",
+        stepFiveMeta: ".txt strutturato · Link firmati che scadono e si possono revocare",
+        noMedical: "Mai indicazioni mediche",
+        noMedicalCopy: "Rapporti e avvisi descrivono la situazione. Non generano né trasmettono mai una procedura medica. Le istruzioni vengono dai professionisti in linea.",
+        onlyInterprets: "L’interprete si limita a interpretare",
+        onlyInterpretsCopy: "L’agente di traduzione è vincolato a un’interpretazione fedele. Non esprime opinioni, non risponde al posto di chi chiama e non fa domande proprie.",
+        consentFirst: "Prima il consenso, poi i dati minimi",
+        consentFirstCopy: "Nessuno viene contattato senza aver acconsentito prima. Ogni destinatario vede solo i campi che il suo ruolo giustifica, tramite link firmati e di breve durata.",
+        notReplacement: "Non sostituisce i servizi di emergenza",
+        notReplacementCopy: "AuXio è uno strato di interpretazione e notifica. In un’emergenza chiama sempre il numero locale. AuXio non invia soccorsi.",
+        currentScope: "Ambito attuale di questa versione:",
+        scopeAndroid: "Solo Android — APK installato manualmente, non pubblicato su store",
+        scopeSip: "Nessun SIP né integrazione reale con le linee di emergenza",
+        scopeTurnBased: "Interpretazione a turni, un parlante alla volta",
+        footerNote: "AuXio non sostituisce i servizi di emergenza e non fornisce istruzioni mediche, legali o di sicurezza. Se sei in pericolo, chiama il numero di emergenza locale. I rapporti sono condivisi solo con i contatti che hanno acconsentito in anticipo, e i link scadono.",
+      }
+    };
+    const waveform = document.createElement("div");
+    waveform.className = "waveform";
+    waveform.setAttribute("role", "img");
+    waveform.setAttribute("aria-label", "Animated AuXio audio waveform");
+    const svgNamespace = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(svgNamespace, "svg");
+    svg.setAttribute("viewBox", "0 0 1000 300");
+    svg.setAttribute("aria-hidden", "true");
+    const defs = document.createElementNS(svgNamespace, "defs");
+    const gradient = document.createElementNS(svgNamespace, "linearGradient");
+    gradient.id = "audio-gradient";
+    gradient.innerHTML = '<stop offset="0%" stop-color="#ffb3b1"/><stop offset="35%" stop-color="#c20b31"/><stop offset="68%" stop-color="#397db2"/><stop offset="100%" stop-color="#8bc5ee"/>';
+    defs.append(gradient);
+    svg.append(defs);
+    const createWavePath = (amplitude, frequency, phase, className) => {
+      const path = document.createElementNS(svgNamespace, "path");
+      let pathData = "";
+      for (let x = 0; x <= 1000; x += 4) {
+        const y = 150 + amplitude * Math.sin((x / 1000) * Math.PI * frequency + phase);
+        pathData += `${x === 0 ? "M" : "L"}${x} ${y.toFixed(2)} `;
+      }
+      path.setAttribute("d", pathData);
+      path.setAttribute("class", `wave-path ${className}`);
+      path.setAttribute("stroke-width", className === "secondary" ? "3" : className.startsWith("background") ? "2" : "5");
+      return path;
+    };
+    svg.append(
+      createWavePath(112, 4.5, 0, "primary"),
+      createWavePath(70, 5, Math.PI / 2, "secondary"),
+      createWavePath(94, 3.1, Math.PI / 3, "background"),
+      createWavePath(60, 6.7, Math.PI, "background-alt"),
+      createWavePath(38, 9.2, Math.PI / 5, "background")
+    );
+    waveform.append(svg);
+    document.querySelector(".visual").append(waveform);
+
+    const languageSelect = document.querySelector("#language-select");
+    const applyLanguage = (language) => {
+      const dictionary = translations[language] || translations.en;
+      document.documentElement.lang = language;
+      document.querySelectorAll("[data-i18n]").forEach((element) => {
+        const translation = dictionary[element.dataset.i18n] || translations.en[element.dataset.i18n];
+        if (translation) element.textContent = translation;
+      });
+      languageSelect.value = language;
+      localStorage.setItem("auxio-language", language);
+    };
+    languageSelect.addEventListener("change", (event) => applyLanguage(event.target.value));
+    applyLanguage(localStorage.getItem("auxio-language") || "en");
+  </script>
+  <script>
+    /* Cursor glow with a fading trail, in the palette red.
+
+       The trail samples the REAL pointer path with no easing, so the glow is
+       always anchored to the cursor instead of chasing it. Softness comes from
+       a wide, low-alpha gradient sprite plus `filter: blur()` on the canvas --
+       which is also why the backing store stays at 1x: the blur hides the
+       resolution, and a full-viewport blur of a 2x buffer is not cheap. */
+    (() => {
+      const canvas = document.querySelector("#cursor-trail");
+      if (!canvas || !window.matchMedia) return;
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      if (matchMedia("(hover: none)").matches) return;
+
+      const ctx = canvas.getContext("2d");
+      let width = 0;
+      let height = 0;
+      /* documentElement.clientWidth/Height is the viewport minus scrollbars,
+         which is exactly the range clientX/clientY report - so one drawing unit
+         equals one pointer unit and the glow lands under the cursor.
+         The style size is set here too, not just in CSS: a canvas is a replaced
+         element, so without an explicit size it stays 300x150 and the effect
+         ends up squeezed into the top-left corner. */
+      const resize = () => {
+        width = document.documentElement.clientWidth;
+        height = document.documentElement.clientHeight;
+        canvas.style.width = width + "px";
+        canvas.style.height = height + "px";
+        canvas.width = width;
+        canvas.height = height;
+      };
+      resize();
+      window.addEventListener("resize", resize);
+
+      const SPRITE = 160;
+      const sprite = document.createElement("canvas");
+      sprite.width = SPRITE;
+      sprite.height = SPRITE;
+      const spriteCtx = sprite.getContext("2d");
+      const glow = spriteCtx.createRadialGradient(SPRITE / 2, SPRITE / 2, 0, SPRITE / 2, SPRITE / 2, SPRITE / 2);
+      glow.addColorStop(0, "rgba(255, 222, 221, 0.50)");
+      glow.addColorStop(0.12, "rgba(255, 196, 194, 0.36)");
+      glow.addColorStop(0.30, "rgba(255, 179, 177, 0.22)");
+      glow.addColorStop(0.55, "rgba(196, 20, 50, 0.11)");
+      glow.addColorStop(0.78, "rgba(173, 2, 36, 0.04)");
+      glow.addColorStop(1, "rgba(173, 2, 36, 0)");
+      spriteCtx.fillStyle = glow;
+      spriteCtx.fillRect(0, 0, SPRITE, SPRITE);
+
+      const LIFE = 700;
+      const STEP = 9;          // px between sampled points, so fast moves stay continuous
+      const trail = [];
+      let pointerX = null;
+      let pointerY = null;
+      let inside = false;
+      let frame = null;
+
+      const blit = (x, y, radius, alpha) => {
+        if (alpha <= 0) return;
+        ctx.globalAlpha = alpha;
+        ctx.drawImage(sprite, x - radius, y - radius, radius * 2, radius * 2);
+      };
+
+      const push = (x, y, now) => {
+        const last = trail[trail.length - 1];
+        if (!last) {
+          trail.push({ x, y, born: now });
+          return;
+        }
+        // Interpolate along the segment so a fast flick leaves a line, not dots.
+        const distance = Math.hypot(x - last.x, y - last.y);
+        const steps = Math.min(Math.floor(distance / STEP), 24);
+        for (let i = 1; i <= steps; i++) {
+          const t = i / steps;
+          trail.push({ x: last.x + (x - last.x) * t, y: last.y + (y - last.y) * t, born: now });
+        }
+        if (steps === 0 && distance > 0.5) trail.push({ x, y, born: now });
+      };
+
+      const draw = (now) => {
+        while (trail.length && now - trail[0].born > LIFE) trail.shift();
+
+        ctx.clearRect(0, 0, width, height);
+        ctx.globalCompositeOperation = "lighter";
+        for (const point of trail) {
+          const fade = 1 - (now - point.born) / LIFE;
+          blit(point.x, point.y, 14 + 34 * fade, 0.26 * fade * fade);
+        }
+        // Head sits on the exact pointer position, never behind it.
+        if (inside && pointerX !== null) blit(pointerX, pointerY, 62, 0.30);
+        ctx.globalAlpha = 1;
+
+        if (inside || trail.length) {
+          frame = requestAnimationFrame(draw);
+        } else {
+          ctx.clearRect(0, 0, width, height);
+          frame = null;
+        }
+      };
+
+      window.addEventListener("pointermove", (event) => {
+        if (event.pointerType === "touch") return;
+        pointerX = event.clientX;
+        pointerY = event.clientY;
+        inside = true;
+        push(pointerX, pointerY, performance.now());
+        if (frame === null) frame = requestAnimationFrame(draw);
+      }, { passive: true });
+
+      document.addEventListener("pointerleave", () => { inside = false; });
+      window.addEventListener("blur", () => { inside = false; });
+    })();
+  </script>
 </body>
 </html>
