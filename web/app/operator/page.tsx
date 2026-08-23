@@ -14,6 +14,8 @@ import { useElbRoom, type TranscriptEntry } from "@/components/useElbRoom";
 import { fixedFor, highlight, GLOSSARY_VERSION } from "@/lib/glossary";
 import type { Assessed, TurnState } from "@/lib/events";
 
+const DEFAULT_ROOM = "elb-demo";
+
 const OPERATOR_LANGS = [
   { code: "es", label: "Español" },
   { code: "en", label: "English" },
@@ -89,7 +91,7 @@ function Field({ label, node, lang }: { label: string; node?: Assessed; lang: st
 
 export default function OperatorPage() {
   const elb = useElbRoom("operator");
-  const [roomInput, setRoomInput] = useState("");
+  const [roomInput, setRoomInput] = useState(DEFAULT_ROOM);
   const [lang, setLang] = useState("es");
   const [elapsed, setElapsed] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -131,6 +133,7 @@ export default function OperatorPage() {
           <input
             value={roomInput}
             onChange={(ev) => setRoomInput(ev.target.value)}
+            autoComplete="off"
             placeholder="p. ej. elb-demo"
             className="mt-1.5 w-full rounded-lg border border-ink-700 bg-ink-900 px-3 py-2.5 text-sm
                        outline-none placeholder:text-ink-600 focus:border-crit-600"
@@ -165,10 +168,9 @@ export default function OperatorPage() {
         ) : null}
 
         <button
-          onClick={() => elb.connect({ room: roomInput.trim() || undefined, lang })}
-          disabled={!roomInput.trim()}
+          onClick={() => elb.connect({ room: roomInput.trim() || DEFAULT_ROOM, lang })}
           className="rounded-lg bg-crit-600 px-4 py-3 text-sm font-semibold text-white
-                     transition hover:bg-crit-500 disabled:cursor-not-allowed disabled:opacity-40"
+                     transition hover:bg-crit-500"
         >
           Entrar a la llamada
         </button>
