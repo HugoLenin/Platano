@@ -128,7 +128,10 @@
     .waveform { position: relative; z-index: 1; min-height: 390px; display: flex; align-items: center; justify-content: center; gap: clamp(4px, 0.8vw, 12px); padding: 72px clamp(24px, 6vw, 96px); overflow: hidden; border: 1px solid rgba(143, 170, 198, 0.25); border-radius: 28px; background: linear-gradient(135deg, rgba(13, 28, 45, 0.98), rgba(18, 33, 49, 0.82)); box-shadow: 0 24px 56px rgba(0, 0, 0, 0.5); transform: rotate(-4deg); transition: transform 700ms ease; }
     .waveform:hover { transform: rotate(0); }
     .waveform::before { content: ""; position: absolute; inset: 50% 8%; height: 1px; background: rgba(212, 228, 250, 0.18); box-shadow: 0 0 20px rgba(212, 228, 250, 0.2); }
-    .wave-bar { position: relative; z-index: 1; width: clamp(5px, 0.65vw, 10px); height: var(--height); min-height: 14px; border-radius: 999px; background: linear-gradient(to bottom, #ffb3b1 0%, #c20b31 35%, #397db2 72%, #8bc5ee 100%); box-shadow: 0 0 12px rgba(255, 179, 177, 0.24); transform-origin: center; animation: wave 1.25s ease-in-out infinite alternate; animation-delay: var(--delay); }
+    .wave-bar { display: none; }
+    .waveform svg { position: relative; z-index: 1; width: 100%; height: auto; overflow: visible; }
+    .wave-path { fill: none; stroke: url(#audio-gradient); stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 7px rgba(255, 179, 177, 0.45)); stroke-dasharray: 22 12; animation: wave-drift 3.2s linear infinite; }
+    .wave-path.secondary { opacity: 0.38; stroke-width: 3; animation-duration: 4.6s; animation-direction: reverse; }
     .live-sync { position: absolute; z-index: 2; top: -6px; left: -22px; flex-direction: column; align-items: stretch; gap: 10px; min-width: 150px; padding: 16px; border: 1px solid var(--line); border-radius: 14px; background: rgba(10, 26, 43, 0.85); backdrop-filter: blur(12px); box-shadow: 0 16px 30px rgba(0, 0, 0, 0.25); }
     .live-sync-label { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; }
     .live-sync-label .material-symbols-outlined { color: var(--accent); }
@@ -188,7 +191,7 @@
     .footer-note { max-width: 720px; margin-bottom: 28px; line-height: 1.7; }
     .footer-bar { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
     .footer-links { display: flex; gap: 28px; } .footer-links a:hover { color: var(--text); }
-    @keyframes bounce { 0%, 100% { height: 20%; } 50% { height: 80%; } } @keyframes waveform { 0% { background-position: 0 center, center; transform: rotate(-4deg) scaleY(0.88); filter: saturate(0.9); } 100% { background-position: 180px center, center; transform: rotate(-1deg) scaleY(1); filter: saturate(1.25); } } @keyframes ping { 0% { transform: scale(0.1); opacity: 1; } 100% { transform: scale(3); opacity: 0; } }
+    @keyframes bounce { 0%, 100% { height: 20%; } 50% { height: 80%; } } @keyframes wave { 0%, 100% { transform: scaleY(0.55); opacity: 0.7; } 50% { transform: scaleY(1); opacity: 1; } } @keyframes wave-drift { to { stroke-dashoffset: -68; } } @keyframes waveform { 0% { transform: rotate(-4deg) scaleY(0.88); filter: saturate(0.9); } 100% { transform: rotate(-1deg) scaleY(1); filter: saturate(1.25); } } @keyframes ping { 0% { transform: scale(0.1); opacity: 1; } 100% { transform: scale(3); opacity: 0; } }
     @media (max-width: 800px) { .nav, .hero, .features, .section { width: min(100% - 32px, 560px); } .nav-links, .nav-download { display: none; } .hero { display: flex; flex-direction: column; align-items: stretch; gap: 24px; padding-top: 56px; } h1 { font-size: 44px; } .visual { margin-top: 28px; padding-left: 16px; } .visual::after { min-height: 280px; background-size: 360px 100%, 100% 100%; } .live-sync { left: -2px; } .features { grid-template-columns: 1fr; padding-bottom: 64px; } .steps, .safeguards { grid-template-columns: 1fr; } .steps-section, .safeguards-section { padding-bottom: 64px; } footer { padding: 32px 16px; } .footer-bar { flex-direction: column; text-align: center; } }
     /* Cursor glow + trail. `screen` keeps it additive: it lights the dark
        surfaces and leaves light text alone instead of tinting it red. */
@@ -701,14 +704,30 @@
     waveform.className = "waveform";
     waveform.setAttribute("role", "img");
     waveform.setAttribute("aria-label", "Animated AuXio audio waveform");
-    const waveformHeights = [18, 28, 42, 58, 74, 86, 94, 86, 72, 56, 42, 32, 26, 30, 44, 62, 80, 92, 86, 68, 48, 34, 24, 20, 28, 44, 64, 82, 94, 84, 64, 44, 28];
-    waveformHeights.forEach((height, index) => {
-      const bar = document.createElement("span");
-      bar.className = "wave-bar";
-      bar.style.setProperty("--height", `${height}%`);
-      bar.style.setProperty("--delay", `${index * -0.08}s`);
-      waveform.append(bar);
-    });
+    const svgNamespace = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(svgNamespace, "svg");
+    svg.setAttribute("viewBox", "0 0 1000 300");
+    svg.setAttribute("aria-hidden", "true");
+    const defs = document.createElementNS(svgNamespace, "defs");
+    const gradient = document.createElementNS(svgNamespace, "linearGradient");
+    gradient.id = "audio-gradient";
+    gradient.innerHTML = '<stop offset="0%" stop-color="#ffb3b1"/><stop offset="35%" stop-color="#c20b31"/><stop offset="68%" stop-color="#397db2"/><stop offset="100%" stop-color="#8bc5ee"/>';
+    defs.append(gradient);
+    svg.append(defs);
+    const createWavePath = (amplitude, frequency, phase, className) => {
+      const path = document.createElementNS(svgNamespace, "path");
+      let pathData = "";
+      for (let x = 0; x <= 1000; x += 4) {
+        const y = 150 + amplitude * Math.sin((x / 1000) * Math.PI * frequency + phase);
+        pathData += `${x === 0 ? "M" : "L"}${x} ${y.toFixed(2)} `;
+      }
+      path.setAttribute("d", pathData);
+      path.setAttribute("class", `wave-path ${className}`);
+      path.setAttribute("stroke-width", className === "secondary" ? "3" : "5");
+      return path;
+    };
+    svg.append(createWavePath(58, 4.5, 0, "primary"), createWavePath(34, 5, Math.PI / 2, "secondary"));
+    waveform.append(svg);
     document.querySelector(".visual").append(waveform);
 
     const languageSelect = document.querySelector("#language-select");
