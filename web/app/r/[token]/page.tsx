@@ -1,7 +1,7 @@
 /**
  * Signed report viewer.
  *
- * This is the page a relative opens from WhatsApp/SMS/email. It is a server
+ * This is the page a relative opens from the emailed alert. It is a server
  * component on purpose: the token is verified and the scope resolved BEFORE
  * any report content exists in the response, so an operator-scope field can
  * never be shipped to a family-scope browser and hidden with CSS.
@@ -11,7 +11,6 @@
  */
 
 import { notFound } from "next/navigation";
-import { Disclaimer } from "@/components/Disclaimer";
 import { supabaseAdmin } from "@/lib/supabase";
 import { BadToken, SCOPE_FAMILY, verifyToken, type LinkClaims } from "@/lib/signing";
 
@@ -38,7 +37,6 @@ function Denied({ title, detail }: { title: string; detail: string }) {
         <h1 className="mt-3 text-lg font-bold text-ink-50">{title}</h1>
         <p className="mt-2 text-sm text-ink-400">{detail}</p>
       </div>
-      <Disclaimer />
     </main>
   );
 }
@@ -217,7 +215,6 @@ export default async function ReportPage({
       </section>
 
       <div className="mt-5">
-        <Disclaimer lang={lang} />
       </div>
 
       <p className="mt-4 text-center text-[11px] text-ink-600">

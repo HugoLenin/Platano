@@ -10,10 +10,11 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Disclaimer } from "@/components/Disclaimer";
 import { useElbRoom, type TranscriptEntry } from "@/components/useElbRoom";
 import { fixedFor, highlight, GLOSSARY_VERSION } from "@/lib/glossary";
 import type { Assessed, TurnState } from "@/lib/events";
+
+const DEFAULT_ROOM = "elb-demo";
 
 const OPERATOR_LANGS = [
   { code: "es", label: "Español" },
@@ -90,7 +91,7 @@ function Field({ label, node, lang }: { label: string; node?: Assessed; lang: st
 
 export default function OperatorPage() {
   const elb = useElbRoom("operator");
-  const [roomInput, setRoomInput] = useState("");
+  const [roomInput, setRoomInput] = useState(DEFAULT_ROOM);
   const [lang, setLang] = useState("es");
   const [elapsed, setElapsed] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -132,6 +133,7 @@ export default function OperatorPage() {
           <input
             value={roomInput}
             onChange={(ev) => setRoomInput(ev.target.value)}
+            autoComplete="off"
             placeholder="p. ej. elb-demo"
             className="mt-1.5 w-full rounded-lg border border-ink-700 bg-ink-900 px-3 py-2.5 text-sm
                        outline-none placeholder:text-ink-600 focus:border-crit-600"
@@ -166,15 +168,13 @@ export default function OperatorPage() {
         ) : null}
 
         <button
-          onClick={() => elb.connect({ room: roomInput.trim() || undefined, lang })}
-          disabled={!roomInput.trim()}
+          onClick={() => elb.connect({ room: roomInput.trim() || DEFAULT_ROOM, lang })}
           className="rounded-lg bg-crit-600 px-4 py-3 text-sm font-semibold text-white
-                     transition hover:bg-crit-500 disabled:cursor-not-allowed disabled:opacity-40"
+                     transition hover:bg-crit-500"
         >
           Entrar a la llamada
         </button>
 
-        <Disclaimer />
       </main>
     );
   }
@@ -182,7 +182,24 @@ export default function OperatorPage() {
   // ------------------------------------------------------------------ in call
   return (
     <main className="flex h-screen flex-col">
-      <div ref={elb.audioRef} className="hidden" aria-hidden />
+      <div
+        ref={elb.audioRef}
+        aria-hidden
+        style={{ position: "absolute", width: 0, height: 0, overflow: "hidden" }}
+      />
+      {elb.micError ? (
+        <div className="bg-warn-400 px-4 py-2 text-sm font-semibold text-ink-950">
+          {elb.micError}
+        </div>
+      ) : null}
+      {elb.audioBlocked ? (
+        <button
+          onClick={elb.resumeAudio}
+          className="bg-warn-400 px-4 py-2 text-sm font-semibold text-ink-950"
+        >
+          El navegador bloqueó el audio. Pulsa aquí para escuchar la interpretación.
+        </button>
+      ) : null}
 
       {/* header */}
       <header className="flex shrink-0 items-center gap-4 border-b border-ink-800 bg-ink-900 px-4 py-2.5">
@@ -261,7 +278,6 @@ export default function OperatorPage() {
             </span>
             <span>glosario v{GLOSSARY_VERSION}</span>
             <span className="ml-auto">
-              <Disclaimer compact />
             </span>
           </footer>
         </section>
@@ -348,12 +364,32 @@ export default function OperatorPage() {
               </p>
             ) : (
               <ul className="mt-1.5 space-y-1 text-xs">
-                {elb.notifications.map((n, i) => (
-                  <li key={i} className={n.ok ? "text-ok-400" : "text-crit-500"}>
-                    {n.kind === "early" ? "Aviso temprano" : "Reporte final"} ·{" "}
-                    {n.delivered} contacto(s) {n.ok ? "notificado(s)" : `— ${n.reason ?? "falló"}`}
-                  </li>
-                ))}
+                {elb.notifications.map((n, i) => {
+                  // Three states, not two. "links minted, no channel to send
+                  // them on" is neither green nor red: nothing failed, so
+                  // painting it red is what trains a dispatcher to ignore red.
+                  const label = n.kind === "early" ? "Aviso temprano" : "Reporte final";
+                  if (!n.ok) {
+                    return (
+                      <li key={i} className="text-crit-500">
+                        {label} · falló — {n.reason ?? "error de envío"}
+                      </li>
+                    );
+                  }
+                  if (n.delivered > 0) {
+                    return (
+                      <li key={i} className="text-ok-400">
+                        {label} · {n.delivered} contacto(s) notificado(s)
+                      </li>
+                    );
+                  }
+                  return (
+                    <li key={i} className="text-warn-400">
+                      {label} · {n.prepared ?? 0} enlace(s) generado(s), sin envío
+                      {n.reason ? ` — ${n.reason}` : ""}
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </div>

@@ -1,14 +1,20 @@
 /**
- * Support-network delivery fan-out.
+ * Support-network delivery.
  *
  * The Python agent decides WHEN to notify and WHAT the report says, and mints
  * the per-contact signed links. This route only decides HOW each contact is
- * reached, in strict preference order:
+ * reached - and as of now there is exactly one way: email over SMTP.
  *
- *   1. native push   - the contact has the app installed (richest, has a map)
- *   2. WhatsApp      - template outside the 24h window, free-form + native
- *                      location card inside it
- *   3. email         - last resort, plain link
+ * It used to be a three-rung ladder (native push -> WhatsApp -> email). Both
+ * of the other rungs are gone, and for different reasons worth recording:
+ *
+ *   - WhatsApp needed a Meta-approved template for any contact who had never
+ *     messaged the business number, which is every trusted contact by
+ *     definition. The approval, the WABA and the phone number ID were all
+ *     upstream of a working demo.
+ *   - Native push needed an FCM project AND an Android client that registers a
+ *     token. The app never registered one, so `push_token` was always empty and
+ *     the rung never once executed. Deleting dead code beats keeping it.
  *
  * Every attempt is written to `deliveries` with a unique constraint on
  * (report_id, contact_id, kind, channel), so an agent retry cannot notify a
@@ -17,7 +23,7 @@
 
 import { NextResponse } from "next/server";
 import { supabaseAdmin, requireInternalToken } from "@/lib/supabase";
-import { sendEmergencyAlert, sessionWindowOpen, whatsappConfigured } from "@/lib/whatsapp";
+import { sendEmergencyAlert, emailConfigured } from "@/lib/email";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -29,8 +35,6 @@ interface ContactIn {
   email?: string;
   locale?: string;
   relationship?: string;
-  push_token?: string;
-  whatsapp_opt_in_at?: string | null;
   link: string;
   link_expires_at?: number;
 }
@@ -55,6 +59,16 @@ interface Attempt {
   ok: boolean;
   detail?: string;
   skipped?: boolean;
+}
+
+/**
+ * Channels this deployment can actually use. Kept deliberately separate from
+ * "did it work": a channel that was never configured did not fail, it does not
+ * exist here, and recording it as a failed delivery makes a correctly-working
+ * deployment look broken.
+ */
+function configuredChannels(): string[] {
+  return emailConfigured() ? ["email"] : [];
 }
 
 async function alreadySent(reportId: string, contactId: string, kind: string): Promise<boolean> {
@@ -82,49 +96,10 @@ async function record(row: Record<string, unknown>) {
   if (error) console.warn("[notify] delivery log failed:", error.message);
 }
 
-async function sendPush(c: ContactIn, b: Body): Promise<Attempt | null> {
-  if (!c.push_token) return null;
-  const key = process.env.FCM_SERVER_KEY;
-  if (!key) {
-    // The app-installed path needs an FCM project. Without one we fall
-    // through to WhatsApp rather than silently dropping the contact.
-    return null;
-  }
-  try {
-    const res = await fetch("https://fcm.googleapis.com/fcm/send", {
-      method: "POST",
-      headers: { Authorization: `key=${key}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        to: c.push_token,
-        priority: "high",
-        notification: {
-          title:
-            c.locale?.startsWith("en")
-              ? `Emergency alert from ${b.caller_name}`
-              : `Alerta de emergencia de ${b.caller_name}`,
-          body: `${b.emergency_type || "-"} - ${b.location || "-"}`,
-        },
-        data: {
-          report_id: b.report_id,
-          kind: b.kind,
-          link: c.link,
-          lat: b.lat != null ? String(b.lat) : "",
-          lon: b.lon != null ? String(b.lon) : "",
-          severity: b.severity,
-        },
-      }),
-    });
-    const ok = res.ok;
-    return { contact_id: c.id, channel: "push", ok, detail: ok ? undefined : await res.text() };
-  } catch (err) {
-    return { contact_id: c.id, channel: "push", ok: false, detail: String(err) };
-  }
-}
-
-async function sendWhatsApp(c: ContactIn, b: Body): Promise<Attempt | null> {
-  if (!c.phone_e164 || !whatsappConfigured()) return null;
+async function sendEmail(c: ContactIn, b: Body): Promise<Attempt | null> {
+  if (!c.email || !emailConfigured()) return null;
   const res = await sendEmergencyAlert({
-    to: c.phone_e164,
+    to: c.email,
     contactName: c.name,
     callerName: b.caller_name,
     emergencyType: b.emergency_type,
@@ -133,55 +108,14 @@ async function sendWhatsApp(c: ContactIn, b: Body): Promise<Attempt | null> {
     link: c.link,
     lat: b.lat,
     lon: b.lon,
-    optInAt: c.whatsapp_opt_in_at,
   });
   if (res.skipped) return null;
   return {
     contact_id: c.id,
-    channel: "whatsapp",
+    channel: "email",
     ok: res.ok,
-    detail: res.ok
-      ? `${res.usedTemplate ? "template" : "freeform"} ${res.messageId ?? ""}`.trim()
-      : res.error,
+    detail: res.ok ? res.messageId : res.error,
   };
-}
-
-async function sendEmail(c: ContactIn, b: Body): Promise<Attempt | null> {
-  const key = process.env.RESEND_API_KEY;
-  if (!c.email || !key) return null;
-  const es = (c.locale || "es").startsWith("es");
-  const subject = es
-    ? `Alerta de emergencia - ${b.caller_name}`
-    : `Emergency alert - ${b.caller_name}`;
-  const html = `
-    <div style="font-family:system-ui,sans-serif;max-width:560px">
-      <h2 style="color:#b91c1c">${es ? "Alerta de emergencia" : "Emergency alert"}</h2>
-      <p>${es
-        ? `<b>${b.caller_name}</b> activó una alerta y te registró como contacto de confianza.`
-        : `<b>${b.caller_name}</b> triggered an alert and listed you as a trusted contact.`}</p>
-      <p><b>${es ? "Tipo" : "Type"}:</b> ${b.emergency_type || "-"}<br/>
-         <b>${es ? "Lugar" : "Place"}:</b> ${b.location || "-"}</p>
-      <p><a href="${c.link}" style="background:#b91c1c;color:#fff;padding:10px 16px;
-        border-radius:8px;text-decoration:none">${es ? "Ver reporte" : "View report"}</a></p>
-      <p style="font-size:12px;color:#666">${es
-        ? "Este aviso informa, no da instrucciones. No reemplaza a los servicios de emergencia profesionales. Si hay peligro, llama al 123."
-        : "This message informs, it does not instruct. It does not replace professional emergency services. If there is danger, call 123 / 911 / 112."}</p>
-    </div>`;
-  try {
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        from: process.env.RESEND_FROM || "ELB <onboarding@resend.dev>",
-        to: [c.email],
-        subject,
-        html,
-      }),
-    });
-    return { contact_id: c.id, channel: "email", ok: res.ok, detail: res.ok ? undefined : await res.text() };
-  } catch (err) {
-    return { contact_id: c.id, channel: "email", ok: false, detail: String(err) };
-  }
 }
 
 export async function POST(req: Request) {
@@ -200,6 +134,7 @@ export async function POST(req: Request) {
   }
 
   const attempts: Attempt[] = [];
+  const channels = configuredChannels();
 
   await Promise.all(
     body.contacts.map(async (c) => {
@@ -208,14 +143,15 @@ export async function POST(req: Request) {
         return;
       }
 
-      // Preference order. Stop at the first channel that actually succeeds so
-      // a relative does not get the same alarm three times.
-      const ladder = [sendPush, sendWhatsApp, sendEmail];
+      // One rung left, but the loop stays: it is the shape that makes adding a
+      // second channel a one-line change instead of a rewrite.
+      const ladder = [sendEmail];
+      const mine: Attempt[] = [];
       let delivered = false;
       for (const send of ladder) {
         const attempt = await send(c, body);
         if (!attempt) continue;
-        attempts.push(attempt);
+        mine.push(attempt);
         await record({
           report_id: body.report_id,
           contact_id: c.id,
@@ -229,23 +165,49 @@ export async function POST(req: Request) {
           break;
         }
       }
+
       if (!delivered) {
-        attempts.push({ contact_id: c.id, channel: "-", ok: false, detail: "no channel available" });
+        // Nothing went out, and there are two very different reasons for that.
+        // Only a channel that was tried and errored is a failure; a channel
+        // this deployment never configured is `skipped`.
+        const tried = mine.some((a) => !a.ok);
+        const note = tried
+          ? "every available channel failed"
+          : channels.length
+            ? "contact has no email address"
+            : "no delivery channel configured in this deployment";
+        mine.push({ contact_id: c.id, channel: "-", ok: false, skipped: !tried, detail: note });
         await record({
           report_id: body.report_id,
           contact_id: c.id,
           kind: body.kind,
           channel: "none",
-          status: "failed",
-          error: "no channel available (no push token, no whatsapp, no email)",
+          status: tried ? "failed" : "skipped",
+          error: note,
         });
       }
+
+      attempts.push(...mine);
     }),
   );
 
   const delivered = attempts.filter((a) => a.ok && !a.skipped).length;
+  const failures = attempts.filter((a) => !a.ok && !a.skipped).length;
+  const prepared = body.contacts.length;
+  const note =
+    delivered || failures
+      ? undefined
+      : channels.length
+        ? "no contact was reachable on a configured channel"
+        : "delivery channels not configured - links were minted but nothing was sent";
+
   console.log(
-    `[notify] report=${body.report_id} kind=${body.kind} delivered=${delivered}/${body.contacts.length}`,
+    `[notify] report=${body.report_id} kind=${body.kind} delivered=${delivered}/${prepared}` +
+      (failures ? ` failures=${failures}` : "") +
+      (channels.length ? ` channels=${channels.join(",")}` : " channels=none"),
   );
-  return NextResponse.json({ ok: true, delivered, attempts });
+  // `ok` means "nothing that was actually attempted failed". An unconfigured
+  // channel keeps this true on purpose: email being absent must not surface as
+  // a red error on the dispatcher console.
+  return NextResponse.json({ ok: failures === 0, delivered, prepared, failures, channels, note, attempts });
 }

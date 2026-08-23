@@ -97,37 +97,3 @@ fun StatePill(label: String, state: String, modifier: Modifier = Modifier) {
     }
 }
 
-/**
- * The product's ethical guarantee. Rendered as a component so no screen can
- * quietly ship without it.
- */
-@Composable
-fun EthicsNotice(modifier: Modifier = Modifier, compact: Boolean = false) {
-    Column(
-        modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
-            .padding(12.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp),
-    ) {
-        Text(
-            "Esta app informa, no da instrucciones.",
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurface,
-        )
-        if (!compact) {
-            Text(
-                "Nunca genera ni sugiere procedimientos médicos o de rescate. " +
-                    "No reemplaza a los servicios de emergencia profesionales.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
-        Text(
-            "Si hay peligro inmediato, llama al 123 / 911 / 112.",
-            style = MaterialTheme.typography.bodyMedium,
-            color = Info,
-        )
-    }
-}

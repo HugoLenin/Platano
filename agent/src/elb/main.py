@@ -287,8 +287,6 @@ class Call:
                 email=c.get("email") or "",
                 locale=c.get("locale") or self.caller_lang,
                 relationship=c.get("relationship") or "",
-                push_token=c.get("push_token") or "",
-                whatsapp_opt_in_at=c.get("whatsapp_opt_in_at"),
             )
             for c in contacts
             if c.get(field, True)
@@ -325,13 +323,26 @@ class Call:
                     "kind": kind,
                 }
             )
+            # The signed link IS the deliverable. With no delivery channel
+            # configured it is the only way to reach the report, so it goes to
+            # the log instead of nowhere. It is a capability URL: treat the log
+            # like a credential store.
+            logger.info("report link [%s] contact=%s -> %s", link["scope"], cid, link["url"])
 
+        # Report what happened, not how many contacts existed. A deployment with
+        # no delivery channel configured minted the links and sent nothing: that
+        # is neither a success nor an error, and calling it either one teaches
+        # the dispatcher to distrust the indicator.
+        inner = result.get("result") if isinstance(result.get("result"), dict) else {}
+        failures = int(inner.get("failures") or 0)
         await self.bus.emit(
             EV_NOTIFY,
             kind=kind,
-            delivered=len(targets),
-            ok=result.get("ok", False),
-            detail=result.get("result") or result.get("error"),
+            delivered=int(inner.get("delivered") or 0),
+            prepared=len(targets),
+            ok=bool(result.get("ok")) and failures == 0,
+            reason=inner.get("note") or result.get("error"),
+            detail=inner or result.get("error"),
         )
 
     async def on_early_notify(self, extraction: Extraction, decision: NotifyDecision) -> None:

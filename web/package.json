@@ -13,17 +13,18 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@kapso/whatsapp-cloud-api": "^0.3.0",
     "@supabase/supabase-js": "^2.112.3",
     "livekit-client": "^2.22.0",
     "livekit-server-sdk": "^2.18.0",
     "next": "^16.3.2",
+    "nodemailer": "^9.0.5",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^24.0.0",
+    "@types/nodemailer": "^8.0.1",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "tailwindcss": "^4.3.3",

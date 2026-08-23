@@ -43,8 +43,7 @@ data class TrustedContact(
     val active: Boolean = true,
     @SerialName("notify_early") val notifyEarly: Boolean = true,
     @SerialName("notify_final") val notifyFinal: Boolean = true,
-    @SerialName("whatsapp_opt_in_at") val whatsappOptInAt: String? = null,
-    @SerialName("whatsapp_ready") val whatsappReady: Boolean = false,
+    @SerialName("email_ready") val emailReady: Boolean = false,
 )
 
 @Serializable

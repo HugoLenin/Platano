@@ -42,7 +42,7 @@ import co.elb.app.ui.theme.Warn
 fun HomeScreen(vm: ElbViewModel, state: AppState, onEmergency: () -> Unit) {
     val langLabel = SUPPORTED_LANGUAGES.firstOrNull { it.code == state.language }
     val contactCount = state.contacts.count { it.active }
-    val readyCount = state.contacts.count { it.active && it.whatsappReady }
+    val readyCount = state.contacts.count { it.active && it.emailReady }
 
     Column(
         Modifier
@@ -126,7 +126,7 @@ fun HomeScreen(vm: ElbViewModel, state: AppState, onEmergency: () -> Unit) {
             else "$contactCount contacto(s) de confianza",
             subtitle = when {
                 contactCount == 0 -> "Añádelos antes de una emergencia"
-                readyCount < contactCount -> "$readyCount con WhatsApp activo · falta confirmar el resto"
+                readyCount < contactCount -> "$readyCount con correo · al resto no se le puede avisar"
                 else -> "Todos recibirán el reporte automáticamente"
             },
             ok = contactCount > 0 && readyCount == contactCount,
@@ -134,7 +134,6 @@ fun HomeScreen(vm: ElbViewModel, state: AppState, onEmergency: () -> Unit) {
             onClick = { vm.go(Screen.SETTINGS) },
         )
 
-        EthicsNotice()
         Spacer(Modifier.height(16.dp))
     }
 }
@@ -280,7 +279,6 @@ fun CallScreen(vm: ElbViewModel, call: CallUiState, onLeave: () -> Unit) {
         // controls
         Surface(color = MaterialTheme.colorScheme.surface, tonalElevation = 3.dp) {
             Column(Modifier.fillMaxWidth().padding(16.dp)) {
-                EthicsNotice(compact = true)
                 Spacer(Modifier.height(12.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     if (call.phase == CallPhase.LIVE) {
@@ -506,8 +504,7 @@ fun SettingsScreen(vm: ElbViewModel, state: AppState, onBack: () -> Unit) {
                 }
             }
 
-            EthicsNotice()
-            Spacer(Modifier.height(24.dp))
+                Spacer(Modifier.height(24.dp))
         }
     }
 
@@ -543,14 +540,14 @@ private fun ContactRow(c: TrustedContact, vm: ElbViewModel) {
     ) {
         Box(
             Modifier.size(40.dp).clip(CircleShape).background(
-                if (c.whatsappReady) Ok.copy(alpha = 0.2f) else Warn.copy(alpha = 0.2f),
+                if (c.emailReady) Ok.copy(alpha = 0.2f) else Warn.copy(alpha = 0.2f),
             ),
             contentAlignment = Alignment.Center,
         ) {
             Icon(
-                if (c.whatsappReady) Icons.Filled.CheckCircle else Icons.Filled.Schedule,
+                if (c.emailReady) Icons.Filled.CheckCircle else Icons.Filled.Schedule,
                 null,
-                tint = if (c.whatsappReady) Ok else Warn,
+                tint = if (c.emailReady) Ok else Warn,
                 modifier = Modifier.size(20.dp),
             )
         }
@@ -563,10 +560,10 @@ private fun ContactRow(c: TrustedContact, vm: ElbViewModel) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Text(
-                if (c.whatsappReady) "WhatsApp activo"
-                else "Pendiente: pídele que envíe un WhatsApp al número de la app",
+                if (c.emailReady) "Recibirá el aviso por correo"
+                else "Sin correo: no se le puede avisar",
                 style = MaterialTheme.typography.labelSmall,
-                color = if (c.whatsappReady) Ok else Warn,
+                color = if (c.emailReady) Ok else Warn,
             )
         }
         IconButton(onClick = { vm.removeContact(c.id) }) {
@@ -582,7 +579,6 @@ private fun AddContactSheet(vm: ElbViewModel, saving: Boolean, onDismiss: () -> 
     var relationship by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("+57") }
     var email by remember { mutableStateOf("") }
-    val optInNumber = vm.whatsappOptInNumber
 
     ModalBottomSheet(onDismissRequest = onDismiss) {
         Column(
@@ -602,27 +598,27 @@ private fun AddContactSheet(vm: ElbViewModel, saving: Boolean, onDismiss: () -> 
             )
             OutlinedTextField(
                 value = phone, onValueChange = { phone = it },
-                label = { Text("WhatsApp (+57…)") },
+                label = { Text("Teléfono (+57…, opcional)") },
                 keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(keyboardType = KeyboardType.Phone),
                 singleLine = true, modifier = Modifier.fillMaxWidth(),
             )
             OutlinedTextField(
                 value = email, onValueChange = { email = it },
-                label = { Text("Email (opcional)") },
+                label = { Text("Correo electrónico") },
                 keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(keyboardType = KeyboardType.Email),
                 singleLine = true, modifier = Modifier.fillMaxWidth(),
             )
 
-            // The opt-in step. This is consent, and it is also what opens the
-            // 24h WhatsApp window so the alert is not stuck behind a template.
+            // The email address is not optional any more: it is the only way an
+            // alert can leave the system. Saying so here beats letting someone
+            // save a contact that silently never gets reached.
             Surface(shape = RoundedCornerShape(12.dp), color = Info.copy(alpha = 0.12f)) {
                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text("Un paso más, importante", style = MaterialTheme.typography.titleMedium, color = Info)
+                    Text("El correo es obligatorio", style = MaterialTheme.typography.titleMedium, color = Info)
                     Text(
-                        "WhatsApp solo permite escribirle a alguien que primero nos haya escrito. " +
-                            "Pídele a tu contacto que envíe cualquier mensaje por WhatsApp a " +
-                            (optInNumber.ifBlank { "el número de la app" }) +
-                            ". Con eso queda su consentimiento registrado y podremos avisarle al instante.",
+                        "El aviso de emergencia se envía por correo electrónico. " +
+                            "Sin una dirección válida no podremos avisarle a esta persona. " +
+                            "Pídele que revise también la carpeta de spam la primera vez.",
                         style = MaterialTheme.typography.bodyMedium,
                     )
                 }
@@ -633,7 +629,7 @@ private fun AddContactSheet(vm: ElbViewModel, saving: Boolean, onDismiss: () -> 
                     vm.addContact(name, relationship, phone, email, "es")
                     onDismiss()
                 },
-                enabled = !saving && name.isNotBlank() && (phone.length > 5 || email.contains("@")),
+                enabled = !saving && name.isNotBlank() && email.contains("@"),
                 modifier = Modifier.fillMaxWidth().height(52.dp),
             ) {
                 if (saving) CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp)

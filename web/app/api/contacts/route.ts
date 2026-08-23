@@ -28,13 +28,10 @@ export async function GET(req: Request) {
     .order("priority", { ascending: true });
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
+  // Email is the only delivery channel, and an address is either present or
+  // it is not - there is no opt-in handshake left to report on.
   return NextResponse.json({
-    contacts: (data ?? []).map((c) => ({
-      ...c,
-      // Surfaced so the app can show "opt-in pending" instead of pretending
-      // the contact is reachable on WhatsApp when they are not.
-      whatsapp_ready: Boolean(c.whatsapp_opt_in_at),
-    })),
+    contacts: (data ?? []).map((c) => ({ ...c, email_ready: Boolean(c.email) })),
   });
 }
 
@@ -46,9 +43,12 @@ export async function POST(req: Request) {
   if (!body?.user_id || !body?.name) {
     return NextResponse.json({ error: "user_id and name are required" }, { status: 400 });
   }
-  if (!body.phone_e164 && !body.email) {
+  // Email is the only way an alert can leave this system, so a contact
+  // without one cannot be notified. Rejecting at write time beats storing a
+  // contact that silently never gets reached.
+  if (!body.email) {
     return NextResponse.json(
-      { error: "a contact needs at least a phone number or an email" },
+      { error: "a contact needs an email address to be notified" },
       { status: 400 },
     );
   }
@@ -68,7 +68,7 @@ export async function POST(req: Request) {
 
   const { data, error } = await sb.from("trusted_contacts").insert(row).select().single();
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ contact: data, whatsapp_ready: false }, { status: 201 });
+  return NextResponse.json({ contact: data, email_ready: Boolean(row.email) }, { status: 201 });
 }
 
 export async function DELETE(req: Request) {

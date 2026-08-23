@@ -27,7 +27,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import co.elb.app.ui.CallScreen
 import co.elb.app.ui.ElbViewModel
-import co.elb.app.ui.EthicsNotice
 import co.elb.app.ui.HomeScreen
 import co.elb.app.ui.Screen
 import co.elb.app.ui.SettingsScreen
@@ -130,6 +129,5 @@ private fun MicDenied(onRetry: () -> Unit) {
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Button(onClick = onRetry) { Text("Conceder permiso") }
-        EthicsNotice()
     }
 }

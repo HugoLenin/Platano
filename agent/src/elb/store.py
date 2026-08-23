@@ -153,7 +153,7 @@ class Store:
             {
                 "user_id": f"eq.{user_id}",
                 "active": "eq.true",
-                "select": "id,name,phone_e164,email,relationship,locale,whatsapp_opt_in_at,push_token,notify_early,notify_final",
+                "select": "id,name,phone_e164,email,relationship,locale,notify_early,notify_final",
                 "order": "priority.asc",
             },
         )

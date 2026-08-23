@@ -57,7 +57,10 @@ export interface CallInfo {
 
 export interface NotifyLog {
   kind: string;
+  /** Contacts an alert actually reached. */
   delivered: number;
+  /** Links minted. Larger than `delivered` when no channel is configured. */
+  prepared?: number;
   ok?: boolean;
   reason?: string;
   ts: number;
@@ -86,6 +89,8 @@ export function useElbRoom(role: "operator" | "caller" = "operator") {
   const [latencies, setLatencies] = useState<number[]>([]);
   const [call, setCall] = useState<CallInfo>({});
   const [agentPresent, setAgentPresent] = useState(false);
+  const [audioBlocked, setAudioBlocked] = useState(false);
+  const [micError, setMicError] = useState("");
 
   const wantTrack = role === "operator" ? TRACK_TO_OPERATOR : "interpreter-to-caller";
 
@@ -156,7 +161,14 @@ export function useElbRoom(role: "operator" | "caller" = "operator") {
       case "notify":
         setNotifications((p) => [
           ...p,
-          { kind: ev.kind, delivered: ev.delivered, ok: ev.ok, reason: ev.reason, ts: ev.ts },
+          {
+            kind: ev.kind,
+            delivered: ev.delivered,
+            prepared: ev.prepared,
+            ok: ev.ok,
+            reason: ev.reason,
+            ts: ev.ts,
+          },
         ]);
         break;
 
@@ -224,10 +236,21 @@ export function useElbRoom(role: "operator" | "caller" = "operator") {
             const ev = decodeEvent(payload);
             if (ev) handleEvent(ev);
           })
+          .on(RoomEvent.AudioPlaybackStatusChanged, () => {
+            setAudioBlocked(!room.canPlaybackAudio);
+          })
           .on(RoomEvent.Disconnected, () => setState(ConnectionState.Disconnected));
 
         await room.connect(data.url, data.token, { autoSubscribe: false });
         setRoomName(data.room);
+        setState(room.state);
+
+        try {
+          await room.startAudio();
+          setAudioBlocked(false);
+        } catch {
+          setAudioBlocked(true);
+        }
 
         // Anything published before we attached the listener.
         room.remoteParticipants.forEach((p) => {
@@ -237,16 +260,36 @@ export function useElbRoom(role: "operator" | "caller" = "operator") {
           }
         });
 
-        await room.localParticipant.setMicrophoneEnabled(true);
-        setMicOn(true);
+        try {
+          await room.localParticipant.setMicrophoneEnabled(true);
+          setMicOn(true);
+          setMicError("");
+        } catch (err) {
+          setMicOn(false);
+          const insecure =
+            typeof window !== "undefined" &&
+            !window.isSecureContext &&
+            window.location.hostname !== "localhost" &&
+            window.location.hostname !== "127.0.0.1";
+          setMicError(
+            insecure
+              ? `El navegador bloquea el micrófono en ${window.location.origin} porque no es un origen seguro. Abre la consola en http://localhost:3000 y podrás hablar.`
+              : `No se pudo activar el micrófono: ${err instanceof Error ? err.message : String(err)}. Oirás la interpretación, pero no podrás hablar.`,
+          );
+        }
 
-        // Tell the agent who we are and ask it to replay anything we missed.
-        await room.localParticipant.publishData(
-          encodeMessage({ type: "hello", role, lang: opts.lang }),
-          { reliable: true, topic: DATA_TOPIC },
-        );
+        try {
+          await room.localParticipant.publishData(
+            encodeMessage({ type: "hello", role, lang: opts.lang }),
+            { reliable: true, topic: DATA_TOPIC },
+          );
+        } catch {
+          // no-op
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));
+        await roomRef.current?.disconnect().catch(() => undefined);
+        roomRef.current = null;
         setState(ConnectionState.Disconnected);
       }
     },
@@ -257,8 +300,13 @@ export function useElbRoom(role: "operator" | "caller" = "operator") {
     const room = roomRef.current;
     if (!room) return;
     const next = !micOn;
-    await room.localParticipant.setMicrophoneEnabled(next);
-    setMicOn(next);
+    try {
+      await room.localParticipant.setMicrophoneEnabled(next);
+      setMicOn(next);
+      setMicError("");
+    } catch (err) {
+      setMicError(err instanceof Error ? err.message : String(err));
+    }
   }, [micOn]);
 
   const endCall = useCallback(async () => {
@@ -288,8 +336,22 @@ export function useElbRoom(role: "operator" | "caller" = "operator") {
       ? 0
       : [...latencies].sort((a, b) => a - b)[Math.floor(latencies.length / 2)];
 
+  const resumeAudio = useCallback(async () => {
+    const room = roomRef.current;
+    if (!room) return;
+    try {
+      await room.startAudio();
+      setAudioBlocked(false);
+    } catch {
+      setAudioBlocked(true);
+    }
+  }, []);
+
   return {
     audioRef,
+    audioBlocked,
+    micError,
+    resumeAudio,
     state,
     error,
     roomName,

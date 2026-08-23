@@ -31,7 +31,7 @@ export type ElbEvent =
   | (Base & { type: "extraction"; pass_no: number; data: Extraction;
       critical_flags: string[]; notify: boolean; notify_reason: string })
   | (Base & { type: "notify"; kind: "early" | "final"; delivered: number;
-      ok?: boolean; reason?: string; detail?: unknown })
+      prepared?: number; ok?: boolean; reason?: string; detail?: unknown })
   | (Base & { type: "call"; phase: string; call_id?: string; report_id?: string;
       caller_lang?: string; operator_lang?: string; caller_name?: string;
       operator_url?: string; glossary_version?: string })

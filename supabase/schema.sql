@@ -34,19 +34,14 @@ create table if not exists trusted_contacts (
   priority            int  not null default 100,
   active              boolean not null default true,
 
-  -- Delivery capability, resolved at notify time
-  push_token          text,                 -- set when the contact installs the app
-  whatsapp_opt_in_at  timestamptz,          -- set by the inbound opt-in webhook
-  whatsapp_opt_in_ref text,                 -- wa message id that proved consent
-
   -- Per-contact consent about WHEN to be told
   notify_early        boolean not null default true,
   notify_final        boolean not null default true,
 
   created_at          timestamptz not null default now(),
-  constraint contact_reachable check (
-    phone_e164 is not null or email is not null or push_token is not null
-  )
+  -- Email is the only delivery channel, so an address is what makes a contact
+  -- reachable at all. phone_e164 is kept for identification, not for delivery.
+  constraint contact_reachable check (email is not null)
 );
 create index if not exists trusted_contacts_user_idx on trusted_contacts(user_id, active, priority);
 create index if not exists trusted_contacts_phone_idx on trusted_contacts(phone_e164);
@@ -150,7 +145,7 @@ create table if not exists deliveries (
   report_id     text not null,
   contact_id    text not null,
   kind          text not null,                   -- early | final
-  channel       text not null,                   -- push | whatsapp | sms | email
+  channel       text not null,                   -- email | none
   status        text not null,                   -- sent | failed | skipped
   provider_id   text,
   error         text,
@@ -212,19 +207,34 @@ begin
 end $$;
 
 -- -------------------------------------------------------------- demo seed
--- A ready-to-use caller with two trusted contacts, so the demo works the
--- moment the schema is applied. Replace the phone numbers with real WhatsApp
--- numbers you control before demoing the WhatsApp path.
+-- The caller profile only. Its id is the one the APK ships with by default, so
+-- contacts added from the app attach to it. Add the contacts from the app.
 insert into profiles (id, display_name, preferred_language, phone_e164)
 values ('11111111-1111-1111-1111-111111111111', 'Amara Okafor', 'en', '+573001112233')
 on conflict (id) do nothing;
 
-insert into trusted_contacts (id, user_id, name, relationship, phone_e164, email, locale, priority)
-values
-  ('22222222-2222-2222-2222-222222222222',
-   '11111111-1111-1111-1111-111111111111',
-   'Chidi Okafor', 'hermano', '+573001112244', 'chidi@example.com', 'es', 10),
-  ('33333333-3333-3333-3333-333333333333',
-   '11111111-1111-1111-1111-111111111111',
-   'Maria Rojas', 'vecina', '+573001112255', 'maria@example.com', 'es', 20)
-on conflict (id) do nothing;
+
+-- --------------------------------------------------------------- migrations
+-- `create table if not exists` above leaves an EXISTING database untouched, so
+-- a database created before email became the only channel keeps three columns
+-- that nothing reads any more. Dropping them is safe and optional; the code
+-- neither writes nor selects them.
+alter table trusted_contacts drop column if exists push_token;
+alter table trusted_contacts drop column if exists whatsapp_opt_in_at;
+alter table trusted_contacts drop column if exists whatsapp_opt_in_ref;
+
+-- The reachability rule changed from "phone OR email OR push" to "email".
+-- Recreated rather than altered because a check constraint cannot be modified
+-- in place. Contacts already stored without an email would violate it, so they
+-- are reported instead of silently blocking the migration.
+do $$
+declare unreachable int;
+begin
+  select count(*) into unreachable from trusted_contacts where email is null;
+  if unreachable > 0 then
+    raise warning 'ELB: % trusted contact(s) have no email and can no longer be notified. Add an address before enforcing the constraint.', unreachable;
+  else
+    alter table trusted_contacts drop constraint if exists contact_reachable;
+    alter table trusted_contacts add constraint contact_reachable check (email is not null);
+  end if;
+end $$;

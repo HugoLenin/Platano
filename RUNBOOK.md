@@ -6,7 +6,6 @@ PowerShell); en macOS y Linux cambia solo el intérprete de Python (`python3.13`
 en vez de `py -3.13`).
 
 - Decisiones de diseño y gotchas conocidos → [`docs/DECISIONS.md`](docs/DECISIONS.md)
-- Plantilla de WhatsApp y flujo de opt-in → [`docs/WHATSAPP_TEMPLATE.md`](docs/WHATSAPP_TEMPLATE.md)
 - Estado detallado del traspaso → [`HANDOFF.md`](HANDOFF.md)
 
 ---
@@ -18,7 +17,7 @@ llamada**. Lo que sí corre sin ninguna key:
 
 ```bash
 cd agent && PYTHONPATH=src py -3.13 -m pytest tests/ -q     # 31 passed, ~0.3 s
-cd web   && npm install && npm run build                    # 9 rutas
+cd web   && npm install && npm run build                    # 8 rutas
 cd android && ./gradlew assembleDebug                       # APK sideloadable
 ```
 
@@ -49,7 +48,7 @@ Con keys, el orden mínimo es: **web → agente → teléfono** (§4, §5, §6).
 | Anthropic | traducción, extracción, reporte | no hay interpretación |
 | ElevenLabs | TTS (`eleven_flash_v2_5`) | no hay voz de salida |
 | Supabase | contactos, reportes, transcripciones | la llamada funciona; nada se guarda |
-| Kapso o Meta WhatsApp | aviso a familiares | los envíos vuelven `skipped: true` |
+| Cuenta de Google (SMTP) | aviso a familiares | los envíos vuelven `skipped: true` |
 
 Las últimas dos son **opcionales**: el sistema degrada en vez de romperse.
 
@@ -90,7 +89,7 @@ ELB_OPERATOR_LANG=es                      # idioma del despachador
 ```
 
 **`web/.env.local`** — LiveKit (server + `NEXT_PUBLIC_LIVEKIT_URL`), Supabase,
-WhatsApp, y los dos secretos compartidos.
+correo (Gmail SMTP), y los dos secretos compartidos.
 
 `NEXT_PUBLIC_LIVEKIT_URL` debe tener **el mismo valor** que `LIVEKIT_URL`; una
 va al navegador y la otra al servidor.
@@ -110,9 +109,9 @@ Trae **seed de demo**: un perfil (`Amara Okafor`, `user_id`
 `11111111-1111-1111-1111-111111111111` — el mismo que trae el APK por defecto) y
 dos contactos de confianza.
 
-> Para demostrar WhatsApp de verdad, reemplaza los teléfonos del seed por
-> números que controles y que hayan hecho opt-in
-> (ver [`docs/WHATSAPP_TEMPLATE.md`](docs/WHATSAPP_TEMPLATE.md) §6).
+> Para demostrar el envío de verdad, reemplaza los correos del seed
+> (`chidi@example.com`, `maria@example.com`) por buzones que controles:
+> `example.com` no va a ninguna parte.
 
 ---
 
@@ -134,10 +133,9 @@ Rutas:
 | `/operator` | consola del despachador (la que se usa en la demo) |
 | `/r/<token>` | visor del reporte, renderizado según el `scope` del token |
 | `/api/token` | mint de tokens de LiveKit (`role`: `caller` \| `operator`) |
-| `/api/notify` | recibe el aviso del agente y despacha WhatsApp/push |
+| `/api/notify` | recibe el aviso del agente y despacha el correo |
 | `/api/contacts` | CRUD de contactos de confianza (lo usa la app) |
 | `/api/report/[token]` | reporte en texto plano |
-| `/api/whatsapp/webhook` | handshake de Meta + opt-in/opt-out entrante |
 
 Verificación rápida:
 
@@ -192,7 +190,6 @@ cd android
 # Opcional pero necesario en teléfono físico: apuntar el APK a tu backend.
 # Crear android/elb.properties (git-ignorado):
 #   ELB_API_BASE=http://192.168.X.X:3000     <- IP de tu laptop en la LAN
-#   ELB_WHATSAPP_NUMBER=+57...               <- número al que se manda el opt-in
 #   ELB_DEFAULT_ROOM=elb-demo
 
 ./gradlew assembleDebug      # -> app/build/outputs/apk/debug/app-debug.apk
@@ -261,7 +258,7 @@ credenciales de verdad:
 | 4 | Sin cruce de audio: el operador no se suscribe al track del llamante | ✅ verificado por el harness |
 | 5 | Colgar → reporte generado | ✅ dos `.txt` (operador y familia) en `reports/` |
 | 5b | El link `/r/<token>` abre el reporte | ⬜ necesita Supabase: el visor lee de ahí |
-| 6 | WhatsApp: opt-in del contacto y luego un aviso real | ⬜ falta plantilla aprobada |
+| 6 | Correo: un aviso real llega a un buzón de verdad | ⬜ el SMTP rechaza la cuenta (§10) |
 
 ### Cómo reproducirlo sin teléfono ni navegador
 
@@ -318,6 +315,10 @@ cd agent && PYTHONPATH=src:tests py -3.13 -c "import sys; sys.path[:0]=['src','t
 # Web
 cd web && npx tsc --noEmit && npm run build
 
+# Credenciales del SMTP (sin enviar nada), y luego un envío real
+cd web && node scripts/check-email.mjs
+cd web && node scripts/check-email.mjs tu-correo@gmail.com
+
 # Android
 cd android && ./gradlew assembleDebug
 ```
@@ -349,7 +350,10 @@ export PYTHONIOENCODING=utf-8      # PowerShell: $env:PYTHONIOENCODING="utf-8"
 | `Could not find plugin org.jetbrains.kotlin.android` | AGP 9 trae Kotlin integrado | ese plugin **no** debe aplicarse ([D14](docs/DECISIONS.md#d14--decisiones-de-build-de-android-que-parecen-errores-y-no-lo-son)) |
 | Build de Android falla con `error writing value of type DefaultConfigurableFileCollection` | configuration cache de Gradle | está desactivada a propósito en `gradle.properties` |
 | Meta no valida el webhook | `localhost` no es alcanzable | `ngrok http 3000` y usar esa URL |
-| Envíos de WhatsApp devuelven `skipped: true` | falta `WHATSAPP_PHONE_NUMBER_ID` o la credencial | ver [`docs/WHATSAPP_TEMPLATE.md`](docs/WHATSAPP_TEMPLATE.md) §8 |
+| Envíos de correo devuelven `skipped: true` | faltan `GMAIL_USER` / `GMAIL_APP_PASSWORD` | ponlos en `web/.env.local` y reinicia la web |
+| SMTP da `534-5.7.9 WebLoginRequired` | la dirección no es una cuenta de Google, o la App Password se generó en otra cuenta | autentica con la cuenta Google real (`@gmail.com` o dominio en Workspace). Diagnostica con `node scripts/check-email.mjs` |
+| SMTP da `535 Username and Password not accepted` | se usó la contraseña de la cuenta en vez de una App Password, o 2FA está apagado | genera una App Password en myaccount.google.com/apppasswords |
+| El correo llega a Spam o Promociones | remitente Gmail nuevo escribiendo a un desconocido | normal la primera vez; pide al contacto que lo marque como "no es spam" |
 | `UnicodeEncodeError: 'cp932'` al imprimir | consola de Windows | `PYTHONIOENCODING=utf-8` |
 
 ---
@@ -359,13 +363,18 @@ export PYTHONIOENCODING=utf-8      # PowerShell: $env:PYTHONIOENCODING="utf-8"
 Al 2026-08-22 hay credenciales de LiveKit, Deepgram y Anthropic funcionando, y
 los pasos 1–2 del smoke test están verdes (§8). Lo que **sigue sin ejecutarse**:
 una llamada con audio real de punta a punta, la latencia medida (objetivo
-1–2 s, realista 1,5–3 s), el envío por WhatsApp y la escritura a Supabase. Los
+1–2 s, realista 1,5–3 s), el envío por correo y la escritura a Supabase. Los
 números de latencia del reporte de ejemplo salen de datos de prueba, no de una
 llamada.
 
-El bloqueo inmediato es la key de ElevenLabs sin el permiso `text_to_speech`:
-sin TTS el agente transcribe y traduce, pero no sale voz.
+Bloqueos inmediatos, en orden de impacto:
 
-Además, el push nativo (`/api/notify` con FCM) está implementado del lado del
-servidor pero la app Android **no registra token FCM todavía**: hoy el camino de
-"contacto con la app instalada" cae igualmente a WhatsApp.
+1. La key de ElevenLabs sin el permiso `text_to_speech`: sin TTS el agente
+   transcribe y traduce, pero no sale voz.
+2. El SMTP rechaza la cuenta configurada con `534-5.7.9 WebLoginRequired`, así
+   que el aviso al familiar todavía no sale. Verifícalo con
+   `cd web && node scripts/check-email.mjs`.
+
+El push nativo (FCM) y WhatsApp **se eliminaron**; el único canal de salida es
+el correo. El razonamiento está en
+[D11](docs/DECISIONS.md#d11--un-solo-canal-de-salida-correo-por-smtp).
